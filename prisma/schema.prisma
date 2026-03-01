@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  image     String?
+  username  String?  @unique
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  biodata   Biodata?
+}
+
+model Biodata {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  language   String   @default("bn")
+  isPublic   Boolean  @default(true)
+  isReported Boolean  @default(false)
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
