@@ -1,6 +1,23 @@
 import Image from "next/image"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 
+interface CustomField {
+  label: string;
+  value: string;
+}
+
+interface Qualification {
+  degree: string;
+  institution: string;
+  passingYear: string | number;
+  result?: string;
+}
+
+interface CustomSection {
+  title: string;
+  fields: CustomField[];
+}
+
 function hasContent(val: unknown): boolean {
   if (val === null || val === undefined) return false;
   if (typeof val === 'string') return val.trim().length > 0;
@@ -127,17 +144,25 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   const t = LABELS[lang];
 
   return (
-    <div className="space-y-10 text-gray-800 print:space-y-6">
-      <div className="text-center mb-8 pb-4 border-b border-gray-300">
-        <h1 className="text-4xl font-serif font-black text-gray-900 mb-2 uppercase tracking-tight">{t.title}</h1>
+    <div className="space-y-12 text-gray-800 print:space-y-8 max-w-4xl mx-auto">
+      {/* Header with watermark-like background */}
+      <div className="text-center mb-12 pb-8 border-b-4 border-double border-indigo-100 relative overflow-hidden">
+        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-indigo-50/50 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-indigo-50/50 rounded-full blur-3xl -z-10"></div>
+
+        <h1 className="text-5xl font-serif font-black text-gray-900 mb-3 uppercase tracking-tighter">
+          {t.title}
+        </h1>
         {hasContent(data?.basicInfo?.fullName) && (
-          <h2 className="text-2xl font-bold text-indigo-600">{data?.basicInfo?.fullName}</h2>
+          <h2 className="text-2xl font-bold text-indigo-600 inline-block">
+            {data?.basicInfo?.fullName}
+          </h2>
         )}
       </div>
 
       {data.basicInfo?.photoUrl && (
-        <div className="flex justify-center mb-6">
-          <div className="relative w-36 h-36 rounded-xl overflow-hidden border-4 border-white shadow-md">
+        <div className="flex justify-center mb-10">
+          <div className="relative w-40 h-40 rounded-3xl overflow-hidden border-8 border-white shadow-2xl ring-1 ring-gray-100">
             <Image
               src={data.basicInfo.photoUrl}
               alt="Profile photo"
@@ -148,181 +173,252 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         </div>
       )}
 
-      {/* 1. Basic Information */}
-      {hasContent(data?.basicInfo) && (
-        <section className="print:break-inside-avoid">
-          <h3 className="text-lg font-bold text-indigo-800 mb-3 border-b-2 border-indigo-50 pb-1 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-indigo-600 rounded-full"></span>
-            {t.basic}
-          </h3>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
-            {hasContent(data.basicInfo?.fullName) && <div><span className="font-bold text-gray-600">{t.fullName}:</span> {data.basicInfo?.fullName}</div>}
-            {hasContent(data.basicInfo?.dateOfBirth) && <div><span className="font-bold text-gray-600">{t.dob}:</span> {data.basicInfo?.dateOfBirth}</div>}
-            {hasContent(data.basicInfo?.age) && <div><span className="font-bold text-gray-600">{t.age}:</span> {data.basicInfo?.age} {lang === 'en' ? 'Years' : 'বছর'}</div>}
-            {hasContent(data.basicInfo?.height) && <div><span className="font-bold text-gray-600">{t.height}:</span> {data.basicInfo?.height}</div>}
-            {hasContent(data.basicInfo?.bloodGroup) && <div><span className="font-bold text-gray-600">{t.bloodGroup}:</span> {data.basicInfo?.bloodGroup}</div>}
-            {hasContent(data.basicInfo?.religion) && <div><span className="font-bold text-gray-600">{t.religion}:</span> {data.basicInfo?.religion}</div>}
-            {hasContent(data.basicInfo?.maritalStatus) && <div><span className="font-bold text-gray-600">{t.maritalStatus}:</span> {data.basicInfo?.maritalStatus}</div>}
-            {hasContent(data.basicInfo?.nationality) && <div><span className="font-bold text-gray-600">{t.nationality}:</span> {data.basicInfo?.nationality}</div>}
-            {hasContent(data.basicInfo?.weight) && <div><span className="font-bold text-gray-600">{t.weight}:</span> {data.basicInfo?.weight}</div>}
-            {data.basicInfo?.extraFields?.map((f: { label: string; value: string }, i: number) => (
-              <div key={i}><span className="font-bold text-gray-600">{f.label}:</span> {f.value}</div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* 2. Personal Information */}
-      {hasContent(data?.personalInfo) && (
-        <section className="print:break-inside-avoid">
-          <h3 className="text-lg font-bold text-indigo-800 mb-3 border-b-2 border-indigo-50 pb-1 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-indigo-600 rounded-full"></span>
-            {t.personal}
-          </h3>
-          <div className="grid grid-cols-1 gap-y-2 text-sm">
-            {hasContent(data.personalInfo?.presentAddress) && <div><span className="font-bold text-gray-600">{t.presentAddress}:</span> {data.personalInfo?.presentAddress}</div>}
-            {hasContent(data.personalInfo?.permanentAddress) && <div><span className="font-bold text-gray-600">{t.permanentAddress}:</span> {data.personalInfo?.permanentAddress}</div>}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-              {hasContent(data.personalInfo?.district) && <div><span className="font-bold text-gray-600">{t.district}:</span> {data.personalInfo?.district}</div>}
-              {hasContent(data.personalInfo?.division) && <div><span className="font-bold text-gray-600">{t.division}:</span> {data.personalInfo?.division}</div>}
-              {hasContent(data.personalInfo?.nativeVillage) && <div><span className="font-bold text-gray-600">{t.nativeVillage}:</span> {data.personalInfo?.nativeVillage}</div>}
-              {hasContent(data.personalInfo?.complexion) && <div><span className="font-bold text-gray-600">{t.complexion}:</span> {data.personalInfo?.complexion}</div>}
-              {hasContent(data.personalInfo?.physicalStatus) && <div><span className="font-bold text-gray-600">{t.physicalStatus}:</span> {data.personalInfo?.physicalStatus}</div>}
-            </div>
-            {hasContent(data.personalInfo?.hobby) && <div><span className="font-bold text-gray-600">{t.hobby}:</span> {data.personalInfo?.hobby}</div>}
-          </div>
-        </section>
-      )}
-
-      {/* 3. Education Information */}
-      {hasContent(data?.education) && (
-        <section className="print:break-inside-avoid">
-          <h3 className="text-lg font-bold text-indigo-800 mb-3 border-b-2 border-indigo-50 pb-1 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-indigo-600 rounded-full"></span>
-            {t.education}
-          </h3>
-          <div className="grid grid-cols-1 gap-y-2 text-sm bg-gray-50/50 p-3 rounded-lg border border-gray-100">
-            {hasContent(data.education?.highestQualification) && <div className="text-base font-bold text-indigo-700">{data.education?.highestQualification}</div>}
-            {hasContent(data.education?.institution) && <div><span className="font-bold text-gray-600">{t.institution}:</span> {data.education?.institution}</div>}
-            {hasContent(data.education?.passingYear) && <div><span className="font-bold text-gray-600">{t.passingYear}:</span> {data.education?.passingYear}</div>}
-            {hasContent(data.education?.additionalQualifications) && (
-              <div className="mt-1">
-                <span className="font-bold text-gray-600 block mb-1">{t.additionalQualifications}:</span>
-                <p className="whitespace-pre-wrap text-gray-700 leading-relaxed">{data.education?.additionalQualifications}</p>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* 4. Profession Information */}
-      {hasContent(data?.profession) && (
-        <section className="print:break-inside-avoid">
-          <h3 className="text-lg font-bold text-indigo-800 mb-3 border-b-2 border-indigo-50 pb-1 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-indigo-600 rounded-full"></span>
-            {t.profession}
-          </h3>
-          <div className="grid grid-cols-1 gap-y-2 text-sm bg-gray-50/50 p-3 rounded-lg border border-gray-100">
-            {hasContent(data.profession?.occupation) && <div className="text-base font-bold text-indigo-700">{data.profession?.occupation}</div>}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-              {hasContent(data.profession?.organizationName) && <div><span className="font-bold text-gray-600">{t.organization}:</span> {data.profession?.organizationName}</div>}
-              {hasContent(data.profession?.employmentType) && <div><span className="font-bold text-gray-600">{t.employmentType}:</span> {data.profession?.employmentType}</div>}
-              {hasContent(data.profession?.monthlyIncome) && <div><span className="font-bold text-gray-600">{t.monthlyIncome}:</span> {data.profession?.monthlyIncome}</div>}
-              {hasContent(data.profession?.workplaceLocation) && <div><span className="font-bold text-gray-600">{t.workplace}:</span> {data.profession?.workplaceLocation}</div>}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 5. Family Information */}
-      {hasContent(data?.familyInfo) && (
-        <section className="print:break-inside-avoid">
-          <h3 className="text-lg font-bold text-indigo-800 mb-3 border-b-2 border-indigo-50 pb-1 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-indigo-600 rounded-full"></span>
-            {t.family}
-          </h3>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-            {hasContent(data.familyInfo?.fatherName) && <div><span className="font-bold text-gray-600">{t.fatherName}:</span> {data.familyInfo?.fatherName}</div>}
-            {hasContent(data.familyInfo?.fatherProfession) && <div><span className="font-bold text-gray-600">{t.fatherProfession}:</span> {data.familyInfo?.fatherProfession}</div>}
-            {hasContent(data.familyInfo?.motherName) && <div><span className="font-bold text-gray-600">{t.motherName}:</span> {data.familyInfo?.motherName}</div>}
-            {hasContent(data.familyInfo?.motherProfession) && <div><span className="font-bold text-gray-600">{t.motherProfession}:</span> {data.familyInfo?.motherProfession}</div>}
-            {hasContent(data.familyInfo?.numberOfBrothers) && <div><span className="font-bold text-gray-600">{t.brothers}:</span> {data.familyInfo?.numberOfBrothers}</div>}
-            {hasContent(data.familyInfo?.numberOfSisters) && <div><span className="font-bold text-gray-600">{t.sisters}:</span> {data.familyInfo?.numberOfSisters}</div>}
-            {hasContent(data.familyInfo?.familyStatus) && <div className="col-span-2"><span className="font-bold text-gray-600">{t.familyStatus}:</span> {data.familyInfo?.familyStatus}</div>}
-          </div>
-        </section>
-      )}
-
-      {/* 6. Marriage Expectations */}
-      {hasContent(data?.expectations) && (
-        <section className="print:break-inside-avoid">
-          <h3 className="text-lg font-bold text-indigo-800 mb-3 border-b-2 border-indigo-50 pb-1 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-indigo-600 rounded-full"></span>
-            {t.expectations}
-          </h3>
-          <div className="grid grid-cols-1 gap-y-2 text-sm">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-              {hasContent(data.expectations?.expectedAgeRange) && <div><span className="font-bold text-gray-600">{t.expectedAge}:</span> {data.expectations?.expectedAgeRange}</div>}
-              {hasContent(data.expectations?.expectedHeight) && <div><span className="font-bold text-gray-600">{t.expectedHeight}:</span> {data.expectations?.expectedHeight}</div>}
-              {hasContent(data.expectations?.expectedEducation) && <div><span className="font-bold text-gray-600">{t.expectedEducation}:</span> {data.expectations?.expectedEducation}</div>}
-              {hasContent(data.expectations?.expectedProfession) && <div><span className="font-bold text-gray-600">{t.expectedProfession}:</span> {data.expectations?.expectedProfession}</div>}
-              {hasContent(data.expectations?.expectedLocation) && <div><span className="font-bold text-gray-600">{t.expectedLocation}:</span> {data.expectations?.expectedLocation}</div>}
-            </div>
-            {hasContent(data.expectations?.additionalExpectations) && (
-              <div className="mt-1 bg-indigo-50/30 p-3 rounded-lg border border-indigo-100/50">
-                <span className="font-bold text-indigo-700 block mb-1 text-xs uppercase tracking-wider">{t.additionalExpectations}:</span>
-                <p className="whitespace-pre-wrap text-gray-700 leading-relaxed italic">&quot;{data.expectations?.additionalExpectations}&quot;</p>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* 7. Contact Information */}
-      {hasContent(data?.contactInfo) && (
-        <section className="mt-10 pt-8 border-t-2 border-dashed border-gray-200 text-center print:mt-6 print:pt-4">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">{t.contact}</h3>
-          <div className="inline-flex flex-wrap justify-center gap-6 bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm print:p-4 print:gap-4">
-            {hasContent(data.contactInfo?.contactNumber) && (
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t.contactNumber}</span>
-                <span className="text-indigo-600 font-bold">{data.contactInfo?.contactNumber}</span>
-              </div>
-            )}
-            {hasContent(data.contactInfo?.whatsAppNumber) && (
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t.whatsApp}</span>
-                <span className="text-emerald-600 font-bold">{data.contactInfo?.whatsAppNumber}</span>
-              </div>
-            )}
-            {hasContent(data.contactInfo?.emailAddress) && (
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t.email}</span>
-                <span className="text-gray-700 font-semibold">{data.contactInfo?.emailAddress}</span>
-              </div>
-            )}
-          </div>
-          {hasContent(data.contactInfo?.guardianContact) && (
-            <div className="mt-4 text-xs text-gray-500 italic">
-              {t.guardianContact}: {data.contactInfo?.guardianContact}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* Custom Sections */}
-      {data?.customSections?.map((section: { title: string; fields: { label: string; value: string }[] }, idx: number) => (
-        hasContent(section.fields) && (
-          <section key={idx} className="print:break-inside-avoid mt-8">
-            <h3 className="text-lg font-bold text-indigo-800 mb-3 border-b-2 border-indigo-50 pb-1">{section.title}</h3>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
-              {section.fields.map((f: { label: string; value: string }, fIdx: number) => (
-                <div key={fIdx}><span className="font-bold text-gray-600">{f.label}:</span> {f.value}</div>
+      {/* Grid for sections - A4 optimized */}
+      <div className="space-y-10">
+        {/* 1. Basic Information */}
+        {hasContent(data?.basicInfo) && (
+          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+              {t.basic}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-[13px] border-l-2 border-indigo-100 pl-6 ml-2">
+              {[
+                { label: t.fullName, value: data.basicInfo?.fullName },
+                { label: t.dob, value: data.basicInfo?.dateOfBirth },
+                { label: t.age, value: data.basicInfo?.age ? `${data.basicInfo?.age} ${lang === 'en' ? 'Years' : 'বছর'}` : null },
+                { label: t.height, value: data.basicInfo?.height },
+                { label: t.bloodGroup, value: data.basicInfo?.bloodGroup },
+                { label: t.religion, value: data.basicInfo?.religion },
+                { label: t.maritalStatus, value: data.basicInfo?.maritalStatus },
+                { label: t.nationality, value: data.basicInfo?.nationality },
+                { label: t.weight, value: data.basicInfo?.weight },
+                ...(data.basicInfo?.extraFields || []).map((f: CustomField) => ({ label: f.label, value: f.value }))
+              ].map((item, i) => hasContent(item.value) && (
+                <div key={i} className="flex flex-col gap-0.5">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{item.label}</span>
+                  <span className="font-semibold text-gray-900">{item.value}</span>
+                </div>
               ))}
             </div>
           </section>
-        )
-      ))}
+        )}
+
+        {/* 2. Personal Information */}
+        {hasContent(data?.personalInfo) && (
+          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+              {t.personal}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 text-[13px] border-l-2 border-indigo-100 pl-6 ml-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+                {[
+                  { label: t.presentAddress, value: data.personalInfo?.presentAddress, fullWidth: true },
+                  { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, fullWidth: true },
+                  { label: t.district, value: data.personalInfo?.district },
+                  { label: t.division, value: data.personalInfo?.division },
+                  { label: t.nativeVillage, value: data.personalInfo?.nativeVillage },
+                  { label: t.complexion, value: data.personalInfo?.complexion },
+                  { label: t.physicalStatus, value: data.personalInfo?.physicalStatus },
+                ].map((item, i) => hasContent(item.value) && (
+                  <div key={i} className={`flex flex-col gap-0.5 ${item.fullWidth ? 'col-span-2' : ''}`}>
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{item.label}</span>
+                    <span className="font-semibold text-gray-900 leading-relaxed">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+              {hasContent(data.personalInfo?.hobby) && (
+                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 italic">
+                  <span className="text-indigo-600 font-bold not-italic mr-2"># {t.hobby}:</span>
+                  {data.personalInfo?.hobby}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* 3. Education Information */}
+        {hasContent(data?.education) && (
+          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+              {t.education}
+            </h3>
+            <div className="space-y-6 ml-2">
+              {data.education && data.education.qualifications?.map((edu: Qualification, index: number) => (
+                <div key={index} className="bg-gradient-to-br from-indigo-50/30 to-indigo-50/30 p-6 rounded-[2rem] border border-indigo-100/50 relative">
+                  <div className="text-xl font-black text-indigo-900 mb-4 uppercase tracking-tight">
+                    {edu.degree}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-[13px]">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t.institution}</span>
+                      <span className="font-bold text-gray-800">{edu.institution}</span>
+                    </div>
+                    {edu.passingYear && (
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t.passingYear}</span>
+                        <span className="font-bold text-gray-800">{edu.passingYear}</span>
+                      </div>
+                    )}
+                    {edu.result && (
+                      <div className="flex flex-col sm:col-span-2">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Result</span>
+                        <span className="font-bold text-gray-800">{edu.result}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {hasContent(data.education?.additionalQualifications) && (
+                <div className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100 ml-0 mt-4">
+                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">{t.additionalQualifications}</span>
+                   <p className="whitespace-pre-wrap text-gray-700 leading-relaxed font-medium text-[13px]">
+                     {data.education?.additionalQualifications}
+                   </p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* 4. Profession Information */}
+        {hasContent(data?.profession) && (
+          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+             <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+              {t.profession}
+            </h3>
+            <div className="bg-indigo-50/20 p-6 rounded-[2rem] border border-indigo-100/50 shadow-sm ml-2">
+              <div className="grid grid-cols-1 gap-y-4 text-[13px]">
+                {hasContent(data.profession?.occupation) && (
+                  <div className="text-xl font-black text-indigo-900 mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+                    {data.profession?.occupation}
+                  </div>
+                )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+                  {[
+                    { label: t.organization, value: data.profession?.organizationName },
+                    { label: t.employmentType, value: data.profession?.employmentType },
+                    { label: t.monthlyIncome, value: data.profession?.monthlyIncome },
+                    { label: t.workplace, value: data.profession?.workplaceLocation },
+                  ].map((item, i) => hasContent(item.value) && (
+                    <div key={i} className="flex flex-col gap-0.5">
+                      <span className="text-[10px] font-bold text-indigo-400 uppercase">{item.label}</span>
+                      <span className="font-bold text-gray-800">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 5. Family Information */}
+        {hasContent(data?.familyInfo) && (
+          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '500ms' }}>
+            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+              {t.family}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 text-[13px] border-l-2 border-indigo-100 pl-6 ml-2">
+              {[
+                { label: t.fatherName, value: data.familyInfo?.fatherName },
+                { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
+                { label: t.motherName, value: data.familyInfo?.motherName },
+                { label: t.motherProfession, value: data.familyInfo?.motherProfession },
+                { label: t.brothers, value: data.familyInfo?.numberOfBrothers?.toString() },
+                { label: t.sisters, value: data.familyInfo?.numberOfSisters?.toString() },
+              ].map((item, i) => hasContent(item.value) && item.value !== "NaN" && (
+                <div key={i} className="flex flex-col gap-0.5">
+                  <span className="text-[10px] font-bold text-indigo-300 uppercase">{item.label}</span>
+                  <span className="font-bold text-gray-800">{item.value}</span>
+                </div>
+              ))}
+              {hasContent(data.familyInfo?.familyStatus) && (
+                <div className="col-span-2 mt-2 bg-indigo-50/30 p-4 rounded-2xl border border-indigo-100/50">
+                   <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block mb-1">{t.familyStatus}</span>
+                   <p className="font-bold text-gray-800">{data.familyInfo?.familyStatus}</p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* 6. Marriage Expectations */}
+        {hasContent(data?.expectations) && (
+          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '600ms' }}>
+            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+              {t.expectations}
+            </h3>
+            <div className="bg-indigo-50/20 p-6 sm:p-8 rounded-[2.5rem] border-2 border-indigo-100 items-center justify-center text-center ml-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-[13px] mb-8">
+                {[
+                  { label: t.expectedAge, value: data.expectations?.expectedAgeRange },
+                  { label: t.expectedHeight, value: data.expectations?.expectedHeight },
+                  { label: t.expectedEducation, value: data.expectations?.expectedEducation },
+                  { label: t.expectedProfession, value: data.expectations?.expectedProfession },
+                  { label: t.expectedLocation, value: data.expectations?.expectedLocation },
+                ].map((item, i) => hasContent(item.value) && (
+                  <div key={i} className="flex flex-col gap-1">
+                    <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{item.label}</span>
+                    <span className="font-black text-gray-900 underline decoration-indigo-200 underline-offset-4 decoration-2">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+              {hasContent(data.expectations?.additionalExpectations) && (
+                <div className="relative pt-6">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-indigo-200"></div>
+                  <p className="italic text-gray-700 leading-relaxed px-4 text-sm font-medium">
+                    &quot;{data.expectations?.additionalExpectations}&quot;
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Custom Sections */}
+        {data?.customSections?.map((section: CustomSection, idx: number) => (
+          hasContent(section.fields) && (
+            <section key={idx} className="print:break-inside-avoid">
+               <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+                {section.title}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-[13px] border-l-2 border-indigo-200 pl-6 ml-2">
+                {section.fields.map((f: CustomField, fIdx: number) => (
+                  <div key={fIdx} className="flex flex-col gap-0.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{f.label}</span>
+                    <span className="font-semibold text-gray-900">{f.value}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        ))}
+
+        {/* 7. Contact Information */}
+        {hasContent(data?.contactInfo) && (
+          <section className="mt-20 pt-12 border-t-8 border-double border-indigo-100 text-center print:mt-10 print:pt-8 bg-gray-50/50 rounded-[3rem] p-10">
+            <h3 className="text-2xl font-black text-gray-900 mb-6 uppercase tracking-widest">{t.contact}</h3>
+            <div className="flex flex-wrap justify-center gap-10">
+              {[
+                { label: t.contactNumber, value: data.contactInfo?.contactNumber, color: 'text-indigo-600' },
+                { label: t.whatsApp, value: data.contactInfo?.whatsAppNumber, color: 'text-indigo-600' },
+                { label: t.email, value: data.contactInfo?.emailAddress, color: 'text-gray-900' },
+              ].map((item, i) => hasContent(item.value) && (
+                <div key={i} className="flex flex-col items-center">
+                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">{item.label}</span>
+                  <span className={`text-lg font-black ${item.color}`}>{item.value}</span>
+                </div>
+              ))}
+            </div>
+            {hasContent(data.contactInfo?.guardianContact) && (
+              <div className="mt-8 pt-6 border-t border-gray-200/50 text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
+                {t.guardianContact}: <span className="text-gray-600 ml-2">{data.contactInfo?.guardianContact}</span>
+              </div>
+            )}
+          </section>
+        )}
+      </div>
     </div>
   )
 }

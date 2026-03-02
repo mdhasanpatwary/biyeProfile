@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
 import { DownloadPDFButton } from "@/components/DownloadPDFButton"
-import { ReportButton } from "@/components/ReportButton"
 import { BiodataContent } from "@/components/BiodataContent"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 
@@ -54,29 +53,27 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
     )
   }
 
-  if (user.biodata.isReported) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white p-8 rounded shadow text-center border">
-          <h1 className="text-2xl font-bold text-red-600 mb-2">Under Review</h1>
-          <p className="text-gray-600">This profile is currently under review by administrators.</p>
-        </div>
-      </div>
-    )
-  }
 
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
-      <div className="max-w-3xl mx-auto bg-white shadow-lg print:shadow-none p-10 print:p-0">
+    <div className="bg-gray-50 min-h-screen py-6 sm:py-12 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg print:shadow-none p-4 sm:p-10 print:p-0 sm:rounded-[2.5rem] border border-gray-100/50">
         <BiodataContent data={data} />
 
-        <div className="mt-12 pt-8 border-t print:hidden flex justify-between items-center">
-          <ReportButton username={user.username!} />
+        <div className="mt-12 pt-8 border-t border-gray-100 print:hidden flex justify-center items-center px-4">
           <DownloadPDFButton />
         </div>
       </div>
+
+      {/* Floating Sticky Download Bar for Mobile */}
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/60 backdrop-blur-xl border-t border-gray-100/50 sm:hidden flex justify-center z-50 print:hidden transition-all duration-300">
+        <DownloadPDFButton />
+      </div>
+
+      {/* Spacer for mobile to prevent content being hidden by sticky bar */}
+      <div className="h-28 sm:hidden print:hidden" />
     </div>
   )
 }
+

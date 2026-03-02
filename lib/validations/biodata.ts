@@ -10,6 +10,13 @@ const customSectionSchema = z.object({
   fields: z.array(customFieldSchema).min(1, "At least one field is required"),
 })
 
+const educationQualificationSchema = z.object({
+  degree: z.string().min(1, "Degree/Level is required").max(100),
+  institution: z.string().min(1, "Institution is required").max(200),
+  passingYear: z.union([z.number(), z.literal(""), z.string()]),
+  result: z.string().optional(),
+})
+
 export const biodataSchema = z.object({
   language: z.enum(["en", "bn"]),
   basicInfo: z.object({
@@ -37,9 +44,7 @@ export const biodataSchema = z.object({
     extraFields: z.array(customFieldSchema),
   }),
   education: z.object({
-    highestQualification: z.string().min(2, "Highest qualification is required").max(200),
-    institution: z.string(),
-    passingYear: z.union([z.number(), z.literal("")]),
+    qualifications: z.array(educationQualificationSchema).min(1, "At least one qualification is required"),
     additionalQualifications: z.string(),
     extraFields: z.array(customFieldSchema),
   }),

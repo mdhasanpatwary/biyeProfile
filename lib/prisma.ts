@@ -7,7 +7,18 @@ const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 export const prisma =
   globalForPrisma.prisma ||
   ((): PrismaClient => {
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+    // Strip query params to prevent conflicts
+    const url = new URL(process.env.DATABASE_URL!)
+    url.search = ""
+
+    const pool = new Pool({
+      connectionString: url.toString(),
+      ssl: {
+        rejectUnauthorized: false
+      },
+      connectionTimeoutMillis: 15000,
+    })
+
     const adapter = new PrismaPg(pool)
     return new PrismaClient({ adapter })
   })()

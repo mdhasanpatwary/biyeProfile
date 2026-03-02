@@ -31,12 +31,10 @@ const HEIGHT_OPTIONS = Array.from({ length: 20 }, (_, i) => {
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 const COMPLEXION_OPTIONS = ["Fair", "Medium", "Dark"];
 const EMPLOYMENT_TYPES = ["Private", "Govt", "Business", "Freelancer", "Other"];
-const FAMILY_STATUS_OPTIONS = ["Middle Class", "Upper Middle Class", "Affluent"];
+const FAMILY_STATUS_OPTIONS = ["Nuclear Family", "Joint Family", "Middle Class", "Upper Middle Class", "Affluent"];
 const MARITAL_STATUS_OPTIONS = ["Unmarried", "Divorced", "Widow/Widower"];
 
 export function BiodataForm({ initialData, onDataChange }: { initialData: Partial<BiodataFormValues>, onDataChange?: (data: BiodataFormValues) => void }) {
-  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle")
-  const [formLoading, setFormLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const tabsRef = useRef<HTMLDivElement>(null)
 
@@ -80,9 +78,9 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
         extraFields: initialData?.personalInfo?.extraFields || [],
       },
       education: {
-        highestQualification: initialData?.education?.highestQualification || "",
-        institution: initialData?.education?.institution || "",
-        passingYear: initialData?.education?.passingYear || "",
+        qualifications: initialData?.education?.qualifications || [
+          { degree: "", institution: "", passingYear: "", result: "" }
+        ],
         additionalQualifications: initialData?.education?.additionalQualifications || "",
         extraFields: initialData?.education?.extraFields || [],
       },
@@ -150,6 +148,28 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
     name: "customSections"
   })
 
+  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
+    control: form.control,
+    name: "education.qualifications"
+  })
+
+  // Auto-center active tab
+  useEffect(() => {
+    if (tabsRef.current) {
+      const activeTab = tabsRef.current.children[0].children[currentStep - 1] as HTMLElement;
+      if (activeTab) {
+        const containerWidth = tabsRef.current.offsetWidth;
+        const tabWidth = activeTab.offsetWidth;
+        const scrollLeft = activeTab.offsetLeft - (containerWidth / 2) + (tabWidth / 2);
+
+        tabsRef.current.scrollTo({
+          left: scrollLeft,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [currentStep]);
+
   const scrollTabs = (direction: 'left' | 'right') => {
     if (tabsRef.current) {
       const scrollAmount = 150;
@@ -162,7 +182,6 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
 
   // Set up autosave
   const debouncedSave = useDebounce(async (data: BiodataFormValues) => {
-    setSaveState("saving")
     try {
       const res = await fetch("/api/biodata", {
         method: "PUT",
@@ -170,18 +189,15 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
         body: JSON.stringify({ data })
       })
       if (res.ok) {
-        setSaveState("saved")
         toast.success("Changes autosaved", { duration: 1500 })
-        setTimeout(() => setSaveState("idle"), 2000)
-      } else {
-        setSaveState("error")
       }
     } catch {
-      setSaveState("error")
+      // Silence background errors
     }
   }, 2000)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/incompatible-library
     const subscription = form.watch((value) => {
       onDataChange?.(value as BiodataFormValues)
       debouncedSave(value as BiodataFormValues)
@@ -189,100 +205,70 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
     return () => subscription.unsubscribe()
   }, [form, debouncedSave, onDataChange])
 
-  const handleManualSave = async () => {
-    const isValid = await form.trigger();
-    if (!isValid) {
-      toast.error("Please fill in all required fields correctly.");
-      return;
-    }
-
-    const data = form.getValues()
-    setSaveState("saving")
-    setFormLoading(true)
-    try {
-      const res = await fetch("/api/biodata", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data })
-      })
-      if (res.ok) {
-        setSaveState("saved")
-        toast.success("Biodata saved successfully!")
-        setTimeout(() => setSaveState("idle"), 2000)
-      } else {
-        setSaveState("error")
-      }
-    } catch {
-      setSaveState("error")
-    } finally {
-      setFormLoading(false)
-    }
-  }
 
   const lang = form.watch("language");
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6 bg-indigo-50/50 p-2 sm:p-4 rounded-xl border border-indigo-100/50 backdrop-blur-sm sticky top-0 z-10 transition-all duration-300">
-        <div className="flex items-center gap-1 flex-1 overflow-hidden relative group/tabs min-w-0">
+    <div className="relative">
+
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-12 bg-white/80 p-3 sm:p-5 rounded-[2.5rem] border border-gray-100 backdrop-blur-xl sticky top-4 z-50 transition-all duration-500 shadow-xl shadow-indigo-500/5 gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0 w-full">
+          {/* Prev Button */}
           <button
             type="button"
-            onClick={() => scrollTabs('left')}
-            className="absolute left-0 z-20 h-8 w-6 bg-gradient-to-r from-indigo-50 to-transparent flex items-center justify-start text-indigo-400 opacity-0 group-hover/tabs:opacity-100 transition-opacity lg:hidden"
+            disabled={currentStep === 1}
+            onClick={() => {
+              setCurrentStep(prev => prev - 1);
+              scrollTabs('left');
+            }}
+            className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center text-indigo-600 transition-all enabled:hover:bg-indigo-50 enabled:hover:scale-110 enabled:active:scale-90 disabled:opacity-20 disabled:grayscale cursor-pointer disabled:cursor-not-allowed group"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+            <svg className="w-5 h-5 group-enabled:group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
           </button>
 
+          {/* Tabs Scroll Area */}
           <div
             ref={tabsRef}
-            className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth py-1 px-1 overflow-y-hidden w-full select-none"
+            className="flex-1 overflow-x-auto no-scrollbar scroll-smooth py-2 select-none"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-center gap-1 sm:gap-3 min-w-max px-2">
               {steps.map((step, idx) => (
-                <div
+                <button
                   key={idx}
-                  className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 border ${currentStep === idx + 1 ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm scale-105' : 'bg-white text-gray-400 border-gray-100 hover:bg-gray-50'}`}
+                  type="button"
+                  className={`flex items-center gap-3 px-4 sm:px-8 py-2.5 sm:py-4 rounded-2xl sm:rounded-3xl text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] transition-all duration-500 border-2 ${currentStep === idx + 1 ? 'bg-indigo-600 text-white border-indigo-600 shadow-2xl shadow-indigo-200 scale-105 sm:scale-110 z-10' : 'bg-gray-50/50 text-gray-400 border-transparent hover:text-indigo-600 hover:bg-white hover:border-indigo-100'}`}
                   onClick={() => setCurrentStep(idx + 1)}
                 >
-                  <span className="text-base sm:text-lg">{step.icon}</span>
-                  <span className={currentStep === idx + 1 ? 'block' : 'hidden md:block'}>{step.title}</span>
-                </div>
+                  <span className={`text-xl sm:text-2xl transition-all duration-500 ${currentStep === idx + 1 ? 'scale-110 rotate-12 brightness-110' : 'grayscale opacity-40'}`}>{step.icon}</span>
+                  <span className="hidden sm:block">{step.title}</span>
+                </button>
               ))}
-            </div>
-
-            <div className="ml-2 sm:ml-4 flex items-center shrink-0 min-w-[70px] sm:min-w-[100px]">
-              {saveState === "saving" && <span className="text-[9px] sm:text-[10px] font-bold text-indigo-600 animate-pulse flex items-center gap-1 sm:gap-2 uppercase tracking-tight"><div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-indigo-600 rounded-full animate-ping"></div> Saving</span>}
-              {saveState === "saved" && <span className="text-[9px] sm:text-[10px] font-bold text-emerald-600 flex items-center gap-1 uppercase tracking-tight">✓ Saved</span>}
-              {saveState === "error" && <span className="text-[9px] sm:text-[10px] font-bold text-red-600 uppercase tracking-tight">⚠ Error</span>}
             </div>
           </div>
 
+          {/* Next Button */}
           <button
             type="button"
-            onClick={() => scrollTabs('right')}
-            className="absolute right-0 z-20 h-8 w-6 bg-gradient-to-l from-indigo-50 to-transparent flex items-center justify-end text-indigo-400 opacity-0 group-hover/tabs:opacity-100 transition-opacity lg:hidden"
+            disabled={currentStep === steps.length}
+            onClick={() => {
+              setCurrentStep(prev => prev + 1);
+              scrollTabs('right');
+            }}
+            className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white border border-gray-100 shadow-sm flex items-center justify-center text-indigo-600 transition-all enabled:hover:bg-indigo-50 enabled:hover:scale-110 enabled:active:scale-90 disabled:opacity-20 disabled:grayscale cursor-pointer disabled:cursor-not-allowed group"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+            <svg className="w-5 h-5 group-enabled:group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-4 ml-2">
+        <div className="flex items-center gap-3 ml-4 pr-2">
           <select
             {...form.register("language")}
-            className="text-xs font-bold bg-white border border-gray-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="text-xs font-black text-slate-800 bg-white border border-gray-200 rounded-xl px-3 py-2 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none shadow-sm cursor-pointer transition-all hover:bg-gray-50 active:scale-95"
           >
-            <option value="en">English</option>
-            <option value="bn">বাংলা</option>
+            <option value="en" className="font-bold">ENG</option>
+            <option value="bn" className="font-bold">বাংলা</option>
           </select>
-          <button
-            type="button"
-            onClick={handleManualSave}
-            disabled={formLoading}
-            className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-md hover:shadow-indigo-500/30 transition-all hover:bg-indigo-700 active:scale-95 disabled:opacity-50 shrink-0"
-          >
-            Save
-          </button>
         </div>
       </div>
 
@@ -307,63 +293,63 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Full Name</label>
-                <input type="text" {...form.register("basicInfo.fullName")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.basicInfo?.fullName && <p className="mt-1 text-xs text-red-600">{form.formState.errors.basicInfo.fullName.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Full Name</label>
+                <input type="text" {...form.register("basicInfo.fullName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.basicInfo?.fullName?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.fullName.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-                <input type="date" {...form.register("basicInfo.dateOfBirth")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.basicInfo?.dateOfBirth && <p className="mt-1 text-xs text-red-600">{form.formState.errors.basicInfo.dateOfBirth.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Date of Birth</label>
+                <input type="date" {...form.register("basicInfo.dateOfBirth")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.basicInfo?.dateOfBirth?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.dateOfBirth.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Age (Auto Calculated)</label>
-                <input type="number" readOnly {...form.register("basicInfo.age")} className="mt-1 block w-full rounded-lg bg-gray-50 border-gray-200 shadow-sm sm:text-sm p-2.5 border text-gray-500 cursor-not-allowed" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Age (Auto Calculated)</label>
+                <input type="number" readOnly {...form.register("basicInfo.age")} className="block w-full rounded-2xl border-gray-100 bg-gray-100/50 shadow-sm sm:text-sm p-3 border text-gray-400 cursor-not-allowed outline-none font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Height</label>
-                <select {...form.register("basicInfo.height")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Height</label>
+                <select {...form.register("basicInfo.height")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
                   <option value="">Select Height</option>
                   {HEIGHT_OPTIONS.map(h => <option key={h} value={h}>{h}</option>)}
                 </select>
-                {form.formState.errors.basicInfo?.height && <p className="mt-1 text-xs text-red-600">{form.formState.errors.basicInfo.height.message}</p>}
+                {form.formState.errors.basicInfo?.height?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.height.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Weight (Optional)</label>
-                <input type="text" {...form.register("basicInfo.weight")} placeholder="e.g. 70kg" className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Weight (Optional)</label>
+                <input type="text" {...form.register("basicInfo.weight")} placeholder="e.g. 70kg" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Blood Group</label>
-                <select {...form.register("basicInfo.bloodGroup")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Blood Group</label>
+                <select {...form.register("basicInfo.bloodGroup")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
                   <option value="">Select Blood Group</option>
                   {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
                 </select>
-                {form.formState.errors.basicInfo?.bloodGroup && <p className="mt-1 text-xs text-red-600">{form.formState.errors.basicInfo.bloodGroup.message}</p>}
+                {form.formState.errors.basicInfo?.bloodGroup?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.bloodGroup.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Religion</label>
-                <input type="text" {...form.register("basicInfo.religion")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.basicInfo?.religion && <p className="mt-1 text-xs text-red-600">{form.formState.errors.basicInfo.religion.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Religion</label>
+                <input type="text" {...form.register("basicInfo.religion")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.basicInfo?.religion?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.religion.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Marital Status</label>
-                <select {...form.register("basicInfo.maritalStatus")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Marital Status</label>
+                <select {...form.register("basicInfo.maritalStatus")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
                   <option value="">Select Status</option>
                   {MARITAL_STATUS_OPTIONS.map(status => <option key={status} value={status}>{status}</option>)}
                 </select>
-                {form.formState.errors.basicInfo?.maritalStatus && <p className="mt-1 text-xs text-red-600">{form.formState.errors.basicInfo.maritalStatus.message}</p>}
+                {form.formState.errors.basicInfo?.maritalStatus?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.maritalStatus.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Nationality</label>
-                <input type="text" {...form.register("basicInfo.nationality")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nationality</label>
+                <input type="text" {...form.register("basicInfo.nationality")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
             </div>
           </section>
@@ -379,49 +365,49 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Present Address</label>
-                <textarea {...form.register("personalInfo.presentAddress")} rows={3} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.personalInfo?.presentAddress && <p className="mt-1 text-xs text-red-600">{form.formState.errors.personalInfo.presentAddress.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Present Address</label>
+                <textarea {...form.register("personalInfo.presentAddress")} rows={3} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.personalInfo?.presentAddress?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.personalInfo.presentAddress.message}</p>}
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Permanent Address</label>
-                <textarea {...form.register("personalInfo.permanentAddress")} rows={3} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.personalInfo?.permanentAddress && <p className="mt-1 text-xs text-red-600">{form.formState.errors.personalInfo.permanentAddress.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Permanent Address</label>
+                <textarea {...form.register("personalInfo.permanentAddress")} rows={3} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.personalInfo?.permanentAddress?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.personalInfo.permanentAddress.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">District</label>
-                <input type="text" {...form.register("personalInfo.district")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.personalInfo?.district && <p className="mt-1 text-xs text-red-600">{form.formState.errors.personalInfo.district.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">District</label>
+                <input type="text" {...form.register("personalInfo.district")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.personalInfo?.district?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.personalInfo.district.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Division (Optional)</label>
-                <input type="text" {...form.register("personalInfo.division")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Division (Optional)</label>
+                <input type="text" {...form.register("personalInfo.division")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Native Village (Optional)</label>
-                <input type="text" {...form.register("personalInfo.nativeVillage")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Native Village (Optional)</label>
+                <input type="text" {...form.register("personalInfo.nativeVillage")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Complexion (Optional)</label>
-                <select {...form.register("personalInfo.complexion")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Complexion (Optional)</label>
+                <select {...form.register("personalInfo.complexion")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
                   <option value="">Select Complexion</option>
                   {COMPLEXION_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Physical Status (Optional)</label>
-                <input type="text" {...form.register("personalInfo.physicalStatus")} placeholder="e.g. Healthy" className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Physical Status (Optional)</label>
+                <input type="text" {...form.register("personalInfo.physicalStatus")} placeholder="e.g. Healthy" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Hobby / Interests (Optional)</label>
-                <textarea {...form.register("personalInfo.hobby")} rows={2} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Hobby / Interests (Optional)</label>
+                <textarea {...form.register("personalInfo.hobby")} rows={2} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
             </div>
           </section>
@@ -435,26 +421,85 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
               {lang === 'en' ? 'Education Information' : 'শিক্ষাগত তথ্য'}
             </h3>
 
-            <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Highest Qualification</label>
-                <input type="text" {...form.register("education.highestQualification")} placeholder="e.g. B.Sc in CSE" className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.education?.highestQualification && <p className="mt-1 text-xs text-red-600">{form.formState.errors.education.highestQualification.message}</p>}
-              </div>
+            <div className="space-y-8">
+              {educationFields.map((field, index) => (
+                <div key={field.id} className="p-6 rounded-2xl bg-gray-50/50 border border-gray-100 relative group/edu">
+                  {educationFields.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeEducation(index)}
+                      className="absolute -top-3 -right-3 w-8 h-8 bg-white text-red-500 rounded-full shadow-md border border-red-50 flex items-center justify-center opacity-0 group-hover/edu:opacity-100 transition-all hover:bg-red-50 z-10"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Institution Name (Optional)</label>
-                <input type="text" {...form.register("education.institution")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-              </div>
+                  <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                    <div className="sm:col-span-1">
+                      <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Degree / Level</label>
+                      <input
+                        type="text"
+                        {...form.register(`education.qualifications.${index}.degree` as const)}
+                        placeholder="e.g. SSC / Graduation"
+                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                      />
+                      {form.formState.errors.education?.qualifications?.[index]?.degree?.message && (
+                        <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">
+                          {form.formState.errors.education.qualifications[index].degree.message}
+                        </p>
+                      )}
+                    </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Passing Year (Optional)</label>
-                <input type="number" {...form.register("education.passingYear", { valueAsNumber: true })} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-              </div>
+                    <div className="sm:col-span-1">
+                      <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Passing Year</label>
+                      <input
+                        type="text"
+                        {...form.register(`education.qualifications.${index}.passingYear` as const)}
+                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Institution Name</label>
+                      <input
+                        type="text"
+                        {...form.register(`education.qualifications.${index}.institution` as const)}
+                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                      />
+                      {form.formState.errors.education?.qualifications?.[index]?.institution?.message && (
+                        <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">
+                          {form.formState.errors.education.qualifications[index].institution.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Result (Optional)</label>
+                      <input
+                        type="text"
+                        {...form.register(`education.qualifications.${index}.result` as const)}
+                        placeholder="e.g. GPA 5.00 / 1st Class"
+                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => appendEducation({ degree: "", institution: "", passingYear: "", result: "" })}
+                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-2xl text-gray-400 font-bold text-sm hover:border-indigo-300 hover:text-indigo-500 hover:bg-indigo-50/30 transition-all flex items-center justify-center gap-2 group"
+              >
+                <div className="w-6 h-6 rounded-full bg-gray-100 group-hover:bg-indigo-100 flex items-center justify-center transition-colors">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                </div>
+                Add Another Qualification
+              </button>
 
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Additional Qualifications (Optional)</label>
-                <textarea {...form.register("education.additionalQualifications")} rows={3} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Additional Educational Details (Optional)</label>
+                <textarea {...form.register("education.additionalQualifications")} rows={3} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
             </div>
           </section>
@@ -470,32 +515,32 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Occupation / Job Title</label>
-                <input type="text" {...form.register("profession.occupation")} placeholder="e.g. Software Engineer" className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.profession?.occupation && <p className="mt-1 text-xs text-red-600">{form.formState.errors.profession.occupation.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Occupation / Job Title</label>
+                <input type="text" {...form.register("profession.occupation")} placeholder="e.g. Software Engineer" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.profession?.occupation?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.profession.occupation.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Organization Name (Optional)</label>
-                <input type="text" {...form.register("profession.organizationName")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Organization Name (Optional)</label>
+                <input type="text" {...form.register("profession.organizationName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Employment Type (Optional)</label>
-                <select {...form.register("profession.employmentType")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Employment Type (Optional)</label>
+                <select {...form.register("profession.employmentType")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
                   <option value="">Select Type</option>
                   {EMPLOYMENT_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Monthly Income (Optional)</label>
-                <input type="text" {...form.register("profession.monthlyIncome")} placeholder="e.g. 50,000 BDT" className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Monthly Income (Optional)</label>
+                <input type="text" {...form.register("profession.monthlyIncome")} placeholder="e.g. 50,000 BDT" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Workplace Location (Optional)</label>
-                <input type="text" {...form.register("profession.workplaceLocation")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Workplace Location (Optional)</label>
+                <input type="text" {...form.register("profession.workplaceLocation")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
             </div>
           </section>
@@ -511,40 +556,40 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Father&apos;s Name</label>
-                <input type="text" {...form.register("familyInfo.fatherName")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.familyInfo?.fatherName && <p className="mt-1 text-xs text-red-600">{form.formState.errors.familyInfo.fatherName.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Father&apos;s Name</label>
+                <input type="text" {...form.register("familyInfo.fatherName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.familyInfo?.fatherName?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.familyInfo.fatherName.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Father&apos;s Profession (Optional)</label>
-                <input type="text" {...form.register("familyInfo.fatherProfession")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Father&apos;s Profession (Optional)</label>
+                <input type="text" {...form.register("familyInfo.fatherProfession")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Mother&apos;s Name</label>
-                <input type="text" {...form.register("familyInfo.motherName")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.familyInfo?.motherName && <p className="mt-1 text-xs text-red-600">{form.formState.errors.familyInfo.motherName.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Mother&apos;s Name</label>
+                <input type="text" {...form.register("familyInfo.motherName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.familyInfo?.motherName?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.familyInfo.motherName.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Mother&apos;s Profession (Optional)</label>
-                <input type="text" {...form.register("familyInfo.motherProfession")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Mother&apos;s Profession (Optional)</label>
+                <input type="text" {...form.register("familyInfo.motherProfession")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Number of Brothers (Optional)</label>
-                <input type="number" {...form.register("familyInfo.numberOfBrothers", { valueAsNumber: true })} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Number of Brothers (Optional)</label>
+                <input type="number" {...form.register("familyInfo.numberOfBrothers", { valueAsNumber: true })} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Number of Sisters (Optional)</label>
-                <input type="number" {...form.register("familyInfo.numberOfSisters", { valueAsNumber: true })} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Number of Sisters (Optional)</label>
+                <input type="number" {...form.register("familyInfo.numberOfSisters", { valueAsNumber: true })} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Family Status (Optional)</label>
-                <select {...form.register("familyInfo.familyStatus")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900">
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Family Status (Optional)</label>
+                <select {...form.register("familyInfo.familyStatus")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
                   <option value="">Select Family Status</option>
                   {FAMILY_STATUS_OPTIONS.map(status => <option key={status} value={status}>{status}</option>)}
                 </select>
@@ -563,33 +608,33 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Expected Age Range (Optional)</label>
-                <input type="text" {...form.register("expectations.expectedAgeRange")} placeholder="e.g. 22-26" className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Age Range (Optional)</label>
+                <input type="text" {...form.register("expectations.expectedAgeRange")} placeholder="e.g. 22-26" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Expected Height (Optional)</label>
-                <input type="text" {...form.register("expectations.expectedHeight")} placeholder={`e.g. 5'2" - 5'6"`} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Height (Optional)</label>
+                <input type="text" {...form.register("expectations.expectedHeight")} placeholder={`e.g. 5'2" - 5'6"`} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Expected Education (Optional)</label>
-                <input type="text" {...form.register("expectations.expectedEducation")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Education (Optional)</label>
+                <input type="text" {...form.register("expectations.expectedEducation")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Expected Profession (Optional)</label>
-                <input type="text" {...form.register("expectations.expectedProfession")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Profession (Optional)</label>
+                <input type="text" {...form.register("expectations.expectedProfession")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Expected Location (Optional)</label>
-                <input type="text" {...form.register("expectations.expectedLocation")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Location (Optional)</label>
+                <input type="text" {...form.register("expectations.expectedLocation")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Additional Expectations (Optional)</label>
-                <textarea {...form.register("expectations.additionalExpectations")} rows={4} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Additional Expectations (Optional)</label>
+                <textarea {...form.register("expectations.additionalExpectations")} rows={4} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
             </div>
           </section>
@@ -605,25 +650,25 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Contact Number</label>
-                <input type="text" {...form.register("contactInfo.contactNumber")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.contactInfo?.contactNumber && <p className="mt-1 text-xs text-red-600">{form.formState.errors.contactInfo.contactNumber.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Contact Number</label>
+                <input type="text" {...form.register("contactInfo.contactNumber")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.contactInfo?.contactNumber?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.contactInfo.contactNumber.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">WhatsApp Number (Optional)</label>
-                <input type="text" {...form.register("contactInfo.whatsAppNumber")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">WhatsApp Number (Optional)</label>
+                <input type="text" {...form.register("contactInfo.whatsAppNumber")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Email Address (Optional)</label>
-                <input type="email" {...form.register("contactInfo.emailAddress")} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
-                {form.formState.errors.contactInfo?.emailAddress && <p className="mt-1 text-xs text-red-600">{form.formState.errors.contactInfo.emailAddress.message}</p>}
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Email Address (Optional)</label>
+                <input type="email" {...form.register("contactInfo.emailAddress")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                {form.formState.errors.contactInfo?.emailAddress?.message && <p className="mt-1.5 text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.contactInfo.emailAddress.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Guardian Contact Info (Optional)</label>
-                <input type="text" {...form.register("contactInfo.guardianContact")} placeholder="e.g. Father: 017..." className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 border text-gray-900" />
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Guardian Contact Info (Optional)</label>
+                <input type="text" {...form.register("contactInfo.guardianContact")} placeholder="e.g. Father: 017..." className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
               </div>
             </div>
           </section>
@@ -631,117 +676,152 @@ export function BiodataForm({ initialData, onDataChange }: { initialData: Partia
 
         {/* Step 8: Custom Sections */}
         {currentStep === 8 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold flex items-center gap-2 text-gray-900">
-                <div className="w-2 h-6 bg-indigo-600 rounded-full"></div>
-                Custom Sections
-              </h3>
+          <section className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex justify-between items-center mb-10 pb-4 border-b border-gray-50">
+              <div>
+                <h3 className="text-xl font-black text-gray-900 flex items-center gap-3">
+                  <div className="w-2.5 h-8 bg-indigo-600 rounded-full"></div>
+                  Custom Sections
+                </h3>
+                <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-1">Add any extra information about yourself</p>
+              </div>
               <button
                 type="button"
                 onClick={() => appendSection({ title: "", fields: [{ label: "", value: "" }] })}
-                className="text-sm font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-full hover:bg-indigo-100"
+                className="text-xs font-black text-indigo-600 bg-indigo-50 px-6 py-3 rounded-2xl hover:bg-indigo-100 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-widest border border-indigo-100/50"
               >
-                + Add Section
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+                Add Section
               </button>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-10">
               {customSectionsFields.map((section, sectionIdx) => (
-                <div key={section.id} className="p-4 bg-gray-50 rounded-xl border border-gray-200 relative group">
+                <div key={section.id} className="p-8 bg-gray-50/50 rounded-[2rem] border border-gray-100 relative group transition-all hover:bg-white hover:shadow-xl hover:shadow-indigo-500/5 overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-200 group-hover:bg-indigo-500 transition-colors"></div>
                   <button
                     type="button"
                     onClick={() => removeSection(sectionIdx)}
-                    className="absolute top-4 right-4 text-red-400 hover:text-red-600 hidden group-hover/tabs:block"
+                    className="absolute top-6 right-6 text-[10px] font-black text-red-400 hover:text-red-600 uppercase tracking-widest bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-full transition-all border border-red-100/50"
                   >
-                    Remove
+                    Remove Section
                   </button>
-                  <div className="mb-4">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Section Title</label>
-                    <input type="text" {...form.register(`customSections.${sectionIdx}.title`)} className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border bg-white" />
+
+                  <div className="mb-8">
+                    <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Section Title</label>
+                    <input
+                      type="text"
+                      {...form.register(`customSections.${sectionIdx}.title`)}
+                      placeholder="e.g., Religious Practice, Hobbies"
+                      className="block w-full max-w-md rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 sm:text-sm p-3.5 border bg-white transition-all outline-none text-gray-900 font-bold"
+                    />
                   </div>
 
-                  <div className="space-y-3 pl-4 border-l-2 border-indigo-100">
+                  <div className="space-y-4 pl-4 border-l-2 border-indigo-50">
+                    <p className="text-[10px] font-black text-indigo-300 uppercase tracking-widest mb-2">Fields in this section</p>
                     {form.watch(`customSections.${sectionIdx}.fields`)?.map((_, fieldIdx) => (
-                      <div key={fieldIdx} className="flex gap-2 items-center">
-                        <input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.label`)} placeholder="Label" className="flex-1 rounded-md border-gray-300 sm:text-xs p-2 border bg-white" />
-                        <input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.value`)} placeholder="Value" className="flex-[2] rounded-md border-gray-300 sm:text-xs p-2 border bg-white" />
-                        <button type="button" onClick={() => {
-                          const f = form.getValues(`customSections.${sectionIdx}.fields`);
-                          form.setValue(`customSections.${sectionIdx}.fields`, f.filter((_, i) => i !== fieldIdx));
-                        }} className="text-red-400 hover:text-red-600">×</button>
+                      <div key={fieldIdx} className="flex gap-3 items-center group/field">
+                        <input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.label`)} placeholder="Label (e.g., Prayer)" className="flex-1 rounded-xl border-gray-100 sm:text-xs p-3 border bg-white focus:ring-2 focus:ring-indigo-500/10 outline-none font-medium" />
+                        <input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.value`)} placeholder="Value (e.g., Regular)" className="flex-[2] rounded-xl border-gray-100 sm:text-xs p-3 border bg-white focus:ring-2 focus:ring-indigo-500/10 outline-none font-medium text-gray-900" />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const f = form.getValues(`customSections.${sectionIdx}.fields`);
+                            form.setValue(`customSections.${sectionIdx}.fields`, f.filter((_, i) => i !== fieldIdx));
+                          }}
+                          className="w-8 h-8 rounded-full border border-red-100 text-red-400 hover:bg-red-50 hover:text-red-600 flex items-center justify-center transition-all opacity-0 group-field-hover:opacity-100"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
                       </div>
                     ))}
-                    <button type="button" onClick={() => {
-                      const f = form.getValues(`customSections.${sectionIdx}.fields`) || [];
-                      form.setValue(`customSections.${sectionIdx}.fields`, [...f, { label: "", value: "" }]);
-                    }} className="text-xs font-bold text-indigo-600">+ Add Field</button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const f = form.getValues(`customSections.${sectionIdx}.fields`) || [];
+                        form.setValue(`customSections.${sectionIdx}.fields`, [...f, { label: "", value: "" }]);
+                      }}
+                      className="text-[10px] font-black text-indigo-500 hover:text-indigo-700 uppercase tracking-widest flex items-center gap-1.5 mt-2 ml-1"
+                    >
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+                      Add Field
+                    </button>
                   </div>
                 </div>
               ))}
+
+              {customSectionsFields.length === 0 && (
+                <div className="text-center py-20 border-2 border-dashed border-gray-100 rounded-[2.5rem] bg-gray-50/20">
+                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
+                  <p className="text-sm text-gray-400 font-medium">No custom sections added yet.</p>
+                </div>
+              )}
             </div>
           </section>
         )}
 
-        {/* Footer Navigation (Mobile) */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 lg:hidden flex justify-between gap-4 z-50">
+        {/* Footer Navigation (Mobile) - Polished Floating bar */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-100 p-4 lg:hidden flex justify-between gap-4 z-[90] shadow-[0_-8px_32px_rgba(0,0,0,0.05)]">
           {currentStep > 1 && (
             <button
               type="button"
               onClick={() => setCurrentStep(prev => prev - 1)}
-              className="flex-1 px-4 py-3 bg-gray-100 text-gray-900 font-bold rounded-xl text-sm"
+              className="flex-1 px-4 py-4 bg-gray-50 text-gray-900 font-bold rounded-[1.25rem] text-xs uppercase tracking-widest border border-gray-100 active:scale-95 transition-all"
             >
-              ← Back
+              ← Prev
             </button>
           )}
           {currentStep < 8 ? (
             <button
               type="button"
               onClick={() => setCurrentStep(prev => prev + 1)}
-              className="flex-1 px-4 py-3 bg-indigo-600 text-white font-bold rounded-xl text-sm"
+              className="flex-[2] px-4 py-4 bg-indigo-600 text-white font-black rounded-[1.25rem] text-xs uppercase tracking-widest shadow-lg shadow-indigo-200 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              Next →
+              Next Step
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
           ) : (
-            <button
-              type="button"
-              onClick={handleManualSave}
-              disabled={formLoading}
-              className="flex-1 px-4 py-3 bg-emerald-600 text-white font-bold rounded-xl text-sm"
+            <a
+              href="/dashboard"
+              className="flex-[2] px-4 py-4 bg-emerald-600 text-white font-black rounded-[1.25rem] text-xs uppercase tracking-widest shadow-lg shadow-emerald-200 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              Save Biodata
-            </button>
+              Finish & Exit
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+            </a>
           )}
         </div>
 
-        {/* Footer Navigation (Desktop) */}
-        <div className="hidden lg:flex justify-between mt-8 pt-6 border-t">
+        {/* Footer Navigation (Desktop) - Premium styled buttons */}
+        <div className="hidden lg:flex justify-between mt-12 pt-8 border-t border-gray-50">
           {currentStep > 1 ? (
             <button
               type="button"
               onClick={() => setCurrentStep(prev => prev - 1)}
-              className="px-6 py-2 border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50 transition-colors"
+              className="px-8 py-3.5 border border-gray-200 text-gray-500 font-bold rounded-2xl hover:bg-gray-50 hover:text-indigo-600 hover:border-indigo-100 transition-all active:scale-95 flex items-center gap-2 group"
             >
-              Previous
+              <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              Previous Section
             </button>
           ) : <div />}
           {currentStep < 8 ? (
             <button
               type="button"
               onClick={() => setCurrentStep(prev => prev + 1)}
-              className="px-8 py-2 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md active:scale-95"
+              className="px-10 py-3.5 bg-gray-900 text-white font-black rounded-2xl hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-200 active:scale-95 flex items-center gap-3 group"
             >
               Next Phase
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
           ) : (
-            <button
-              type="button"
-              onClick={handleManualSave}
-              disabled={formLoading}
-              className="px-8 py-2 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md active:scale-95"
+            <a
+              href="/dashboard"
+              className="px-10 py-3.5 bg-emerald-600 text-white font-black rounded-2xl hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-100 active:scale-95 flex items-center gap-3"
             >
-              Finalize & Save
-            </button>
+              Finish & Exit
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+            </a>
           )}
         </div>
       </form>
