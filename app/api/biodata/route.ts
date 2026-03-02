@@ -3,14 +3,71 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 const defaultBiodata = {
-  basicInfo: { fullName: "", age: 18, height: "", bloodGroup: "", religion: "", maritalStatus: "" },
-  personalInfo: { address: "", district: "" },
-  familyInfo: { fatherName: "", fatherProfession: "", motherName: "" },
-  education: "",
-  profession: "",
-  expectations: "",
-  contactInfo: "",
-  photoUrl: ""
+  language: "bn",
+  basicInfo: {
+    fullName: "",
+    dateOfBirth: "",
+    age: "",
+    height: "",
+    weight: "",
+    bloodGroup: "",
+    religion: "",
+    maritalStatus: "",
+    nationality: "Bangladeshi",
+    photoUrl: "",
+    extraFields: []
+  },
+  personalInfo: {
+    presentAddress: "",
+    permanentAddress: "",
+    district: "",
+    division: "",
+    nativeVillage: "",
+    complexion: "",
+    physicalStatus: "",
+    hobby: "",
+    extraFields: []
+  },
+  education: {
+    qualifications: [{ degree: "", institution: "", passingYear: "", result: "" }],
+    additionalQualifications: "",
+    extraFields: []
+  },
+  profession: {
+    occupation: "",
+    organizationName: "",
+    employmentType: "",
+    monthlyIncome: "",
+    workplaceLocation: "",
+    extraFields: []
+  },
+  familyInfo: {
+    fatherName: "",
+    fatherProfession: "",
+    motherName: "",
+    motherProfession: "",
+    numberOfBrothers: "",
+    numberOfSisters: "",
+    familyStatus: "",
+    extraFields: []
+  },
+  expectations: {
+    expectedAgeRange: "",
+    expectedHeight: "",
+    expectedEducation: "",
+    expectedProfession: "",
+    expectedLocation: "",
+    additionalExpectations: "",
+    extraFields: []
+  },
+  contactInfo: {
+    contactNumber: "",
+    whatsAppNumber: "",
+    emailAddress: "",
+    guardianContact: "",
+    extraFields: []
+  },
+  customSections: []
 }
 
 export async function POST() {

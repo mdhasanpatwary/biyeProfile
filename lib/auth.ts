@@ -18,6 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           name: "Dev User",
           email: "dev@biyeprofile.com",
           image: "https://ui-avatars.com/api/?name=Dev+User",
+          role: "admin",
         }
       }
     })
@@ -57,7 +58,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (dbUser) {
             token.id = dbUser.id;
             token.username = dbUser.username;
-            token.role = dbUser.role;
+            // Use role from user object (dev login) or from database
+            token.role = (user as { role?: string })?.role || dbUser.role;
           }
         }
       }
