@@ -40,7 +40,7 @@ export default async function Home() {
 
         <div className="text-center relative z-10">
           <h1 className="text-5xl md:text-7xl font-extrabold text-black tracking-tight mb-8 leading-tight">
-            Create Your <span className="underline decoration-gray-300 decoration-8 underline-offset-8">Perfect</span> <br className="hidden md:block"/> Marriage Biodata
+            Create Your <span className="underline decoration-gray-300 decoration-8 underline-offset-8">Perfect</span> <br className="hidden md:block" /> Marriage Biodata
           </h1>
 
           <p className="mt-4 max-w-2xl text-xl text-black mx-auto mb-10 leading-relaxed">
@@ -53,6 +53,12 @@ export default async function Home() {
               className="px-8 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-black hover:bg-gray-800 md:py-4 md:text-lg px-10 shadow-xl hover:shadow-black/10 transition-all transform hover:-translate-y-1"
             >
               Create Free Biodata
+            </Link>
+            <Link
+              href="/biodata"
+              className="px-8 py-4 border border-black/10 text-lg font-medium rounded-full text-black bg-white hover:bg-gray-50 md:py-4 md:text-lg px-10 shadow-sm transition-all transform hover:-translate-y-1"
+            >
+              Browse Profiles
             </Link>
           </div>
         </div>
