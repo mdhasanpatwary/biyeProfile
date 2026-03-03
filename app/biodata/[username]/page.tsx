@@ -5,6 +5,7 @@ import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 import { BiodataContent } from "@/components/BiodataContent"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { auth } from "@/lib/auth"
+import { Logo } from "@/components/Logo"
 
 export async function generateMetadata(props: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const { username } = await props.params
@@ -52,7 +53,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="bg-white p-8 rounded shadow text-center border">
           <h1 className="text-2xl font-bold mb-2">Profile Private</h1>
-          <p className="text-gray-600">This user has made their biodata private.</p>
+          <p className="text-black">This user has made their biodata private.</p>
         </div>
       </div>
     )
@@ -61,11 +62,22 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
-    <div className="bg-gray-50 min-h-screen py-6 sm:py-12 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg print:shadow-none p-4 sm:p-10 print:p-0 sm:rounded-[2.5rem] border border-gray-100/50 relative">
+    <div className="bg-white min-h-screen py-6 sm:py-12 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
+      <div className="max-w-4xl mx-auto mb-8 px-4 flex justify-between items-center print:hidden">
+        <Logo />
+        {isOwner && (
+          <a
+            href="/dashboard/edit"
+            className="text-[10px] font-black uppercase tracking-widest text-black border-b-2 border-black pb-0.5 hover:text-gray-500 hover:border-gray-500 transition-all"
+          >
+            Edit My Biodata
+          </a>
+        )}
+      </div>
+      <div className="max-w-4xl mx-auto bg-white shadow-xl shadow-black/5 print:shadow-none p-4 sm:p-10 print:p-0 sm:rounded-[2.5rem] border border-gray-100 relative">
         {isOwner && !user.biodata.isPublic && (
           <div className="absolute top-4 right-4 print:hidden">
-            <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
+            <span className="bg-gray-100 text-gray-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
               Private View (Owner Only)
             </span>
           </div>

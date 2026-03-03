@@ -5,7 +5,7 @@ export function DownloadPDFButton() {
   return (
     <Button
       onClick={() => window.print()}
-      className="group flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3.5 rounded-full font-bold hover:scale-105 active:scale-95 transition-all shadow-xl hover:shadow-indigo-200/50 print:hidden cursor-pointer"
+      className="group flex items-center gap-2 bg-black text-white px-8 py-3.5 rounded-full font-bold hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/10 hover:shadow-black/20 print:hidden cursor-pointer"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

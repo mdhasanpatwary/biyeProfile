@@ -146,15 +146,15 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   return (
     <div className="space-y-6 sm:space-y-12 text-gray-800 print:space-y-8 max-w-4xl mx-auto">
       {/* Header with watermark-like background */}
-      <div className="text-center mb-8 sm:mb-12 pb-6 sm:pb-8 border-b-4 border-double border-indigo-100 relative overflow-hidden">
-        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-indigo-50/50 rounded-full blur-3xl -z-10"></div>
-        <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-indigo-50/50 rounded-full blur-3xl -z-10"></div>
+      <div className="text-center mb-8 sm:mb-12 pb-6 sm:pb-8 border-b-4 border-double border-gray-100 relative overflow-hidden">
+        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-gray-50/50 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-gray-50/50 rounded-full blur-3xl -z-10"></div>
 
         <h1 className="text-3xl sm:text-5xl font-serif font-black text-gray-900 mb-3 uppercase tracking-tighter">
           {t.title}
         </h1>
         {hasContent(data?.basicInfo?.fullName) && (
-          <h2 className="text-xl sm:text-2xl font-bold text-indigo-600 inline-block">
+          <h2 className="text-xl sm:text-2xl font-bold text-black inline-block">
             {data?.basicInfo?.fullName}
           </h2>
         )}
@@ -178,10 +178,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         {/* 1. Basic Information */}
         {hasContent(data?.basicInfo) && (
           <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
               {t.basic}
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm border-l-2 border-indigo-100 pl-6 ml-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm border-l-2 border-gray-100 pl-6 ml-2">
               {[
                 { label: t.fullName, value: data.basicInfo?.fullName },
                 { label: t.dob, value: data.basicInfo?.dateOfBirth },
@@ -206,10 +206,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         {/* 2. Personal Information */}
         {hasContent(data?.personalInfo) && (
           <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
               {t.personal}
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 text-sm border-l-2 border-indigo-100 pl-6 ml-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 text-sm border-l-2 border-gray-100 pl-6 ml-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
                 {[
                   { label: t.presentAddress, value: data.personalInfo?.presentAddress, fullWidth: true },
@@ -228,7 +228,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
               </div>
               {hasContent(data.personalInfo?.hobby) && (
                 <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 italic">
-                  <span className="text-indigo-600 font-bold not-italic mr-2"># {t.hobby}:</span>
+                  <span className="text-black font-bold not-italic mr-2"># {t.hobby}:</span>
                   {data.personalInfo?.hobby}
                 </div>
               )}
@@ -239,13 +239,13 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         {/* 3. Education Information */}
         {hasContent(data?.education) && (
           <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
               {t.education}
             </h3>
             <div className="space-y-6 ml-2">
               {data.education && data.education.qualifications?.map((edu: Qualification, index: number) => (
-                <div key={index} className="bg-gradient-to-br from-indigo-50/30 to-indigo-50/30 p-6 rounded-[2rem] border border-indigo-100/50 relative">
-                  <div className="text-xl font-black text-indigo-900 mb-4 uppercase tracking-tight">
+                <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100/50 p-6 rounded-[2rem] border border-gray-100 relative">
+                  <div className="text-xl font-black text-black mb-4 uppercase tracking-tight">
                     {edu.degree}
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm">
@@ -284,14 +284,14 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         {/* 4. Profession Information */}
         {hasContent(data?.profession) && (
           <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-             <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+             <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
               {t.profession}
             </h3>
-            <div className="bg-indigo-50/20 p-6 rounded-[2rem] border border-indigo-100/50 shadow-sm ml-2">
+            <div className="bg-gray-50/50 p-6 rounded-[2rem] border border-gray-100 shadow-sm ml-2">
               <div className="grid grid-cols-1 gap-y-4 text-sm">
                 {hasContent(data.profession?.occupation) && (
-                  <div className="text-xl font-black text-indigo-900 mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+                  <div className="text-xl font-black text-black mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-black"></span>
                     {data.profession?.occupation}
                   </div>
                 )}
@@ -303,7 +303,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                     { label: t.workplace, value: data.profession?.workplaceLocation },
                   ].map((item, i) => hasContent(item.value) && (
                     <div key={i} className="flex flex-col gap-0.5">
-                      <span className="text-[11px] font-bold text-indigo-400 uppercase">{item.label}</span>
+                      <span className="text-[11px] font-bold text-gray-500 uppercase">{item.label}</span>
                       <span className="font-bold text-gray-800">{item.value}</span>
                     </div>
                   ))}
@@ -316,10 +316,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         {/* 5. Family Information */}
         {hasContent(data?.familyInfo) && (
           <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
               {t.family}
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 text-sm border-l-2 border-indigo-100 pl-6 ml-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 text-sm border-l-2 border-gray-100 pl-6 ml-2">
               {[
                 { label: t.fatherName, value: data.familyInfo?.fatherName },
                 { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
@@ -329,13 +329,13 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 { label: t.sisters, value: data.familyInfo?.numberOfSisters?.toString() },
               ].map((item, i) => hasContent(item.value) && item.value !== "NaN" && (
                 <div key={i} className="flex flex-col gap-0.5">
-                  <span className="text-[11px] font-bold text-indigo-300 uppercase">{item.label}</span>
+                  <span className="text-[11px] font-bold text-gray-400 uppercase">{item.label}</span>
                   <span className="font-bold text-gray-800">{item.value}</span>
                 </div>
               ))}
               {hasContent(data.familyInfo?.familyStatus) && (
-                <div className="col-span-2 mt-2 bg-indigo-50/30 p-4 rounded-2xl border border-indigo-100/50">
-                   <span className="text-[11px] font-black text-indigo-400 uppercase tracking-widest block mb-1">{t.familyStatus}</span>
+                <div className="col-span-2 mt-2 bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
+                   <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest block mb-1">{t.familyStatus}</span>
                    <p className="font-bold text-gray-800">{data.familyInfo?.familyStatus}</p>
                 </div>
               )}
@@ -346,10 +346,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         {/* 6. Marriage Expectations */}
         {hasContent(data?.expectations) && (
           <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '600ms' }}>
-            <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
               {t.expectations}
             </h3>
-            <div className="bg-indigo-50/20 p-6 sm:p-8 rounded-[2.5rem] border-2 border-indigo-100 items-center justify-center text-center ml-2">
+            <div className="bg-gray-50/50 p-6 sm:p-8 rounded-[2.5rem] border-2 border-gray-100 items-center justify-center text-center ml-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-sm mb-8">
                 {[
                   { label: t.expectedAge, value: data.expectations?.expectedAgeRange },
@@ -359,14 +359,14 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                   { label: t.expectedLocation, value: data.expectations?.expectedLocation },
                 ].map((item, i) => hasContent(item.value) && (
                   <div key={i} className="flex flex-col gap-1">
-                    <span className="text-[11px] font-black text-indigo-500 uppercase tracking-widest">{item.label}</span>
-                    <span className="font-black text-gray-900 underline decoration-indigo-200 underline-offset-4 decoration-2">{item.value}</span>
+                    <span className="text-[11px] font-black text-gray-500 uppercase tracking-widest">{item.label}</span>
+                    <span className="font-black text-gray-900 underline decoration-gray-200 underline-offset-4 decoration-2">{item.value}</span>
                   </div>
                 ))}
               </div>
               {hasContent(data.expectations?.additionalExpectations) && (
                 <div className="relative pt-6">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-indigo-200"></div>
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-gray-200"></div>
                   <p className="italic text-gray-700 leading-relaxed px-4 text-sm font-medium">
                     &quot;{data.expectations?.additionalExpectations}&quot;
                   </p>
@@ -380,10 +380,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         {data?.customSections?.map((section: CustomSection, idx: number) => (
           hasContent(section.fields) && (
             <section key={idx} className="print:break-inside-avoid">
-               <h3 className="text-sm font-black text-indigo-600 mb-4 px-4 py-2 bg-indigo-50 rounded-xl inline-block uppercase tracking-[0.2em]">
+               <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
                 {section.title}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm border-l-2 border-indigo-200 pl-6 ml-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm border-l-2 border-gray-200 pl-6 ml-2">
                 {section.fields.map((f: CustomField, fIdx: number) => (
                   <div key={fIdx} className="flex flex-col gap-0.5">
                     <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{f.label}</span>
@@ -397,12 +397,12 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         {/* 7. Contact Information */}
         {hasContent(data?.contactInfo) && (
-          <section className="mt-20 pt-12 border-t-8 border-double border-indigo-100 text-center print:mt-10 print:pt-8 bg-gray-50/50 rounded-[3rem] p-10">
+          <section className="mt-20 pt-12 border-t-8 border-double border-gray-100 text-center print:mt-10 print:pt-8 bg-gray-50/50 rounded-[3rem] p-10">
             <h3 className="text-2xl font-black text-gray-900 mb-6 uppercase tracking-widest">{t.contact}</h3>
             <div className="flex flex-wrap justify-center gap-10">
               {[
-                { label: t.contactNumber, value: data.contactInfo?.contactNumber, color: 'text-indigo-600' },
-                { label: t.whatsApp, value: data.contactInfo?.whatsAppNumber, color: 'text-indigo-600' },
+                { label: t.contactNumber, value: data.contactInfo?.contactNumber, color: 'text-black' },
+                { label: t.whatsApp, value: data.contactInfo?.whatsAppNumber, color: 'text-black' },
                 { label: t.email, value: data.contactInfo?.emailAddress, color: 'text-gray-900' },
               ].map((item, i) => hasContent(item.value) && (
                 <div key={i} className="flex flex-col items-center">
@@ -413,7 +413,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
             </div>
             {hasContent(data.contactInfo?.guardianContact) && (
               <div className="mt-8 pt-6 border-t border-gray-200/50 text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
-                {t.guardianContact}: <span className="text-gray-600 ml-2">{data.contactInfo?.guardianContact}</span>
+                {t.guardianContact}: <span className="text-black ml-2">{data.contactInfo?.guardianContact}</span>
               </div>
             )}
           </section>

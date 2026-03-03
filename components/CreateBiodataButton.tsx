@@ -30,7 +30,7 @@ export function CreateBiodataButton() {
     <Button
       onClick={handleCreate}
       disabled={loading}
-      className="bg-indigo-600 text-white px-6 py-3 rounded-md font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+      className="bg-black text-white px-6 py-3 rounded-md font-medium hover:bg-gray-900 disabled:opacity-50 transition-colors"
     >
       {loading ? "Creating..." : "Create My Biodata"}
     </Button>

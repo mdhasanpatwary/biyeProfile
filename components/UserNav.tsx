@@ -1,0 +1,57 @@
+"use client"
+
+import { signOut } from "next-auth/react"
+import { Button } from "./ui/button"
+
+export function UserNav({ username }: { username: string }) {
+  return (
+    <div className="flex items-center gap-4">
+      <div className="flex flex-col items-end hidden sm:flex">
+        <span className="text-xs font-black text-black uppercase tracking-widest">
+          @{username}
+        </span>
+        <button
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="text-[10px] font-bold text-gray-400 hover:text-black transition-colors uppercase tracking-tight"
+        >
+          Sign Out
+        </button>
+      </div>
+      <div className="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shadow-sm">
+        <svg
+          className="w-6 h-6 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          />
+        </svg>
+      </div>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => signOut({ callbackUrl: "/" })}
+        className="sm:hidden p-2 text-gray-400 hover:text-black"
+      >
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+      </Button>
+    </div>
+  )
+}

@@ -37,11 +37,11 @@ export default async function AdminPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white p-6 rounded-xl shadow-sm border">
           <p className="text-sm text-gray-500">Total Users</p>
-          <p className="text-3xl font-bold text-indigo-600">{totalUsers}</p>
+          <p className="text-3xl font-bold text-black">{totalUsers}</p>
         </div>
         <div className="bg-white p-6 rounded-xl shadow-sm border">
           <p className="text-sm text-gray-500">Total Biodatas</p>
-          <p className="text-3xl font-bold text-indigo-600">{totalBiodatas}</p>
+          <p className="text-3xl font-bold text-black">{totalBiodatas}</p>
         </div>
         <div className="bg-white p-6 rounded-xl shadow-sm border">
           <p className="text-sm text-gray-500">Public Profiles</p>
@@ -49,7 +49,7 @@ export default async function AdminPage() {
         </div>
         <div className="bg-white p-6 rounded-xl shadow-sm border">
           <p className="text-sm text-gray-500">Private Profiles</p>
-          <p className="text-3xl font-bold text-gray-600">{privateBiodatas}</p>
+          <p className="text-3xl font-bold text-black">{privateBiodatas}</p>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export default async function AdminPage() {
                 <td className="px-6 py-4 text-sm text-gray-900">{user.email}</td>
                 <td className="px-6 py-4 text-sm">
                   {user.username ? (
-                    <a href={`/biodata/${user.username}`} className="text-indigo-600 hover:underline">
+                    <a href={`/biodata/${user.username}`} className="text-black hover:underline">
                       @{user.username}
                     </a>
                   ) : (
