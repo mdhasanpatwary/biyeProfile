@@ -14,16 +14,15 @@ import { Textarea } from "@/components/ui/textarea"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useDebounce<T extends (...args: any[]) => any>(cb: T, delay: number) {
-  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useCallback((...args: any[]) => {
-    if (timer) clearTimeout(timer);
-    const newTimer = setTimeout(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
       cb(...args);
     }, delay);
-    setTimer(newTimer);
-  }, [cb, delay, timer]);
+  }, [cb, delay]);
 }
 
 const HEIGHT_OPTIONS = Array.from({ length: 20 }, (_, i) => {
@@ -208,20 +207,14 @@ export function BiodataForm({
       if (res.ok) {
         toast.success("Changes autosaved", { duration: 1500 })
       }
-    } catch {
-      // Silence background errors
+    } catch (error) {
+      console.error("Autosave failed:", error);
     }
   }, 2000)
 
-  const hasMounted = useRef(false);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const subscription = form.watch((value) => {
-      // Don't trigger on initial load/mount
-      if (!hasMounted.current) {
-        hasMounted.current = true;
-        return;
-      }
       onDataChange?.(value as BiodataFormValues)
       debouncedSave(value as BiodataFormValues)
     })
@@ -295,7 +288,7 @@ export function BiodataForm({
         </div>
       </div>
 
-      <form className="space-y-12 pb-20">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-12 pb-20">
         {/* Step 1: Basic Information */}
         {currentStep === 1 && (
           <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">

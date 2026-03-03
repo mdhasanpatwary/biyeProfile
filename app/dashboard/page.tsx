@@ -7,6 +7,8 @@ import { VisibilityToggle } from "@/components/VisibilityToggle"
 import Image from "next/image"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 
+export const dynamic = "force-dynamic"
+
 export default async function DashboardPage() {
   const session = await auth()
   if (!session?.user?.email) return redirect("/api/auth/signin")
@@ -75,7 +77,7 @@ export default async function DashboardPage() {
           <p className="text-gray-500 font-medium uppercase text-xs tracking-[0.2em]">Manage your profile and visibility</p>
         </div>
         <div className="flex gap-4">
-           <a
+          <a
             href={`/biodata/${session.user.username}`}
             className="px-6 py-3 bg-gray-900 text-white text-sm font-bold rounded-2xl hover:bg-black transition-all flex items-center gap-2 shadow-xl shadow-black/10"
           >
@@ -98,63 +100,63 @@ export default async function DashboardPage() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-full -mr-16 -mt-16 group-hover:bg-gray-100 transition-colors"></div>
           <div className="relative z-10 flex flex-col sm:flex-row items-center gap-8">
             <div className="w-24 h-24 rounded-3xl bg-gray-100 border-4 border-white shadow-md flex items-center justify-center overflow-hidden shrink-0 relative">
-               {user.image ? (
-                  <Image src={user.image} alt={user.name || "User"} fill className="object-cover" />
-               ) : (
-                  <svg className="w-12 h-12 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-               )}
+              {user.image ? (
+                <Image src={user.image} alt={user.name || "User"} fill className="object-cover" />
+              ) : (
+                <svg className="w-12 h-12 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
+              )}
             </div>
             <div className="flex-1 text-center sm:text-left">
               <h2 className="text-2xl font-black text-black mb-2">{biodataContent.basicInfo?.fullName}</h2>
               <div className="flex flex-wrap justify-center sm:justify-start gap-3 mt-4">
                 <span className="bg-gray-50 text-gray-500 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border border-gray-100">
-                   {/* Calculate age accurately */}
-                   {(() => {
-                      if (!biodataContent.basicInfo?.dateOfBirth) return 'N/A';
-                      const birthDate = new Date(biodataContent.basicInfo.dateOfBirth);
-                      const today = new Date();
-                      let age = today.getFullYear() - birthDate.getFullYear();
-                      const m = today.getMonth() - birthDate.getMonth();
-                      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-                      return `${age} Years`;
-                   })()}
+                  {/* Calculate age accurately */}
+                  {(() => {
+                    if (!biodataContent.basicInfo?.dateOfBirth) return 'N/A';
+                    const birthDate = new Date(biodataContent.basicInfo.dateOfBirth);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const m = today.getMonth() - birthDate.getMonth();
+                    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+                    return `${age} Years`;
+                  })()}
                 </span>
                 <span className="bg-gray-50 text-gray-500 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border border-gray-100">
-                   {biodataContent.basicInfo?.height}
+                  {biodataContent.basicInfo?.height}
                 </span>
                 <span className="bg-gray-50 text-gray-500 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border border-gray-100">
-                   {biodataContent.basicInfo?.maritalStatus}
+                  {biodataContent.basicInfo?.maritalStatus}
                 </span>
               </div>
             </div>
           </div>
 
           <div className="mt-10 p-6 bg-gray-50/50 rounded-3xl border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-             <div className="flex flex-col">
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Your Public Link</span>
-                <span className="text-sm font-bold text-black group-hover:text-black transition-colors underline underline-offset-4 decoration-gray-200">{publicUrl}</span>
-             </div>
-             <CopyButton text={`https://${publicUrl}`} />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Your Public Link</span>
+              <span className="text-sm font-bold text-black group-hover:text-black transition-colors underline underline-offset-4 decoration-gray-200">{publicUrl}</span>
+            </div>
+            <CopyButton text={`https://${publicUrl}`} />
           </div>
         </div>
 
         {/* Stats & Controls */}
-         <div className="flex flex-col gap-6">
-            <VisibilityToggle initialIsPublic={user.biodata.isPublic} />
+        <div className="flex flex-col gap-6">
+          <VisibilityToggle initialIsPublic={user.biodata.isPublic} />
 
-            <div className="bg-black text-white p-8 rounded-[2.5rem] shadow-xl shadow-black/20 flex flex-col justify-between group transition-all hover:scale-[1.02]">
-              <div>
-                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-md">
-                   <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                </div>
-                <h3 className="text-4xl font-black mb-1">Live</h3>
-                <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Analytics (Coming Soon)</p>
+          <div className="bg-black text-white p-8 rounded-[2.5rem] shadow-xl shadow-black/20 flex flex-col justify-between group transition-all hover:scale-[1.02]">
+            <div>
+              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-md">
+                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
               </div>
-              <div className="mt-8 flex items-center gap-2 text-xs font-bold text-gray-400">
-                Track who views your profile
-              </div>
+              <h3 className="text-4xl font-black mb-1">Live</h3>
+              <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest">Analytics (Coming Soon)</p>
             </div>
-         </div>
+            <div className="mt-8 flex items-center gap-2 text-xs font-bold text-gray-400">
+              Track who views your profile
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -4,6 +4,8 @@ import { redirect } from "next/navigation"
 import { BiodataEditor } from "@/components/BiodataEditor"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 
+export const dynamic = "force-dynamic"
+
 // Migration function to handle old data structure
 function migrateBiodataData(data: Record<string, unknown>): Partial<BiodataFormValues> {
   const migrated = { ...data } as Partial<BiodataFormValues>
