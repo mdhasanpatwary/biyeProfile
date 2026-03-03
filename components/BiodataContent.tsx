@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
+import { getCloudinaryUrl } from "@/lib/cloudinary"
 
 interface CustomField {
   label: string;
@@ -196,11 +197,13 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         <header className="flex flex-col md:flex-row items-center gap-14 mb-24 border-b border-black/8 pb-12">
           {data.basicInfo?.photoUrl && (
             <div className="relative group shrink-0">
-              <div className="w-44 h-56 bg-gray-50 overflow-hidden grayscale contrast-[1.1] ring-1 ring-black/8 rounded-none shadow-sm">
+              <div className="w-44 h-44 bg-gray-50 overflow-hidden grayscale contrast-[1.1] ring-1 ring-black/8 rounded-none shadow-sm">
                 <Image
-                  src={data.basicInfo.photoUrl}
+                  src={getCloudinaryUrl(data.basicInfo.photoUrl, "full")}
                   alt="Profile photo"
                   fill
+                  sizes="176px"
+                  priority
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>

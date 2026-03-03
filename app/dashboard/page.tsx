@@ -6,6 +6,7 @@ import { CopyButton } from "@/components/CopyButton"
 import { VisibilityToggle } from "@/components/VisibilityToggle"
 import Image from "next/image"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
+import { getCloudinaryUrl } from "@/lib/cloudinary"
 
 export const dynamic = "force-dynamic"
 
@@ -100,8 +101,14 @@ export default async function DashboardPage() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-gray-50 rounded-full -mr-16 -mt-16 group-hover:bg-gray-100 transition-colors"></div>
           <div className="relative z-10 flex flex-col sm:flex-row items-center gap-8">
             <div className="w-24 h-24 rounded-3xl bg-gray-100 border-4 border-white shadow-md flex items-center justify-center overflow-hidden shrink-0 relative">
-              {user.image ? (
-                <Image src={user.image} alt={user.name || "User"} fill className="object-cover" />
+              {biodataContent.basicInfo?.photoUrl ? (
+                <Image
+                  src={getCloudinaryUrl(biodataContent.basicInfo.photoUrl, "thumb")}
+                  alt={biodataContent.basicInfo?.fullName || "User"}
+                  fill
+                  sizes="88px"
+                  className="object-cover"
+                />
               ) : (
                 <svg className="w-12 h-12 text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
               )}
