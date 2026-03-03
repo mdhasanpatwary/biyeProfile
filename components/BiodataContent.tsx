@@ -31,14 +31,14 @@ function hasContent(val: unknown): boolean {
 
 const LABELS: Record<string, Record<string, string>> = {
   en: {
-    title: "Biodata",
+    title: "Document: Biodata",
     basic: "Basic Information",
     personal: "Personal Information",
-    education: "Education Information",
-    profession: "Profession Information",
-    family: "Family Information",
+    education: "Academic History",
+    profession: "Professional Status",
+    family: "Family Context",
     expectations: "Marriage Expectations",
-    contact: "Contact Information",
+    contact: "Communication",
     fullName: "Full Name",
     dob: "Date of Birth",
     age: "Age",
@@ -52,49 +52,49 @@ const LABELS: Record<string, Record<string, string>> = {
     permanentAddress: "Permanent Address",
     district: "District",
     division: "Division",
-    nativeVillage: "Native Village",
+    nativeVillage: "Origin",
     complexion: "Complexion",
     physicalStatus: "Physical Status",
-    hobby: "Hobby / Interests",
-    highestQualification: "Highest Qualification",
+    hobby: "Interests",
+    highestQualification: "Education",
     institution: "Institution",
-    passingYear: "Passing Year",
-    additionalQualifications: "Additional Qualifications",
-    occupation: "Occupation / Job Title",
-    organization: "Organization Name",
-    employmentType: "Employment Type",
+    passingYear: "Year",
+    additionalQualifications: "Additional Credits",
+    occupation: "Current Role",
+    organization: "Organization",
+    employmentType: "Employment",
     monthlyIncome: "Monthly Income",
-    workplace: "Workplace Location",
-    fatherName: "Father's Name",
+    workplace: "Location",
+    fatherName: "Father",
     fatherProfession: "Father's Profession",
-    motherName: "Mother's Name",
+    motherName: "Mother",
     motherProfession: "Mother's Profession",
-    brothers: "Number of Brothers",
-    sisters: "Number of Sisters",
-    familyStatus: "Family Status",
-    expectedAge: "Expected Age Range",
-    expectedHeight: "Expected Height",
-    expectedEducation: "Expected Education",
-    expectedProfession: "Expected Profession",
-    expectedLocation: "Expected Location",
-    additionalExpectations: "Additional Expectations",
-    contactNumber: "Contact Number",
-    whatsApp: "WhatsApp Number",
-    email: "Email Address",
-    guardianContact: "Guardian Contact Info"
+    brothers: "Brothers",
+    sisters: "Sisters",
+    familyStatus: "Social Status",
+    expectedAge: "Age Range",
+    expectedHeight: "Height",
+    expectedEducation: "Education",
+    expectedProfession: "Profession",
+    expectedLocation: "Location",
+    additionalExpectations: "Note",
+    contactNumber: "Phone",
+    whatsApp: "WhatsApp",
+    email: "Email",
+    guardianContact: "Guardian Contact"
   },
   bn: {
-    title: "জীবনবৃত্তান্ত",
+    title: "ডকুমেন্ট: জীবনবৃত্তান্ত",
     basic: "প্রাথমিক তথ্য",
     personal: "ব্যক্তিগত তথ্য",
     education: "শিক্ষাগত তথ্য",
     profession: "পেশাগত তথ্য",
     family: "পারিবারিক তথ্য",
-    expectations: "বিয়ে সংক্রান্ত প্রত্যাশা",
-    contact: "যোগাযোগের তথ্য",
+    expectations: "বিয়ে সংক্রান্ত প্রত্যাশা",
+    contact: "যোগাযোগ",
     fullName: "পূর্ণ নাম",
     dob: "জন্ম তারিখ",
-    age: "বয়স",
+    age: "বয়স",
     height: "উচ্চতা",
     weight: "ওজন",
     bloodGroup: "রক্তের গ্রুপ",
@@ -105,38 +105,74 @@ const LABELS: Record<string, Record<string, string>> = {
     permanentAddress: "স্থায়ী ঠিকানা",
     district: "জেলা",
     division: "বিভাগ",
-    nativeVillage: "গ্রামের নাম",
+    nativeVillage: "উৎপত্তি",
     complexion: "শারীরিক বর্ণ",
     physicalStatus: "শারীরিক অবস্থা",
     hobby: "শখ",
-    highestQualification: "সর্বোচ্চ শিক্ষাগত যোগ্যতা",
-    institution: "শিক্ষা প্রতিষ্ঠানের নাম",
-    passingYear: "পাসের সাল",
-    additionalQualifications: "অন্যান্য শিক্ষাগত যোগ্যতা",
+    highestQualification: "শিক্ষা",
+    institution: "শিক্ষা প্রতিষ্ঠান",
+    passingYear: "সাল",
+    additionalQualifications: "অন্যান্য যোগ্যতা",
     occupation: "পেশা",
-    organization: "প্রতিষ্ঠানের নাম",
+    organization: "প্রতিষ্ঠান",
     employmentType: "চাকরির ধরণ",
     monthlyIncome: "মাসিক আয়",
     workplace: "কর্মস্থল",
-    fatherName: "পিতার নাম",
+    fatherName: "পিতা",
     fatherProfession: "পিতার পেশা",
-    motherName: "মাতার নাম",
+    motherName: "মাতা",
     motherProfession: "মাতার পেশা",
-    brothers: "ভাইয়ের সংখ্যা",
+    brothers: "ভাইয়ের সংখ্যা",
     sisters: "বোনের সংখ্যা",
     familyStatus: "পারিবারিক অবস্থা",
-    expectedAge: "প্রত্যাশিত বয়সের সীমা",
+    expectedAge: "প্রত্যাশিত বয়স",
     expectedHeight: "প্রত্যাশিত উচ্চতা",
-    expectedEducation: "প্রত্যাশিত শিক্ষাগত যোগ্যতা",
-    expectedProfession: "প্রত্যাশিত পেশা",
+    expectedEducation: "পছন্দসই শিক্ষা",
+    expectedProfession: "পছন্দসই পেশা",
     expectedLocation: "প্রত্যাশিত অবস্থান",
-    additionalExpectations: "অন্যান্য প্রত্যাশা",
-    contactNumber: "যোগাযোগের নম্বর",
-    whatsApp: "হোয়াটসঅ্যাপ নম্বর",
+    additionalExpectations: "বিশেষ দ্রষ্টব্য",
+    contactNumber: "ফোন নম্বর",
+    whatsApp: "হোয়াটসঅ্যাপ",
     email: "ইমেইল",
-    guardianContact: "গার্ডিয়ানের যোগাযোগের তথ্য"
+    guardianContact: "গার্ডিয়ান"
   }
 };
+
+// Reusable section title with subtle underline rule
+function SectionTitle({ label }: { label: string }) {
+  return (
+    <div className="sticky top-8">
+      <h2 className="font-mono text-[11px] font-semibold tracking-[0.35em] text-black/50 uppercase">
+        {label}
+      </h2>
+      <div className="w-6 h-px bg-black/20 mt-2" />
+    </div>
+  );
+}
+
+// Reusable key-value field cell
+function Field({
+  label,
+  value,
+  className = "",
+  valueClassName = "",
+}: {
+  label: string;
+  value: React.ReactNode;
+  className?: string;
+  valueClassName?: string;
+}) {
+  return (
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <span className="font-mono text-[9px] font-bold text-black/45 uppercase tracking-[0.22em]">
+        {label}
+      </span>
+      <span className={`text-base font-medium text-black leading-snug ${valueClassName}`}>
+        {value}
+      </span>
+    </div>
+  );
+}
 
 export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   if (!data) return null;
@@ -144,281 +180,333 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   const t = LABELS[lang];
 
   return (
-    <div className="space-y-6 sm:space-y-12 text-gray-800 print:space-y-8 max-w-4xl mx-auto">
-      {/* Header with watermark-like background */}
-      <div className="text-center mb-8 sm:mb-12 pb-6 sm:pb-8 border-b-4 border-double border-gray-100 relative overflow-hidden">
-        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-gray-50/50 rounded-full blur-3xl -z-10"></div>
-        <div className="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 bg-gray-50/50 rounded-full blur-3xl -z-10"></div>
+    <div className="relative bg-white text-black font-sans selection:bg-black selection:text-white p-8 sm:p-16 min-h-screen overflow-hidden">
+      {/* Texture Layer */}
+      <div className="absolute inset-0 bg-grain pointer-events-none opacity-5"></div>
 
-        <h1 className="text-3xl sm:text-5xl font-serif font-black text-gray-900 mb-3 uppercase tracking-tighter">
-          {t.title}
-        </h1>
-        {hasContent(data?.basicInfo?.fullName) && (
-          <h2 className="text-xl sm:text-2xl font-bold text-black inline-block">
-            {data?.basicInfo?.fullName}
-          </h2>
-        )}
-      </div>
+      <div className="relative z-10 max-w-4xl mx-auto">
 
-      {data.basicInfo?.photoUrl && (
-        <div className="flex justify-center mb-10">
-          <div className="relative w-40 h-40 rounded-3xl overflow-hidden border-8 border-white shadow-2xl ring-1 ring-gray-100">
-            <Image
-              src={data.basicInfo.photoUrl}
-              alt="Profile photo"
-              fill
-              className="object-cover"
-            />
-          </div>
+        {/* Document Meta */}
+        <div className="flex justify-between items-baseline mb-16 font-mono text-[10px] tracking-[0.35em] text-black/40 uppercase">
+          <span>{t.title}</span>
+          <span>{new Date().toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'short' })}</span>
         </div>
-      )}
 
-      {/* Grid for sections - A4 optimized */}
-      <div className="space-y-8 sm:space-y-10">
-        {/* 1. Basic Information */}
-        {hasContent(data?.basicInfo) && (
-          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
-              {t.basic}
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm border-l-2 border-gray-100 pl-6 ml-2">
-              {[
-                { label: t.fullName, value: data.basicInfo?.fullName },
-                { label: t.dob, value: data.basicInfo?.dateOfBirth },
-                { label: t.age, value: data.basicInfo?.age ? `${data.basicInfo?.age} ${lang === 'en' ? 'Years' : 'বছর'}` : null },
-                { label: t.height, value: data.basicInfo?.height },
-                { label: t.bloodGroup, value: data.basicInfo?.bloodGroup },
-                { label: t.religion, value: data.basicInfo?.religion },
-                { label: t.maritalStatus, value: data.basicInfo?.maritalStatus },
-                { label: t.nationality, value: data.basicInfo?.nationality },
-                { label: t.weight, value: data.basicInfo?.weight },
-                ...(data.basicInfo?.extraFields || []).map((f: CustomField) => ({ label: f.label, value: f.value }))
-              ].map((item, i) => hasContent(item.value) && (
-                <div key={i} className="flex flex-col gap-0.5">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{item.label}</span>
-                  <span className="font-semibold text-gray-900">{item.value}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 2. Personal Information */}
-        {hasContent(data?.personalInfo) && (
-          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
-              {t.personal}
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 text-sm border-l-2 border-gray-100 pl-6 ml-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
-                {[
-                  { label: t.presentAddress, value: data.personalInfo?.presentAddress, fullWidth: true },
-                  { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, fullWidth: true },
-                  { label: t.district, value: data.personalInfo?.district },
-                  { label: t.division, value: data.personalInfo?.division },
-                  { label: t.nativeVillage, value: data.personalInfo?.nativeVillage },
-                  { label: t.complexion, value: data.personalInfo?.complexion },
-                  { label: t.physicalStatus, value: data.personalInfo?.physicalStatus },
-                ].map((item, i) => hasContent(item.value) && (
-                  <div key={i} className={`flex flex-col gap-0.5 ${item.fullWidth ? 'col-span-2' : ''}`}>
-                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{item.label}</span>
-                    <span className="font-semibold text-gray-900 leading-relaxed">{item.value}</span>
-                  </div>
-                ))}
+        {/* ─── Header Block ─── */}
+        <header className="flex flex-col md:flex-row items-center gap-14 mb-24 border-b border-black/8 pb-12">
+          {data.basicInfo?.photoUrl && (
+            <div className="relative group shrink-0">
+              <div className="w-44 h-56 bg-gray-50 overflow-hidden grayscale contrast-[1.1] ring-1 ring-black/8 rounded-none shadow-sm">
+                <Image
+                  src={data.basicInfo.photoUrl}
+                  alt="Profile photo"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
               </div>
-              {hasContent(data.personalInfo?.hobby) && (
-                <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 italic">
-                  <span className="text-black font-bold not-italic mr-2"># {t.hobby}:</span>
-                  {data.personalInfo?.hobby}
-                </div>
-              )}
+              {/* Corner accent */}
+              <div className="absolute -bottom-3 -right-3 w-6 h-6 border-r-[1.5px] border-b-[1.5px] border-black/25" />
             </div>
-          </section>
-        )}
+          )}
 
-        {/* 3. Education Information */}
-        {hasContent(data?.education) && (
-          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
-              {t.education}
-            </h3>
-            <div className="space-y-6 ml-2">
-              {data.education && data.education.qualifications?.map((edu: Qualification, index: number) => (
-                <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100/50 p-6 rounded-[2rem] border border-gray-100 relative">
-                  <div className="text-xl font-black text-black mb-4 uppercase tracking-tight">
-                    {edu.degree}
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm">
-                    <div className="flex flex-col">
-                      <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{t.institution}</span>
-                      <span className="font-bold text-gray-800">{edu.institution}</span>
-                    </div>
-                    {edu.passingYear && (
-                      <div className="flex flex-col">
-                        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{t.passingYear}</span>
-                        <span className="font-bold text-gray-800">{edu.passingYear}</span>
-                      </div>
-                    )}
-                    {edu.result && (
-                      <div className="flex flex-col sm:col-span-2">
-                        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Result</span>
-                        <span className="font-bold text-gray-800">{edu.result}</span>
-                      </div>
-                    )}
-                  </div>
+          <div className="flex-1 w-full text-left">
+            <p className="font-mono text-[11px] tracking-[0.4em] text-black/40 uppercase mb-3">
+              {data.basicInfo?.religion || 'Profile'}
+            </p>
+            <h1 className="text-5xl sm:text-6xl font-serif leading-none tracking-tighter mb-3 text-black">
+              {data?.basicInfo?.fullName || 'Full Member'}
+            </h1>
+            <p className="text-base text-black/55 tracking-wide">
+              {data.profession?.occupation || (lang === 'en' ? 'Personal Profile' : 'ব্যক্তিগত তথ্য')}
+            </p>
+          </div>
+        </header>
+
+        {/* ─── Content Sections ─── */}
+        <div className="space-y-24">
+
+          {/* Section: Basic Info */}
+          {hasContent(data.basicInfo) && (
+            <section className="group">
+              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+                  <SectionTitle label={t.basic} />
                 </div>
-              ))}
-
-              {hasContent(data.education?.additionalQualifications) && (
-                <div className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100 ml-0 mt-4">
-                   <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest block mb-2">{t.additionalQualifications}</span>
-                   <p className="whitespace-pre-wrap text-gray-700 leading-relaxed font-medium text-sm">
-                     {data.education?.additionalQualifications}
-                   </p>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* 4. Profession Information */}
-        {hasContent(data?.profession) && (
-          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-             <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
-              {t.profession}
-            </h3>
-            <div className="bg-gray-50/50 p-6 rounded-[2rem] border border-gray-100 shadow-sm ml-2">
-              <div className="grid grid-cols-1 gap-y-4 text-sm">
-                {hasContent(data.profession?.occupation) && (
-                  <div className="text-xl font-black text-black mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-black"></span>
-                    {data.profession?.occupation}
-                  </div>
-                )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
                   {[
+                    { label: t.dob, value: data.basicInfo?.dateOfBirth },
+                    { label: t.age, value: data.basicInfo?.age ? `${data.basicInfo?.age} ${lang === 'en' ? 'Years' : 'বছর'}` : null },
+                    { label: t.height, value: data.basicInfo?.height },
+                    { label: t.weight, value: data.basicInfo?.weight },
+                    { label: t.bloodGroup, value: data.basicInfo?.bloodGroup },
+                    { label: t.maritalStatus, value: data.basicInfo?.maritalStatus },
+                    { label: t.nationality, value: data.basicInfo?.nationality },
+                  ].map((item, i) => hasContent(item.value) && (
+                    <Field key={i} label={item.label} value={item.value} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Section: Personal Info */}
+          {hasContent(data.personalInfo) && (
+            <section>
+              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+                  <SectionTitle label={t.personal} />
+                </div>
+                <div className="w-full md:w-2/3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                    {[
+                      { label: t.presentAddress, value: data.personalInfo?.presentAddress, full: true, address: true },
+                      { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, full: true, address: true },
+                      { label: t.district, value: data.personalInfo?.district },
+                      { label: t.nativeVillage, value: data.personalInfo?.nativeVillage },
+                      { label: t.complexion, value: data.personalInfo?.complexion },
+                      { label: t.hobby, value: data.personalInfo?.hobby, full: true, italic: true },
+                    ].map((item, i) => hasContent(item.value) && (
+                      <Field
+                        key={i}
+                        label={item.label}
+                        value={item.value}
+                        className={item.full ? 'sm:col-span-2' : ''}
+                        valueClassName={
+                          item.address
+                            ? 'text-sm font-normal leading-relaxed text-black/75 max-w-sm'
+                            : item.italic
+                              ? 'italic font-light text-black/70'
+                              : ''
+                        }
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Section: Education */}
+          {hasContent(data.education) && (
+            <section>
+              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+                  <SectionTitle label={t.education} />
+                </div>
+                <div className="w-full md:w-2/3 space-y-8">
+                  {data.education?.qualifications?.map((edu: Qualification, idx: number) => {
+                    const isLast = idx === (data.education?.qualifications?.length ?? 0) - 1;
+                    return (
+                      <div
+                        key={idx}
+                        className={`group relative ${!isLast ? 'border-b border-black/8 pb-8' : ''}`}
+                      >
+                        <p className="font-mono text-[10px] text-black/35 mb-1.5 tracking-[0.2em] uppercase">
+                          {edu.passingYear || '—'}
+                        </p>
+                        <h3 className="text-xl font-serif text-black mb-2 leading-snug italic">
+                          {edu.degree}
+                        </h3>
+                        <p className="text-sm text-black/60 font-medium tracking-wide border-l border-black/15 pl-4">
+                          {edu.institution}
+                        </p>
+                        {edu.result && (
+                          <p className="text-xs font-mono text-black/35 mt-2 pl-4 tracking-wide">
+                            Result — {edu.result}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+                  {hasContent(data.education?.additionalQualifications) && (
+                    <div className="bg-gray-50/70 p-6 border-l-2 border-black">
+                      <span className="font-mono text-[9px] font-bold text-black/45 uppercase tracking-widest block mb-2">
+                        {t.additionalQualifications}
+                      </span>
+                      <p className="text-sm leading-relaxed text-black/75 whitespace-pre-wrap">
+                        {data.education?.additionalQualifications}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Section: Professional */}
+          {hasContent(data.profession) && (
+            <section>
+              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+                  <SectionTitle label={t.profession} />
+                </div>
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                  {[
+                    { label: t.occupation, value: data.profession?.occupation },
                     { label: t.organization, value: data.profession?.organizationName },
                     { label: t.employmentType, value: data.profession?.employmentType },
                     { label: t.monthlyIncome, value: data.profession?.monthlyIncome },
                     { label: t.workplace, value: data.profession?.workplaceLocation },
                   ].map((item, i) => hasContent(item.value) && (
-                    <div key={i} className="flex flex-col gap-0.5">
-                      <span className="text-[11px] font-bold text-gray-500 uppercase">{item.label}</span>
-                      <span className="font-bold text-gray-800">{item.value}</span>
-                    </div>
+                    <Field key={i} label={item.label} value={item.value} />
                   ))}
                 </div>
               </div>
-            </div>
-          </section>
-        )}
+            </section>
+          )}
 
-        {/* 5. Family Information */}
-        {hasContent(data?.familyInfo) && (
-          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
-              {t.family}
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 text-sm border-l-2 border-gray-100 pl-6 ml-2">
-              {[
-                { label: t.fatherName, value: data.familyInfo?.fatherName },
-                { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
-                { label: t.motherName, value: data.familyInfo?.motherName },
-                { label: t.motherProfession, value: data.familyInfo?.motherProfession },
-                { label: t.brothers, value: data.familyInfo?.numberOfBrothers?.toString() },
-                { label: t.sisters, value: data.familyInfo?.numberOfSisters?.toString() },
-              ].map((item, i) => hasContent(item.value) && item.value !== "NaN" && (
-                <div key={i} className="flex flex-col gap-0.5">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase">{item.label}</span>
-                  <span className="font-bold text-gray-800">{item.value}</span>
+          {/* Section: Family */}
+          {hasContent(data.familyInfo) && (
+            <section>
+              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+                  <SectionTitle label={t.family} />
                 </div>
-              ))}
-              {hasContent(data.familyInfo?.familyStatus) && (
-                <div className="col-span-2 mt-2 bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
-                   <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest block mb-1">{t.familyStatus}</span>
-                   <p className="font-bold text-gray-800">{data.familyInfo?.familyStatus}</p>
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                  {[
+                    { label: t.fatherName, value: data.familyInfo?.fatherName },
+                    { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
+                    { label: t.motherName, value: data.familyInfo?.motherName },
+                    { label: t.motherProfession, value: data.familyInfo?.motherProfession },
+                    { label: t.brothers, value: data.familyInfo?.numberOfBrothers?.toString() },
+                    { label: t.sisters, value: data.familyInfo?.numberOfSisters?.toString() },
+                    { label: t.familyStatus, value: data.familyInfo?.familyStatus, full: true },
+                  ].map((item, i) => hasContent(item.value) && item.value !== "NaN" && (
+                    <Field
+                      key={i}
+                      label={item.label}
+                      value={item.value}
+                      className={item.full ? 'sm:col-span-2' : ''}
+                    />
+                  ))}
                 </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        {/* 6. Marriage Expectations */}
-        {hasContent(data?.expectations) && (
-          <section className="print:break-inside-avoid animate-fade-in-up" style={{ animationDelay: '600ms' }}>
-            <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
-              {t.expectations}
-            </h3>
-            <div className="bg-gray-50/50 p-6 sm:p-8 rounded-[2.5rem] border-2 border-gray-100 items-center justify-center text-center ml-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 text-sm mb-8">
-                {[
-                  { label: t.expectedAge, value: data.expectations?.expectedAgeRange },
-                  { label: t.expectedHeight, value: data.expectations?.expectedHeight },
-                  { label: t.expectedEducation, value: data.expectations?.expectedEducation },
-                  { label: t.expectedProfession, value: data.expectations?.expectedProfession },
-                  { label: t.expectedLocation, value: data.expectations?.expectedLocation },
-                ].map((item, i) => hasContent(item.value) && (
-                  <div key={i} className="flex flex-col gap-1">
-                    <span className="text-[11px] font-black text-gray-500 uppercase tracking-widest">{item.label}</span>
-                    <span className="font-black text-gray-900 underline decoration-gray-200 underline-offset-4 decoration-2">{item.value}</span>
-                  </div>
-                ))}
               </div>
-              {hasContent(data.expectations?.additionalExpectations) && (
-                <div className="relative pt-6">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-gray-200"></div>
-                  <p className="italic text-gray-700 leading-relaxed px-4 text-sm font-medium">
-                    &quot;{data.expectations?.additionalExpectations}&quot;
+            </section>
+          )}
+
+          {/* Section: Marriage Expectations (Black Card) */}
+          {hasContent(data.expectations) && (
+            <section>
+              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+                  <SectionTitle label={t.expectations} />
+                </div>
+                <div className="w-full md:w-2/3 bg-black text-white p-8 sm:p-12 relative overflow-hidden">
+                  {/* Texture overlay */}
+                  <div className="absolute inset-0 bg-grain opacity-10 pointer-events-none" />
+                  {/* Fields grid */}
+                  <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-0">
+                    {[
+                      { label: t.expectedAge, value: data.expectations?.expectedAgeRange },
+                      { label: t.expectedHeight, value: data.expectations?.expectedHeight },
+                      { label: t.expectedEducation, value: data.expectations?.expectedEducation },
+                      { label: t.expectedProfession, value: data.expectations?.expectedProfession },
+                    ].map((item, i) => hasContent(item.value) && (
+                      <div key={i} className="flex flex-col gap-1.5 border-b border-white/15 py-6">
+                        <span className="font-mono text-[10px] text-white/50 uppercase tracking-[0.22em]">
+                          {item.label}
+                        </span>
+                        <span className="text-lg font-serif italic leading-snug text-white">
+                          {item.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {hasContent(data.expectations?.additionalExpectations) && (
+                    <div className="relative z-10 border-t border-white/10 pt-8 mt-8">
+                      <p className="text-base font-light italic leading-relaxed text-white/85">
+                        &ldquo;{data.expectations?.additionalExpectations}&rdquo;
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Section: Custom Sections */}
+          {hasContent(data.customSections) && (data.customSections as CustomSection[])?.map((section: CustomSection, sIdx: number) => (
+            <section key={sIdx}>
+              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+                  <SectionTitle label={section.title} />
+                </div>
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                  {section.fields?.map((field: CustomField, fIdx: number) => hasContent(field.value) && (
+                    <Field key={fIdx} label={field.label} value={field.value} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          ))}
+
+        </div>
+
+        {/* ─── Contact Footer ─── */}
+        {hasContent(data.contactInfo) && (
+          <footer className="mt-24 pt-12 border-t-4 border-black border-double">
+            <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+
+              {/* Left: Contact hierarchy */}
+              <div className="space-y-6">
+                {/* Section label */}
+                <p className="font-mono text-[10px] font-bold tracking-[0.35em] uppercase text-black/45">
+                  {t.contact}
+                </p>
+
+                {/* Primary — Email */}
+                <p className="text-2xl font-serif tracking-tight text-black underline decoration-black/15 underline-offset-8">
+                  {data.contactInfo?.emailAddress || 'Not Provided'}
+                </p>
+
+                {/* Secondary — Phone + WhatsApp */}
+                <div className="flex gap-8">
+                  {hasContent(data.contactInfo?.contactNumber) && (
+                    <div>
+                      <p className="font-mono text-[9px] text-black/45 uppercase tracking-widest mb-1.5">
+                        {t.contactNumber}
+                      </p>
+                      <p className="text-base font-semibold text-black">
+                        {data.contactInfo?.contactNumber}
+                      </p>
+                    </div>
+                  )}
+                  {hasContent(data.contactInfo?.whatsAppNumber) && (
+                    <div>
+                      <p className="font-mono text-[9px] text-black/45 uppercase tracking-widest mb-1.5">
+                        {t.whatsApp}
+                      </p>
+                      <p className="text-base font-semibold text-black">
+                        {data.contactInfo?.whatsAppNumber}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right: Guardian */}
+              {hasContent(data.contactInfo?.guardianContact) && (
+                <div className="text-left md:text-right bg-gray-50 p-6 border-l-2 md:border-l-0 md:border-r-2 border-black/10 rounded-none">
+                  <p className="font-mono text-[9px] text-black/45 uppercase tracking-widest mb-1.5">
+                    {t.guardianContact}
+                  </p>
+                  <p className="text-sm font-bold text-black/80">
+                    {data.contactInfo?.guardianContact}
                   </p>
                 </div>
               )}
             </div>
-          </section>
-        )}
 
-        {/* Custom Sections */}
-        {data?.customSections?.map((section: CustomSection, idx: number) => (
-          hasContent(section.fields) && (
-            <section key={idx} className="print:break-inside-avoid">
-               <h3 className="text-sm font-black text-white mb-4 px-4 py-2 bg-black rounded-xl inline-block uppercase tracking-[0.2em]">
-                {section.title}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 text-sm border-l-2 border-gray-200 pl-6 ml-2">
-                {section.fields.map((f: CustomField, fIdx: number) => (
-                  <div key={fIdx} className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{f.label}</span>
-                    <span className="font-semibold text-gray-900">{f.value}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )
-        ))}
-
-        {/* 7. Contact Information */}
-        {hasContent(data?.contactInfo) && (
-          <section className="mt-20 pt-12 border-t-8 border-double border-gray-100 text-center print:mt-10 print:pt-8 bg-gray-50/50 rounded-[3rem] p-10">
-            <h3 className="text-2xl font-black text-gray-900 mb-6 uppercase tracking-widest">{t.contact}</h3>
-            <div className="flex flex-wrap justify-center gap-10">
-              {[
-                { label: t.contactNumber, value: data.contactInfo?.contactNumber, color: 'text-black' },
-                { label: t.whatsApp, value: data.contactInfo?.whatsAppNumber, color: 'text-black' },
-                { label: t.email, value: data.contactInfo?.emailAddress, color: 'text-gray-900' },
-              ].map((item, i) => hasContent(item.value) && (
-                <div key={i} className="flex flex-col items-center">
-                  <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2">{item.label}</span>
-                  <span className={`text-lg font-black ${item.color}`}>{item.value}</span>
-                </div>
-              ))}
+            {/* Footer bar */}
+            <div className="mt-24 pt-6 border-t border-black/8 flex justify-between items-center text-[9px] font-mono text-black/35 uppercase tracking-[0.4em]">
+              <span>BiyeProfile 2026</span>
+              <span>·</span>
+              <span>All Rights Reserved</span>
             </div>
-            {hasContent(data.contactInfo?.guardianContact) && (
-              <div className="mt-8 pt-6 border-t border-gray-200/50 text-xs font-bold text-gray-400 uppercase tracking-[0.2em]">
-                {t.guardianContact}: <span className="text-black ml-2">{data.contactInfo?.guardianContact}</span>
-              </div>
-            )}
-          </section>
+          </footer>
         )}
+
       </div>
     </div>
-  )
+  );
 }

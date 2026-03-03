@@ -6,15 +6,15 @@ export function BiodataPreview({ data }: { data: Partial<BiodataFormValues> }) {
 
   return (
     <div>
-      <div className="flex-1 overflow-x-hidden overflow-y-auto p-0 bg-gray-50/50 custom-scrollbar flex flex-col items-center w-full">
+      <div className="flex-1 overflow-x-hidden overflow-y-auto p-0 bg-white custom-scrollbar flex flex-col items-center w-full">
         <div
-          className="bg-white shadow-xl rounded-2xl sm:rounded-3xl border p-4 sm:p-8 origin-top transition-all duration-300 preview-scaled-container w-full sm:w-[920px]"
+          className="bg-white shadow-2xl rounded-none border-black/5 border p-0 origin-top transition-all duration-300 preview-scaled-container w-full sm:w-[920px]"
           style={{
             transform: 'scale(var(--preview-scale, 1))',
             marginBottom: 'calc(var(--preview-margin-bottom, 0px))'
           }}
         >
-           <BiodataContent data={data} />
+          <BiodataContent data={data} />
         </div>
       </div>
 
