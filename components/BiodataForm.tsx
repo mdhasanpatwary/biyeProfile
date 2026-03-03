@@ -213,9 +213,15 @@ export function BiodataForm({
     }
   }, 2000)
 
+  const hasMounted = useRef(false);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const subscription = form.watch((value) => {
+      // Don't trigger on initial load/mount
+      if (!hasMounted.current) {
+        hasMounted.current = true;
+        return;
+      }
       onDataChange?.(value as BiodataFormValues)
       debouncedSave(value as BiodataFormValues)
     })
@@ -263,7 +269,7 @@ export function BiodataForm({
                   key={idx}
                   type="button"
                   variant={currentStep === idx + 1 ? "default" : "ghost"}
-                   className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-300 border h-auto ${currentStep === idx + 1 ? 'bg-black text-white border-black shadow-md ring-1 ring-gray-200' : 'bg-transparent text-slate-500 border-transparent hover:text-black hover:bg-gray-50/50'}`}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-300 border h-auto ${currentStep === idx + 1 ? 'bg-black text-white border-black shadow-md ring-1 ring-gray-200' : 'bg-transparent text-slate-500 border-transparent hover:text-black hover:bg-gray-50/50'}`}
                   onClick={() => setCurrentStep(idx + 1)}
                 >
                   <span className={`text-sm sm:text-base transition-all duration-300 ${currentStep === idx + 1 ? 'scale-110 opacity-100' : 'opacity-70 grayscale'}`}>{step.icon}</span>
@@ -506,9 +512,9 @@ export function BiodataForm({
               <Button
                 type="button"
                 onClick={() => appendEducation({ degree: "", institution: "", passingYear: "", result: "" })}
-                 className="w-full py-4 border-2 border-dashed border-gray-200 rounded-2xl text-gray-400 font-bold text-sm hover:border-gray-300 hover:text-black hover:bg-gray-50/30 transition-all flex items-center justify-center gap-2 group"
+                className="w-full py-4 border-2 border-dashed border-gray-200 rounded-2xl text-gray-400 font-bold text-sm hover:border-gray-300 hover:text-black hover:bg-gray-50/30 transition-all flex items-center justify-center gap-2 group"
               >
-                 <div className="w-6 h-6 rounded-full bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center transition-colors">
+                <div className="w-6 h-6 rounded-full bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center transition-colors">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                 </div>
                 Add Another Qualification
@@ -697,7 +703,7 @@ export function BiodataForm({
             <div className="flex justify-between items-center mb-10 pb-4 border-b border-gray-50">
               <div>
                 <h3 className="text-xl font-black text-gray-900 flex items-center gap-3">
-                   <div className="w-2.5 h-8 bg-black rounded-full"></div>
+                  <div className="w-2.5 h-8 bg-black rounded-full"></div>
                   Custom Sections
                 </h3>
                 <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-1">Add any extra information about yourself</p>
@@ -705,7 +711,7 @@ export function BiodataForm({
               <Button
                 type="button"
                 onClick={() => appendSection({ title: "", fields: [{ label: "", value: "" }] })}
-                 className="text-xs font-black text-black bg-gray-100 px-6 py-3 rounded-2xl hover:bg-gray-200 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-widest border border-gray-200"
+                className="text-xs font-black text-black bg-gray-100 px-6 py-3 rounded-2xl hover:bg-gray-200 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-widest border border-gray-200"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
                 Add Section
@@ -715,8 +721,8 @@ export function BiodataForm({
             <div className="space-y-10">
               {customSectionsFields.map((section, sectionIdx) => (
                 <div key={section.id} className="p-8 bg-gray-50/50 rounded-[2rem] border border-gray-100 relative group transition-all hover:bg-white hover:shadow-xl hover:shadow-black/5 overflow-hidden"
->
-                   <div className="absolute top-0 left-0 w-1.5 h-full bg-gray-200 group-hover:bg-black transition-colors"></div>
+                >
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-gray-200 group-hover:bg-black transition-colors"></div>
                   <Button
                     type="button"
                     onClick={() => removeSection(sectionIdx)}
@@ -735,7 +741,7 @@ export function BiodataForm({
                     />
                   </div>
 
-                   <div className="space-y-4 pl-4 border-l-2 border-gray-100">
+                  <div className="space-y-4 pl-4 border-l-2 border-gray-100">
                     <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-2">Fields in this section</p>
                     {form.watch(`customSections.${sectionIdx}.fields`)?.map((_, fieldIdx) => (
                       <div key={fieldIdx} className="flex gap-3 items-center group/field">
@@ -759,7 +765,7 @@ export function BiodataForm({
                         const f = form.getValues(`customSections.${sectionIdx}.fields`) || [];
                         form.setValue(`customSections.${sectionIdx}.fields`, [...f, { label: "", value: "" }]);
                       }}
-                       className="text-[10px] font-black text-black hover:text-gray-700 uppercase tracking-widest flex items-center gap-1.5 mt-2 ml-1"
+                      className="text-[10px] font-black text-black hover:text-gray-700 uppercase tracking-widest flex items-center gap-1.5 mt-2 ml-1"
                     >
                       <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
                       Add Field

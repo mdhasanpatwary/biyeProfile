@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { biodataUpdatePayloadSchema } from "@/lib/validation/schemas"
 import { sanitizeDeep } from "@/lib/security/sanitize"
 
 const defaultBiodata = {
@@ -103,16 +102,21 @@ export async function PUT(req: NextRequest) {
   try {
     const body = await req.json()
     const sanitizedPayload = sanitizeDeep(body)
-    const parsedPayload = biodataUpdatePayloadSchema.safeParse(sanitizedPayload)
 
-    if (!parsedPayload.success) {
-      return NextResponse.json({ error: parsedPayload.error.issues[0]?.message ?? "Invalid biodata payload" }, { status: 400 })
+    // For autosave, we don't strictly enforce the full biodataSchema.
+    // We only ensure the payload has the expected 'data' object structure.
+    if (!sanitizedPayload.data || typeof sanitizedPayload.data !== 'object') {
+      return NextResponse.json({ error: "Invalid payload: missing data object" }, { status: 400 })
     }
+
+    // Try a partial parse if we want some safety, or just allow it as it's draft data.
+    // The sanitizeDeep already handled HTML stripping.
+    const biodataToSave = sanitizedPayload.data
 
     // Update the JSON field with the autosaved form values
     await prisma.biodata.update({
       where: { userId: session.user.id },
-      data: { data: parsedPayload.data.data }
+      data: { data: biodataToSave }
     })
 
     return NextResponse.json({ success: true })
