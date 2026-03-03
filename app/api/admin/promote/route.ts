@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { adminPromoteSchema } from "@/lib/validation/schemas"
+import { sanitizeDeep } from "@/lib/security/sanitize"
 
 export async function POST(req: NextRequest) {
   const session = await auth()
@@ -12,15 +14,15 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json()
-    const { email, role } = body
-
-    if (!email || !role) {
-      return NextResponse.json({ error: "Email and role required" }, { status: 400 })
+    const sanitizedBody = sanitizeDeep(body)
+    const parsed = adminPromoteSchema.safeParse(sanitizedBody)
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid request payload" }, { status: 400 })
     }
 
     const updated = await prisma.user.update({
-      where: { email },
-      data: { role }
+      where: { email: parsed.data.email },
+      data: { role: parsed.data.role }
     })
 
     return NextResponse.json({ success: true, user: updated })

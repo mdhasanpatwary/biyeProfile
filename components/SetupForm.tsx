@@ -1,6 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export function SetupForm() {
   const [username, setUsername] = useState("")
@@ -44,12 +47,12 @@ export function SetupForm() {
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="username" className="sr-only">Username</label>
+        <Label htmlFor="username" className="sr-only">Username</Label>
         <div className="relative rounded-md shadow-sm">
           <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 sm:text-sm">
             biyeprofile.com/
           </span>
-          <input
+          <Input
             id="username"
             name="username"
             type="text"
@@ -65,13 +68,13 @@ export function SetupForm() {
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
       <div>
-        <button
+        <Button
           type="submit"
           disabled={loading || username.length < 3}
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400"
         >
           {loading ? "Saving..." : "Continue"}
-        </button>
+        </Button>
       </div>
     </form>
   )

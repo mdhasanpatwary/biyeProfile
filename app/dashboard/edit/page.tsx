@@ -118,6 +118,7 @@ export default async function EditBiodataPage() {
     <BiodataEditor
       initialData={migratedData}
       username={user.username!}
+      initialIsPublic={user.biodata.isPublic}
     />
   )
 }

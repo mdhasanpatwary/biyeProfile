@@ -4,6 +4,7 @@ import { Metadata } from "next"
 import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 import { BiodataContent } from "@/components/BiodataContent"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
+import { auth } from "@/lib/auth"
 
 export async function generateMetadata(props: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const { username } = await props.params
@@ -13,9 +14,10 @@ export async function generateMetadata(props: { params: Promise<{ username: stri
     include: { biodata: true }
   })
 
+  // SEO: Only index if public
   if (!user || !user.biodata || !user.biodata.isPublic) {
     return {
-      title: 'Profile Not Found | BiyeProfile',
+      title: 'Biodata | BiyeProfile',
       robots: { index: false, follow: false }
     }
   }
@@ -32,6 +34,7 @@ export async function generateMetadata(props: { params: Promise<{ username: stri
 
 export default async function PublicBiodataPage(props: { params: Promise<{ username: string }> }) {
   const { username } = await props.params
+  const session = await auth()
 
   const user = await prisma.user.findUnique({
     where: { username },
@@ -42,7 +45,9 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
     notFound()
   }
 
-  if (!user.biodata.isPublic) {
+  const isOwner = session?.user?.username === username
+
+  if (!user.biodata.isPublic && !isOwner) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="bg-white p-8 rounded shadow text-center border">
@@ -53,12 +58,18 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
     )
   }
 
-
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
     <div className="bg-gray-50 min-h-screen py-6 sm:py-12 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg print:shadow-none p-4 sm:p-10 print:p-0 sm:rounded-[2.5rem] border border-gray-100/50">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg print:shadow-none p-4 sm:p-10 print:p-0 sm:rounded-[2.5rem] border border-gray-100/50 relative">
+        {isOwner && !user.biodata.isPublic && (
+          <div className="absolute top-4 right-4 print:hidden">
+            <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
+              Private View (Owner Only)
+            </span>
+          </div>
+        )}
         <BiodataContent data={data} />
 
         <div className="mt-12 pt-8 border-t border-gray-100 print:hidden flex justify-center items-center px-4">

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { usernameSchema } from "@/lib/validations/username"
+import { usernameSchema } from "@/lib/validation/schemas"
 import { auth } from "@/lib/auth"
+import { RESERVED_USERNAMES } from "@/lib/constants"
 
 export async function POST(req: NextRequest) {
   const session = await auth()
@@ -19,8 +20,7 @@ export async function POST(req: NextRequest) {
 
     const username = result.data
 
-    const reserved = ["admin", "dashboard", "api", "edit", "login", "setup", "settings", "biodata"];
-    if (reserved.includes(username)) {
+    if (RESERVED_USERNAMES.includes(username)) {
       return NextResponse.json({ error: "Username is reserved" }, { status: 400 })
     }
 

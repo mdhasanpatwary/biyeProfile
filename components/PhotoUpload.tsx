@@ -1,6 +1,7 @@
 import { CldUploadWidget } from 'next-cloudinary';
 import { useState } from 'react';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 interface CloudinaryResult {
   info: {
@@ -37,22 +38,24 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
               onUpload={() => setIsUploading(true)}
             >
               {({ open }) => (
-                <button
+                <Button
                   type="button"
                   onClick={() => open()}
+                  variant="outline"
                   className="text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-white px-4 py-2 rounded-full border border-indigo-100 shadow-sm"
                 >
                   Change Photo
-                </button>
+                </Button>
               )}
             </CldUploadWidget>
-            <button
+            <Button
               type="button"
               onClick={() => onChange("")}
-              className="text-xs font-bold text-red-500 hover:text-red-600 px-4 py-1 text-left"
+              variant="ghost"
+              className="text-xs font-bold text-red-500 hover:text-red-600 px-4 py-1 text-left justify-start"
             >
               Remove
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
@@ -78,9 +81,10 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
           }}
         >
           {({ open }) => (
-            <button
+            <Button
               type="button"
               disabled={isUploading}
+              variant="outline"
               className={`relative overflow-hidden group w-full sm:w-64 h-32 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2 ${isUploading ? 'bg-indigo-50 border-indigo-200' : 'bg-gray-50 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50/30'}`}
               onClick={() => open()}
             >
@@ -99,7 +103,7 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Add Profile Photo</span>
                 </>
               )}
-            </button>
+            </Button>
           )}
         </CldUploadWidget>
       )}

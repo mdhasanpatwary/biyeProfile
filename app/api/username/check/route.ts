@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { usernameSchema } from "@/lib/validations/username"
+import { usernameSchema } from "@/lib/validation/schemas"
+import { RESERVED_USERNAMES } from "@/lib/constants"
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -16,8 +17,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Check reserved words
-  const reserved = ["admin", "dashboard", "api", "edit", "login", "setup", "settings", "biodata"];
-  if (reserved.includes(username)) {
+  if (RESERVED_USERNAMES.includes(result.data)) {
     return NextResponse.json({ available: false, error: "Username is reserved" })
   }
 

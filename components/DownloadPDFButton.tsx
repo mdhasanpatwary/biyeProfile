@@ -1,8 +1,9 @@
 "use client"
+import { Button } from "@/components/ui/button"
 
 export function DownloadPDFButton() {
   return (
-    <button
+    <Button
       onClick={() => window.print()}
       className="group flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3.5 rounded-full font-bold hover:scale-105 active:scale-95 transition-all shadow-xl hover:shadow-indigo-200/50 print:hidden cursor-pointer"
     >
@@ -23,7 +24,6 @@ export function DownloadPDFButton() {
         <line x1="12" x2="12" y1="15" y2="3" />
       </svg>
       <span className="tracking-tight">Download Professional PDF</span>
-    </button>
+    </Button>
   )
 }
-

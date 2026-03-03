@@ -6,13 +6,12 @@ export function BiodataPreview({ data }: { data: Partial<BiodataFormValues> }) {
 
   return (
     <div>
-      <div className="flex-1 overflow-x-hidden overflow-y-auto p-0 bg-gray-50/50 custom-scrollbar flex flex-col items-center">
+      <div className="flex-1 overflow-x-hidden overflow-y-auto p-0 bg-gray-50/50 custom-scrollbar flex flex-col items-center w-full">
         <div
-          className="bg-white shadow-xl rounded-3xl border p-5 sm:p-8 origin-top transition-transform duration-300 preview-scaled-container"
+          className="bg-white shadow-xl rounded-2xl sm:rounded-3xl border p-4 sm:p-8 origin-top transition-all duration-300 preview-scaled-container w-full sm:w-[920px]"
           style={{
-            width: '920px',
-            transform: 'scale(var(--preview-scale, 0.45))',
-            marginBottom: 'calc(-920px * (1 - var(--preview-scale, 0.45)))'
+            transform: 'scale(var(--preview-scale, 1))',
+            marginBottom: 'calc(var(--preview-margin-bottom, 0px))'
           }}
         >
            <BiodataContent data={data} />
@@ -21,21 +20,13 @@ export function BiodataPreview({ data }: { data: Partial<BiodataFormValues> }) {
 
       <style jsx>{`
         .preview-scaled-container {
-          --preview-scale: 0.45;
+          --preview-scale: 1;
+          --preview-margin-bottom: 0px;
         }
-        @media (max-width: 1200px) {
+        @media (min-width: 1024px) {
           .preview-scaled-container {
             --preview-scale: 0.45;
-          }
-        }
-        @media (max-width: 1024px) {
-           .preview-scaled-container {
-            --preview-scale: 0.45;
-          }
-        }
-        @media (max-width: 640px) {
-          .preview-scaled-container {
-            --preview-scale: 0.4;
+            --preview-margin-bottom: calc(-920px * (1 - 0.45));
           }
         }
         .custom-scrollbar::-webkit-scrollbar {
