@@ -5,7 +5,6 @@ import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 import { BiodataContent } from "@/components/BiodataContent"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { auth } from "@/lib/auth"
-import { Logo } from "@/components/Logo"
 
 export async function generateMetadata(props: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const { username } = await props.params
@@ -62,18 +61,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
-    <div className="bg-white min-h-screen py-6 sm:py-12 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
-      <div className="max-w-4xl mx-auto mb-8 px-4 flex justify-between items-center print:hidden">
-        <Logo />
-        {isOwner && (
-          <a
-            href="/dashboard/edit"
-            className="text-[10px] font-black uppercase tracking-widest text-black border-b-2 border-black pb-0.5 hover:text-gray-500 hover:border-gray-500 transition-all"
-          >
-            Edit My Biodata
-          </a>
-        )}
-      </div>
+    <div className="bg-white py-6 sm:py-12 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
       <div className="max-w-4xl mx-auto bg-white shadow-xl shadow-black/5 print:shadow-none p-4 sm:p-10 print:p-0 sm:rounded-[2.5rem] border border-gray-100 relative">
         {isOwner && !user.biodata.isPublic && (
           <div className="absolute top-4 right-4 print:hidden">
@@ -85,13 +73,13 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
         <BiodataContent data={data} />
 
         <div className="mt-12 pt-8 border-t border-gray-100 print:hidden flex justify-center items-center px-4">
-          <DownloadPDFButton />
+          <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
         </div>
       </div>
 
       {/* Floating Sticky Download Bar for Mobile */}
       <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/60 backdrop-blur-xl border-t border-gray-100/50 sm:hidden flex justify-center z-50 print:hidden transition-all duration-300">
-        <DownloadPDFButton />
+        <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
       </div>
 
       {/* Spacer for mobile to prevent content being hidden by sticky bar */}

@@ -181,7 +181,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   const t = LABELS[lang];
 
   return (
-    <div className="relative bg-white text-black font-sans selection:bg-black selection:text-white p-8 sm:p-16 min-h-screen overflow-hidden">
+    <div id="biodata-content" className="relative bg-white text-black font-sans selection:bg-black selection:text-white p-8 sm:p-16 min-h-screen overflow-hidden">
       {/* Texture Layer */}
       <div className="absolute inset-0 bg-grain pointer-events-none opacity-5"></div>
 

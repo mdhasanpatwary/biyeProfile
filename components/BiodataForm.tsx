@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useDebounce<T extends (...args: any[]) => any>(cb: T, delay: number) {
@@ -43,13 +44,15 @@ export function BiodataForm({
   onDataChange,
   language: externalLanguage,
   mobileView,
-  onViewChange
+  onViewChange,
+  isGuest = false,
 }: {
   initialData: Partial<BiodataFormValues>,
   onDataChange?: (data: BiodataFormValues) => void,
   language?: "en" | "bn",
   mobileView?: "edit" | "preview",
-  onViewChange?: (view: "edit" | "preview") => void
+  onViewChange?: (view: "edit" | "preview") => void,
+  isGuest?: boolean,
 }) {
   const [currentStep, setCurrentStep] = useState(1)
   const tabsRef = useRef<HTMLDivElement>(null)
@@ -196,8 +199,9 @@ export function BiodataForm({
     }
   }
 
-  // Set up autosave
+  // Conditional autosave — DISABLED for guest mode
   const debouncedSave = useDebounce(async (data: BiodataFormValues) => {
+    if (isGuest) return; // Skip API save in guest mode
     try {
       const res = await fetch("/api/biodata", {
         method: "PUT",
@@ -822,6 +826,11 @@ export function BiodataForm({
                 Next
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
               </Button>
+            ) : isGuest ? (
+              <DownloadPDFButton
+                filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
+                className="w-full h-12 bg-black text-white font-black rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-2 group"
+              />
             ) : (
               <a
                 href="/dashboard"
@@ -855,6 +864,11 @@ export function BiodataForm({
               Next Phase
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </Button>
+          ) : isGuest ? (
+            <DownloadPDFButton
+                filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
+                className="px-10 py-3.5 bg-black text-white font-black rounded-2xl hover:bg-gray-700 transition-all shadow-xl shadow-gray-100 active:scale-95 flex items-center gap-3 group"
+              />
           ) : (
             <a
               href="/dashboard"

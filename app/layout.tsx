@@ -24,17 +24,24 @@ export const metadata: Metadata = {
   description: "Create, manage, and share secure marriage biodata profiles with privacy controls.",
 };
 
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="max-w-full overflow-x-hidden">
+    <html lang="en" className="max-w-full overflow-x-hidden scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased max-w-full overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased max-w-full overflow-x-hidden flex flex-col min-h-screen`}
       >
-        {children}
+        <Navbar />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
         <Toaster position="top-center" toastOptions={{
           style: {
             background: 'black',

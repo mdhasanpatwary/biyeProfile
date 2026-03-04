@@ -1,38 +1,11 @@
 import Link from "next/link"
 import { auth } from "@/lib/auth"
-import { DevLoginButton } from "@/components/DevLoginButton"
-import { Logo } from "@/components/Logo"
 
 export default async function Home() {
   const session = await auth()
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex justify-between items-center relative z-20">
-        <Logo />
-        <div className="flex items-center gap-6">
-          {session?.user ? (
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium text-white bg-black hover:bg-gray-800 px-5 py-2.5 rounded-full transition-all shadow-md hover:shadow-lg"
-            >
-              Go to Dashboard
-            </Link>
-          ) : (
-            <div className="flex gap-4 items-center">
-              {process.env.NODE_ENV === "development" && <DevLoginButton />}
-              <Link
-                href="/api/auth/signin"
-                className="text-xs font-black uppercase tracking-widest text-black hover:text-gray-500 transition-colors"
-              >
-                Sign In
-              </Link>
-            </div>
-          )}
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-20 pb-32">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
@@ -49,7 +22,7 @@ export default async function Home() {
 
           <div className="flex justify-center flex-col sm:flex-row gap-4">
             <Link
-              href={session?.user ? "/dashboard" : "/api/auth/signin"}
+              href={session?.user ? "/dashboard" : "/create"}
               className="px-8 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-black hover:bg-gray-800 md:py-4 md:text-lg px-10 shadow-xl hover:shadow-black/10 transition-all transform hover:-translate-y-1"
             >
               Create Free Biodata

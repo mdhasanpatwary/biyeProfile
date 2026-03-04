@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma"
 import { BiodataCard } from "@/components/BiodataCard"
-import { Logo } from "@/components/Logo"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import Link from "next/link"
 
@@ -34,20 +33,6 @@ export default async function BrowseBiodataPage(props: {
 
     return (
         <div className="min-h-screen bg-white">
-            {/* Premium Header */}
-            <nav className="border-b border-black/5 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-20 items-center">
-                    <Logo />
-                    <div className="flex items-center gap-8">
-                        <Link
-                            href="/dashboard"
-                            className="text-[10px] font-mono font-black uppercase tracking-[0.2em] text-black border-b border-black hover:pb-1 transition-all"
-                        >
-                            My Dashboard
-                        </Link>
-                    </div>
-                </div>
-            </nav>
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-40">
 
@@ -115,15 +100,6 @@ export default async function BrowseBiodataPage(props: {
 
             </main>
 
-            {/* Footer Branding */}
-            <footer className="border-t border-black/5 py-24 bg-gray-50/30">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-                    <Logo />
-                    <p className="mt-8 text-[10px] font-mono font-black uppercase tracking-[0.4em] text-gray-300">
-                        Premium Marriage Biodata Builder
-                    </p>
-                </div>
-            </footer>
         </div>
     )
 }
