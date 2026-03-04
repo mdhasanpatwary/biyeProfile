@@ -61,29 +61,29 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
-    <div className="bg-white py-6 sm:py-12 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
-      <div className="max-w-4xl mx-auto bg-white shadow-xl shadow-black/5 print:shadow-none p-4 sm:p-10 print:p-0 sm:rounded-[2.5rem] border border-gray-100 relative">
+    <div className="bg-white py-12 sm:py-24 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-white print:px-0">
+      <div className="max-w-4xl mx-auto bg-white print:shadow-none p-4 sm:p-16 print:p-0 sm:rounded-md border border-black/5 relative">
         {isOwner && !user.biodata.isPublic && (
-          <div className="absolute top-4 right-4 print:hidden">
-            <span className="bg-gray-100 text-gray-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
-              Private View (Owner Only)
+          <div className="absolute top-8 right-8 print:hidden">
+            <span className="bg-gray-100 text-black/40 text-[10px] font-mono font-black px-3 py-1.5 rounded-sm uppercase tracking-[0.2em] border border-black/5">
+              Private View / Owner
             </span>
           </div>
         )}
         <BiodataContent data={data} />
 
-        <div className="mt-12 pt-8 border-t border-gray-100 print:hidden flex justify-center items-center px-4">
+        <div className="mt-24 pt-12 border-t border-black/5 print:hidden flex justify-center items-center px-4">
           <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
         </div>
       </div>
 
       {/* Floating Sticky Download Bar for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/60 backdrop-blur-xl border-t border-gray-100/50 sm:hidden flex justify-center z-50 print:hidden transition-all duration-300">
+      <div className="fixed bottom-0 left-0 right-0 p-8 bg-white/80 backdrop-blur-xl border-t border-black/5 sm:hidden flex justify-center z-50 print:hidden transition-all duration-300">
         <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
       </div>
 
       {/* Spacer for mobile to prevent content being hidden by sticky bar */}
-      <div className="h-28 sm:hidden print:hidden" />
+      <div className="h-32 sm:hidden print:hidden" />
     </div>
   )
 }

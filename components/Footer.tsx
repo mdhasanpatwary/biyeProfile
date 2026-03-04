@@ -1,21 +1,33 @@
 import { Logo } from "@/components/Logo"
+import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="border-t border-black/5 py-24 bg-gray-50/30 print:hidden relative z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-        <Logo />
-        <p className="mt-8 text-[10px] font-mono font-black uppercase tracking-[0.4em] text-gray-300">
-          Premium Marriage Biodata Builder
-        </p>
-        <div className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-4">
-            <a href="#" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">Privacy Policy</a>
-            <a href="#" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">Terms of Service</a>
-            <a href="#" className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-colors">Contact Us</a>
+    <footer className="py-24 border-t border-black/5 bg-white print:hidden">
+      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12">
+        <div className="flex flex-col items-center md:items-start gap-4">
+          <Logo />
+          <p className="font-mono text-[9px] font-black text-black/30 uppercase tracking-[0.4em]">
+            Premium Marriage Biodata Builder
+          </p>
         </div>
-        <p className="mt-12 text-[10px] font-medium text-gray-300">
-          © {new Date().getFullYear()} BiyeProfile. All rights reserved.
-        </p>
+
+        <div className="flex gap-16">
+          <div className="flex flex-col gap-4">
+            <span className="font-mono text-[10px] font-black text-black uppercase tracking-[0.2em] mb-1.5">Navigation</span>
+            <Link href="/biodata" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Directory</Link>
+            <Link href="/dashboard" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Dashboard</Link>
+          </div>
+          <div className="flex flex-col gap-4">
+            <span className="font-mono text-[10px] font-black text-black uppercase tracking-[0.2em] mb-1.5">Legal</span>
+            <Link href="#" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Privacy</Link>
+            <Link href="#" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Terms</Link>
+          </div>
+        </div>
+
+        <div className="pt-8 md:pt-0 text-[10px] font-mono text-black/30 uppercase tracking-[0.2em]">
+          © {new Date().getFullYear()} BiyeProfile.
+        </div>
       </div>
     </footer>
   )

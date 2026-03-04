@@ -238,7 +238,7 @@ export function BiodataForm({
   return (
     <div className="relative">
 
-      <div className="flex items-center justify-between gap-3 mb-8 bg-white/95 p-1.5 rounded-2xl border border-gray-100 backdrop-blur-xl sticky top-4 z-50 transition-all duration-300 shadow shadow-black/5">
+      <div className="flex items-center justify-between gap-3 mb-16 bg-white/90 backdrop-blur-md p-4 border-b border-black/10 sticky top-0 z-50 transition-all duration-300">
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           {/* Prev Button */}
           <Button
@@ -249,7 +249,7 @@ export function BiodataForm({
               scrollTabs('left');
             }}
             variant="outline"
-            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-xl border-gray-100 bg-white text-black transition-all enabled:hover:bg-gray-50 disabled:opacity-30 disabled:grayscale group p-0"
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-sm border-black/10 bg-white text-black transition-all enabled:hover:bg-gray-50 disabled:opacity-30 disabled:grayscale group p-0"
           >
             <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
           </Button>
@@ -266,11 +266,11 @@ export function BiodataForm({
                   key={idx}
                   type="button"
                   variant={currentStep === idx + 1 ? "default" : "ghost"}
-                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-300 border h-auto ${currentStep === idx + 1 ? 'bg-black text-white border-black shadow-md ring-1 ring-gray-200' : 'bg-transparent text-slate-500 border-transparent hover:text-black hover:bg-gray-50/50'}`}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-sm transition-all duration-300 border h-auto ${currentStep === idx + 1 ? 'bg-black text-white border-black' : 'bg-transparent text-black/40 border-transparent hover:text-black hover:bg-black/5'}`}
                   onClick={() => setCurrentStep(idx + 1)}
                 >
-                  <span className={`text-sm sm:text-base transition-all duration-300 ${currentStep === idx + 1 ? 'scale-110 opacity-100' : 'opacity-70 grayscale'}`}>{step.icon}</span>
-                  <span className={`text-[10px] sm:text-[11px] uppercase tracking-wider transition-all duration-300 ${currentStep === idx + 1 ? 'block font-black text-white' : 'hidden sm:block font-bold text-slate-500 hover:text-black'}`}>{step.title}</span>
+                  <span className={`text-sm sm:text-base transition-all duration-300 ${currentStep === idx + 1 ? 'opacity-100' : 'opacity-40 grayscale'}`}>{step.icon}</span>
+                  <span className={`text-[10px] sm:text-[10px] uppercase font-mono tracking-widest transition-all duration-300 ${currentStep === idx + 1 ? 'block text-white' : 'hidden sm:block'}`}>{step.title}</span>
                 </Button>
               ))}
             </div>
@@ -285,7 +285,7 @@ export function BiodataForm({
               scrollTabs('right');
             }}
             variant="outline"
-            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-xl border-gray-100 bg-white text-black transition-all enabled:hover:bg-gray-50 disabled:opacity-30 disabled:grayscale group p-0"
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-sm border-black/10 bg-white text-black transition-all enabled:hover:bg-gray-50 disabled:opacity-30 disabled:grayscale group p-0"
           >
             <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
           </Button>
@@ -295,11 +295,13 @@ export function BiodataForm({
       <form onSubmit={(e) => e.preventDefault()} className="space-y-12 pb-20">
         {/* Step 1: Basic Information */}
         {currentStep === 1 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
-              <div className="w-2 h-6 bg-black rounded-full"></div>
-              {lang === 'en' ? 'Basic Information' : 'প্রাথমিক তথ্য'}
-            </h3>
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <header className="border-b border-black/10 pb-12 mb-16">
+              <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 01</p>
+              <h2 className="text-5xl font-serif text-black italic">
+                {lang === 'en' ? 'Basic Information' : 'প্রাথমিক তথ্য'}
+              </h2>
+            </header>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div className="sm:col-span-2 space-y-2">
@@ -313,25 +315,25 @@ export function BiodataForm({
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Full Name</Label>
-                <Input type="text" {...form.register("basicInfo.fullName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/5 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Full Name</Label>
+                <Input type="text" {...form.register("basicInfo.fullName")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.basicInfo?.fullName?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.fullName.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Date of Birth</Label>
-                <Input type="date" {...form.register("basicInfo.dateOfBirth")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Date of Birth</Label>
+                <Input type="date" {...form.register("basicInfo.dateOfBirth")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.basicInfo?.dateOfBirth?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.dateOfBirth.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Age (Auto Calculated)</Label>
-                <Input type="number" readOnly {...form.register("basicInfo.age")} className="block w-full rounded-2xl border-gray-100 bg-gray-100/50 shadow-sm sm:text-sm p-3 border text-gray-400 cursor-not-allowed outline-none font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Age (Auto Calculated)</Label>
+                <Input type="number" readOnly {...form.register("basicInfo.age")} className="block w-full rounded-md border-black/10 bg-gray-50 shadow-sm sm:text-sm p-4 border text-black/40 cursor-not-allowed outline-none font-medium" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Height</Label>
-                <Select {...form.register("basicInfo.height")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Height</Label>
+                <Select {...form.register("basicInfo.height")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium cursor-pointer">
                   <option value="">Select Height</option>
                   {HEIGHT_OPTIONS.map(h => <option key={h} value={h}>{h}</option>)}
                 </Select>
@@ -339,13 +341,13 @@ export function BiodataForm({
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Weight (Optional)</Label>
-                <Input type="text" {...form.register("basicInfo.weight")} placeholder="e.g. 70kg" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Weight (Optional)</Label>
+                <Input type="text" {...form.register("basicInfo.weight")} placeholder="e.g. 70kg" className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Blood Group</Label>
-                <Select {...form.register("basicInfo.bloodGroup")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Blood Group</Label>
+                <Select {...form.register("basicInfo.bloodGroup")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium cursor-pointer">
                   <option value="">Select Blood Group</option>
                   {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
                 </Select>
@@ -353,14 +355,14 @@ export function BiodataForm({
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Religion</Label>
-                <Input type="text" {...form.register("basicInfo.religion")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Religion</Label>
+                <Input type="text" {...form.register("basicInfo.religion")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.basicInfo?.religion?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.basicInfo.religion.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Marital Status</Label>
-                <Select {...form.register("basicInfo.maritalStatus")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Marital Status</Label>
+                <Select {...form.register("basicInfo.maritalStatus")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium cursor-pointer">
                   <option value="">Select Status</option>
                   {MARITAL_STATUS_OPTIONS.map(status => <option key={status} value={status}>{status}</option>)}
                 </Select>
@@ -368,8 +370,8 @@ export function BiodataForm({
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Nationality</Label>
-                <Input type="text" {...form.register("basicInfo.nationality")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Nationality</Label>
+                <Input type="text" {...form.register("basicInfo.nationality")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
             </div>
           </section>
@@ -377,57 +379,59 @@ export function BiodataForm({
 
         {/* Step 2: Personal Information */}
         {currentStep === 2 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
-              <div className="w-2 h-6 bg-black rounded-full"></div>
-              {lang === 'en' ? 'Personal Information' : 'ব্যক্তিগত তথ্য'}
-            </h3>
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <header className="border-b border-black/10 pb-12 mb-16">
+              <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 02</p>
+              <h2 className="text-5xl font-serif text-black italic">
+                {lang === 'en' ? 'Personal Information' : 'ব্যক্তিগত তথ্য'}
+              </h2>
+            </header>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Present Address</Label>
-                <Textarea {...form.register("personalInfo.presentAddress")} rows={3} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Present Address</Label>
+                <Textarea {...form.register("personalInfo.presentAddress")} rows={3} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.personalInfo?.presentAddress?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.personalInfo.presentAddress.message}</p>}
               </div>
 
               <div className="sm:col-span-2">
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Permanent Address</Label>
-                <Textarea {...form.register("personalInfo.permanentAddress")} rows={3} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Permanent Address</Label>
+                <Textarea {...form.register("personalInfo.permanentAddress")} rows={3} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.personalInfo?.permanentAddress?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.personalInfo.permanentAddress.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">District</Label>
-                <Input type="text" {...form.register("personalInfo.district")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">District</Label>
+                <Input type="text" {...form.register("personalInfo.district")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.personalInfo?.district?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.personalInfo.district.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Division (Optional)</Label>
-                <Input type="text" {...form.register("personalInfo.division")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Division (Optional)</Label>
+                <Input type="text" {...form.register("personalInfo.division")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Native Village (Optional)</Label>
-                <Input type="text" {...form.register("personalInfo.nativeVillage")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Native Village (Optional)</Label>
+                <Input type="text" {...form.register("personalInfo.nativeVillage")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Complexion (Optional)</Label>
-                <Select {...form.register("personalInfo.complexion")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Complexion (Optional)</Label>
+                <Select {...form.register("personalInfo.complexion")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium cursor-pointer">
                   <option value="">Select Complexion</option>
                   {COMPLEXION_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
                 </Select>
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Physical Status (Optional)</Label>
-                <Input type="text" {...form.register("personalInfo.physicalStatus")} placeholder="e.g. Healthy" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Physical Status (Optional)</Label>
+                <Input type="text" {...form.register("personalInfo.physicalStatus")} placeholder="e.g. Healthy" className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Hobby / Interests (Optional)</Label>
-                <Textarea {...form.register("personalInfo.hobby")} rows={2} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Hobby / Interests (Optional)</Label>
+                <Textarea {...form.register("personalInfo.hobby")} rows={2} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
             </div>
           </section>
@@ -435,11 +439,13 @@ export function BiodataForm({
 
         {/* Step 3: Education Information */}
         {currentStep === 3 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
-              <div className="w-2 h-6 bg-black rounded-full"></div>
-              {lang === 'en' ? 'Education Information' : 'শিক্ষাগত তথ্য'}
-            </h3>
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <header className="border-b border-black/10 pb-12 mb-16">
+              <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 03</p>
+              <h2 className="text-5xl font-serif text-black italic">
+                {lang === 'en' ? 'Education Information' : 'শিক্ষাগত তথ্য'}
+              </h2>
+            </header>
 
             <div className="space-y-8">
               {educationFields.map((field, index) => (
@@ -456,12 +462,12 @@ export function BiodataForm({
 
                   <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                     <div className="sm:col-span-1">
-                      <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Degree / Level</Label>
+                      <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Degree / Level</Label>
                       <Input
                         type="text"
                         {...form.register(`education.qualifications.${index}.degree` as const)}
                         placeholder="e.g. SSC / Graduation"
-                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                        className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans"
                       />
                       {form.formState.errors.education?.qualifications?.[index]?.degree?.message && (
                         <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">
@@ -471,20 +477,20 @@ export function BiodataForm({
                     </div>
 
                     <div className="sm:col-span-1">
-                      <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Passing Year</Label>
+                      <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Passing Year</Label>
                       <Input
                         type="text"
                         {...form.register(`education.qualifications.${index}.passingYear` as const)}
-                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                        className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans"
                       />
                     </div>
 
                     <div className="sm:col-span-2">
-                      <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Institution Name</Label>
+                      <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Institution Name</Label>
                       <Input
                         type="text"
                         {...form.register(`education.qualifications.${index}.institution` as const)}
-                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                        className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans"
                       />
                       {form.formState.errors.education?.qualifications?.[index]?.institution?.message && (
                         <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">
@@ -494,12 +500,12 @@ export function BiodataForm({
                     </div>
 
                     <div className="sm:col-span-2">
-                      <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Result (Optional)</Label>
+                      <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Result (Optional)</Label>
                       <Input
                         type="text"
                         {...form.register(`education.qualifications.${index}.result` as const)}
                         placeholder="e.g. GPA 5.00 / 1st Class"
-                        className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-white transition-all outline-none text-gray-900 font-medium"
+                        className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans"
                       />
                     </div>
                   </div>
@@ -518,8 +524,8 @@ export function BiodataForm({
               </Button>
 
               <div className="sm:col-span-2">
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Additional Educational Details (Optional)</Label>
-                <Textarea {...form.register("education.additionalQualifications")} rows={3} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-2 ml-1">Additional Educational Details (Optional)</Label>
+                <Textarea {...form.register("education.additionalQualifications")} rows={3} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
             </div>
           </section>
@@ -527,40 +533,42 @@ export function BiodataForm({
 
         {/* Step 4: Profession Information */}
         {currentStep === 4 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
-              <div className="w-2 h-6 bg-black rounded-full"></div>
-              {lang === 'en' ? 'Profession Information' : 'পেশাগত তথ্য'}
-            </h3>
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <header className="border-b border-black/10 pb-12 mb-16">
+              <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 04</p>
+              <h2 className="text-5xl font-serif text-black italic">
+                {lang === 'en' ? 'Profession Information' : 'পেশাগত তথ্য'}
+              </h2>
+            </header>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Occupation / Job Title</Label>
-                <Input type="text" {...form.register("profession.occupation")} placeholder="e.g. Software Engineer" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Occupation / Job Title</Label>
+                <Input type="text" {...form.register("profession.occupation")} placeholder="e.g. Software Engineer" className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.profession?.occupation?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.profession.occupation.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Organization Name (Optional)</Label>
-                <Input type="text" {...form.register("profession.organizationName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Organization Name (Optional)</Label>
+                <Input type="text" {...form.register("profession.organizationName")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Employment Type (Optional)</Label>
-                <Select {...form.register("profession.employmentType")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Employment Type (Optional)</Label>
+                <Select {...form.register("profession.employmentType")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium cursor-pointer">
                   <option value="">Select Type</option>
                   {EMPLOYMENT_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
                 </Select>
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Monthly Income (Optional)</Label>
-                <Input type="text" {...form.register("profession.monthlyIncome")} placeholder="e.g. 50,000 BDT" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Monthly Income (Optional)</Label>
+                <Input type="text" {...form.register("profession.monthlyIncome")} placeholder="e.g. 50,000 BDT" className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div className="sm:col-span-2">
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Workplace Location (Optional)</Label>
-                <Input type="text" {...form.register("profession.workplaceLocation")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Workplace Location (Optional)</Label>
+                <Input type="text" {...form.register("profession.workplaceLocation")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
             </div>
           </section>
@@ -568,48 +576,50 @@ export function BiodataForm({
 
         {/* Step 5: Family Information */}
         {currentStep === 5 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
-              <div className="w-2 h-6 bg-black rounded-full"></div>
-              {lang === 'en' ? 'Family Information' : 'পারিবারিক তথ্য'}
-            </h3>
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <header className="border-b border-black/10 pb-12 mb-16">
+              <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 05</p>
+              <h2 className="text-5xl font-serif text-black italic">
+                {lang === 'en' ? 'Family Information' : 'পারিবারিক তথ্য'}
+              </h2>
+            </header>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Father&apos;s Name</Label>
-                <Input type="text" {...form.register("familyInfo.fatherName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Father&apos;s Name</Label>
+                <Input type="text" {...form.register("familyInfo.fatherName")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.familyInfo?.fatherName?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.familyInfo.fatherName.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Father&apos;s Profession (Optional)</Label>
-                <Input type="text" {...form.register("familyInfo.fatherProfession")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Father&apos;s Profession (Optional)</Label>
+                <Input type="text" {...form.register("familyInfo.fatherProfession")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Mother&apos;s Name</Label>
-                <Input type="text" {...form.register("familyInfo.motherName")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Mother&apos;s Name</Label>
+                <Input type="text" {...form.register("familyInfo.motherName")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.familyInfo?.motherName?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.familyInfo.motherName.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Mother&apos;s Profession (Optional)</Label>
-                <Input type="text" {...form.register("familyInfo.motherProfession")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Mother&apos;s Profession (Optional)</Label>
+                <Input type="text" {...form.register("familyInfo.motherProfession")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Number of Brothers (Optional)</Label>
-                <Input type="number" {...form.register("familyInfo.numberOfBrothers", { valueAsNumber: true })} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Number of Brothers (Optional)</Label>
+                <Input type="number" {...form.register("familyInfo.numberOfBrothers", { valueAsNumber: true })} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Number of Sisters (Optional)</Label>
-                <Input type="number" {...form.register("familyInfo.numberOfSisters", { valueAsNumber: true })} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Number of Sisters (Optional)</Label>
+                <Input type="number" {...form.register("familyInfo.numberOfSisters", { valueAsNumber: true })} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div className="sm:col-span-2">
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Family Status (Optional)</Label>
-                <Select {...form.register("familyInfo.familyStatus")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium cursor-pointer">
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Family Status (Optional)</Label>
+                <Select {...form.register("familyInfo.familyStatus")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium cursor-pointer">
                   <option value="">Select Family Status</option>
                   {FAMILY_STATUS_OPTIONS.map(status => <option key={status} value={status}>{status}</option>)}
                 </Select>
@@ -620,41 +630,43 @@ export function BiodataForm({
 
         {/* Step 6: Marriage Expectations */}
         {currentStep === 6 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
-              <div className="w-2 h-6 bg-black rounded-full"></div>
-              {lang === 'en' ? 'Marriage Expectations' : 'বিয়ে সংক্রান্ত প্রত্যাশা'}
-            </h3>
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <header className="border-b border-black/10 pb-12 mb-16">
+              <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 06</p>
+              <h2 className="text-5xl font-serif text-black italic">
+                {lang === 'en' ? 'Marriage Expectations' : 'বিয়ে সংক্রান্ত প্রত্যাশা'}
+              </h2>
+            </header>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Age Range (Optional)</Label>
-                <Input type="text" {...form.register("expectations.expectedAgeRange")} placeholder="e.g. 22-26" className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Expected Age Range (Optional)</Label>
+                <Input type="text" {...form.register("expectations.expectedAgeRange")} placeholder="e.g. 22-26" className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Height (Optional)</Label>
-                <Input type="text" {...form.register("expectations.expectedHeight")} placeholder={`e.g. 5'2" - 5'6"`} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Expected Height (Optional)</Label>
+                <Input type="text" {...form.register("expectations.expectedHeight")} placeholder={`e.g. 5'2" - 5'6"`} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Education (Optional)</Label>
-                <Input type="text" {...form.register("expectations.expectedEducation")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Expected Education (Optional)</Label>
+                <Input type="text" {...form.register("expectations.expectedEducation")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Profession (Optional)</Label>
-                <Input type="text" {...form.register("expectations.expectedProfession")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Expected Profession (Optional)</Label>
+                <Input type="text" {...form.register("expectations.expectedProfession")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Expected Location (Optional)</Label>
-                <Input type="text" {...form.register("expectations.expectedLocation")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Expected Location (Optional)</Label>
+                <Input type="text" {...form.register("expectations.expectedLocation")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div className="sm:col-span-2">
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Additional Expectations (Optional)</Label>
-                <Textarea {...form.register("expectations.additionalExpectations")} rows={4} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Additional Expectations (Optional)</Label>
+                <Textarea {...form.register("expectations.additionalExpectations")} rows={4} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
             </div>
           </section>
@@ -662,33 +674,35 @@ export function BiodataForm({
 
         {/* Step 7: Contact Information */}
         {currentStep === 7 && (
-          <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900">
-              <div className="w-2 h-6 bg-black rounded-full"></div>
-              {lang === 'en' ? 'Contact Information' : 'যোগাযোগের তথ্য'}
-            </h3>
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <header className="border-b border-black/10 pb-12 mb-16">
+              <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 07</p>
+              <h2 className="text-5xl font-serif text-black italic">
+                {lang === 'en' ? 'Contact Information' : 'যোগাযোগের তথ্য'}
+              </h2>
+            </header>
 
             <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Contact Number</Label>
-                <Input type="text" {...form.register("contactInfo.contactNumber")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Contact Number</Label>
+                <Input type="text" {...form.register("contactInfo.contactNumber")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.contactInfo?.contactNumber?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.contactInfo.contactNumber.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">WhatsApp Number (Optional)</Label>
-                <Input type="text" {...form.register("contactInfo.whatsAppNumber")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">WhatsApp Number (Optional)</Label>
+                <Input type="text" {...form.register("contactInfo.whatsAppNumber")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Email Address (Optional)</Label>
-                <Input type="email" {...form.register("contactInfo.emailAddress")} className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Email Address (Optional)</Label>
+                <Input type="email" {...form.register("contactInfo.emailAddress")} className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
                 {form.formState.errors.contactInfo?.emailAddress?.message && <p className="mt-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full inline-block uppercase tracking-wider">{form.formState.errors.contactInfo.emailAddress.message}</p>}
               </div>
 
               <div>
-                <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-1.5 ml-1">Guardian Contact Info (Optional)</Label>
-                <Input type="text" {...form.register("contactInfo.guardianContact")} placeholder="e.g. Father: 017..." className="block w-full rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3 border bg-gray-50/30 transition-all outline-none text-gray-900 font-medium" />
+                <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-1.5 ml-1">Guardian Contact Info (Optional)</Label>
+                <Input type="text" {...form.register("contactInfo.guardianContact")} placeholder="e.g. Father: 017..." className="block w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-[17px] focus:outline-none transition-all outline-none text-black font-medium placeholder:text-black/20 font-sans" />
               </div>
             </div>
           </section>
@@ -696,61 +710,67 @@ export function BiodataForm({
 
         {/* Step 8: Custom Sections */}
         {currentStep === 8 && (
-          <section className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex justify-between items-center mb-10 pb-4 border-b border-gray-50">
+          <section className="bg-white p-12 sm:p-16 rounded-md border border-black/5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex justify-between items-center mb-16 pb-12 border-b border-black/10">
               <div>
-                <h3 className="text-xl font-black text-gray-900 flex items-center gap-3">
-                  <div className="w-2.5 h-8 bg-black rounded-full"></div>
+                <p className="font-mono text-[11px] text-black/30 uppercase tracking-[0.4em] mb-4">Chapter / 08</p>
+                <h3 className="text-5xl font-serif text-black italic">
                   Custom Sections
                 </h3>
-                <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-1">Add any extra information about yourself</p>
+                <p className="text-black/40 font-mono text-[10px] uppercase tracking-widest mt-4 px-0">Describe your heritage and lifestyle in detail</p>
               </div>
               <Button
                 type="button"
                 onClick={() => appendSection({ title: "", fields: [{ label: "", value: "" }] })}
-                className="text-xs font-black text-black bg-gray-100 px-6 py-3 rounded-2xl hover:bg-gray-200 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-widest border border-gray-200"
+                className="px-8 py-3.5 bg-white border border-black/10 text-black font-mono text-[10px] uppercase tracking-widest rounded-md hover:bg-black hover:text-white transition-all active:scale-95 flex items-center gap-3"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
                 Add Section
               </Button>
             </div>
 
-            <div className="space-y-10">
+            <div className="space-y-12">
               {customSectionsFields.map((section, sectionIdx) => (
-                <div key={section.id} className="p-8 bg-gray-50/50 rounded-[2rem] border border-gray-100 relative group transition-all hover:bg-white hover:shadow-xl hover:shadow-black/5 overflow-hidden"
+                <div key={section.id} className="p-10 bg-white rounded-md border border-black/5 relative group transition-all overflow-hidden"
                 >
-                  <div className="absolute top-0 left-0 w-1.5 h-full bg-gray-200 group-hover:bg-black transition-colors"></div>
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-black/5 group-hover:bg-black transition-colors"></div>
                   <Button
                     type="button"
                     onClick={() => removeSection(sectionIdx)}
-                    className="absolute top-6 right-6 text-[10px] font-black text-gray-400 hover:text-black uppercase tracking-widest bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-full transition-all border border-gray-100/50"
+                    className="absolute top-8 right-8 text-[11px] font-mono font-black text-black/20 hover:text-black uppercase tracking-[0.2em] transition-all"
                   >
-                    Remove Section
+                    Delete Section
                   </Button>
 
-                  <div className="mb-8">
-                    <Label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Section Title</Label>
+                  <div className="mb-12">
+                    <Label className="block text-mono text-[9px] font-black text-black/30 uppercase tracking-[0.3em] mb-4">Section Title</Label>
                     <Input
                       type="text"
                       {...form.register(`customSections.${sectionIdx}.title`)}
-                      placeholder="e.g., Religious Practice, Hobbies"
-                      className="block w-full max-w-md rounded-2xl border-gray-100 shadow-sm focus:border-black focus:ring-4 focus:ring-black/10 sm:text-sm p-3.5 border bg-white transition-all outline-none text-gray-900 font-bold"
+                      placeholder="e.g., Heritage, Personal Journey"
+                      className="block w-full max-w-md border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-3 text-2xl font-serif italic focus:outline-none transition-all outline-none text-black"
                     />
                   </div>
 
-                  <div className="space-y-4 pl-4 border-l-2 border-gray-100">
-                    <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-2">Fields in this section</p>
+                  <div className="space-y-6">
+                    <p className="font-mono text-[9px] font-black text-black/20 uppercase tracking-[0.4em] mb-4">Entries</p>
                     {form.watch(`customSections.${sectionIdx}.fields`)?.map((_, fieldIdx) => (
-                      <div key={fieldIdx} className="flex gap-3 items-center group/field">
-                        <Input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.label`)} placeholder="Label (e.g., Prayer)" className="flex-1 rounded-xl border-gray-100 sm:text-xs p-3 border bg-white focus:ring-2 focus:ring-black/10 outline-none font-medium" />
-                        <Input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.value`)} placeholder="Value (e.g., Regular)" className="flex-[2] rounded-xl border-gray-100 sm:text-xs p-3 border bg-white focus:ring-2 focus:ring-black/10 outline-none text-gray-900" />
+                      <div key={fieldIdx} className="flex gap-12 items-end group/field pb-4 border-b border-black/5">
+                        <div className="flex-1">
+                          <Label className="block text-mono text-[8px] font-black text-black/20 uppercase tracking-widest mb-1">Label</Label>
+                          <Input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.label`)} placeholder="e.g. Prayer" className="w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-2 text-sm focus:outline-none transition-all outline-none text-black font-medium" />
+                        </div>
+                        <div className="flex-[2]">
+                          <Label className="block text-mono text-[8px] font-black text-black/20 uppercase tracking-widest mb-1">Detail</Label>
+                          <Input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.value`)} placeholder="e.g. 5 Times Daily" className="w-full border-b border-black/10 focus:border-black rounded-none bg-transparent px-0 py-2 text-sm focus:outline-none transition-all outline-none text-black font-medium" />
+                        </div>
                         <Button
                           type="button"
                           onClick={() => {
                             const f = form.getValues(`customSections.${sectionIdx}.fields`);
                             form.setValue(`customSections.${sectionIdx}.fields`, f.filter((_, i) => i !== fieldIdx));
                           }}
-                          className="w-8 h-8 rounded-full border border-gray-100 text-gray-400 hover:bg-gray-50 hover:text-black flex items-center justify-center transition-all opacity-0 group-field-hover:opacity-100"
+                          className="w-10 h-10 rounded-full border border-black/5 text-black/20 hover:bg-black hover:text-white flex items-center justify-center transition-all opacity-0 group-hover/field:opacity-100"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                         </Button>
@@ -762,21 +782,21 @@ export function BiodataForm({
                         const f = form.getValues(`customSections.${sectionIdx}.fields`) || [];
                         form.setValue(`customSections.${sectionIdx}.fields`, [...f, { label: "", value: "" }]);
                       }}
-                      className="text-[10px] font-black text-black hover:text-gray-700 uppercase tracking-widest flex items-center gap-1.5 mt-2 ml-1"
+                      className="text-[11px] font-mono font-black text-black/40 hover:text-black uppercase tracking-[0.2em] flex items-center gap-2 mt-4"
                     >
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
-                      Add Field
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+                      Add Entry
                     </Button>
                   </div>
                 </div>
               ))}
 
               {customSectionsFields.length === 0 && (
-                <div className="text-center py-20 border-2 border-dashed border-gray-100 rounded-[2.5rem] bg-gray-50/20">
-                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <div className="text-center py-24 border-2 border-dashed border-black/5 rounded-lg bg-gray-50/20">
+                  <div className="w-16 h-16 bg-white border border-black/5 rounded-md flex items-center justify-center mx-auto mb-6">
+                    <svg className="w-8 h-8 text-black/10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   </div>
-                  <p className="text-sm text-gray-400 font-medium">No custom sections added yet.</p>
+                  <p className="text-xs text-black/40 font-mono uppercase tracking-widest">No custom sections added</p>
                 </div>
               )}
             </div>
@@ -784,32 +804,30 @@ export function BiodataForm({
         )}
 
         {/* Footer Navigation (Mobile) - Polished Floating bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-2xl border-t border-gray-100 p-3 lg:hidden flex items-center justify-between gap-2 z-[90] shadow-[0_-8px_32px_rgba(0,0,0,0.08)]">
-          <div className="flex items-center gap-2 flex-1">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-2xl border-t border-black/5 p-4 lg:hidden flex items-center justify-between gap-3 z-[100] shadow-xl">
+          <div className="flex items-center gap-3 flex-1">
             <Button
               type="button"
               disabled={currentStep === 1}
               onClick={() => setCurrentStep(prev => prev - 1)}
               variant="outline"
-              className="w-12 h-12 bg-gray-50 text-gray-900 rounded-2xl border-gray-100 flex items-center justify-center shrink-0 active:scale-90 transition-all"
+              className="w-12 h-12 bg-white text-black rounded-md border-black/10 flex items-center justify-center shrink-0 active:scale-90 transition-all"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
             </Button>
 
-            <div className="flex-1 bg-gray-100/50 p-1 rounded-2xl border border-gray-200/50 flex items-center gap-1">
+            <div className="flex-1 bg-gray-50 p-1 rounded-md border border-black/5 flex items-center h-12 overflow-hidden">
               <button
                 type="button"
                 onClick={() => onViewChange?.("edit")}
-                className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${mobileView === "edit" ? 'bg-white text-black shadow-sm' : 'text-gray-400'}
-`}
+                className={`flex-1 h-full rounded-sm text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "edit" ? 'bg-black text-white shadow-sm' : 'text-black/30'}`}
               >
                 Edit
               </button>
               <button
                 type="button"
                 onClick={() => onViewChange?.("preview")}
-                className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${mobileView === "preview" ? 'bg-white text-black shadow-sm' : 'text-gray-400'}
-`}
+                className={`flex-1 h-full rounded-sm text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "preview" ? 'bg-black text-white shadow-sm' : 'text-black/30'}`}
               >
                 Preview
               </button>
@@ -821,60 +839,59 @@ export function BiodataForm({
               <Button
                 type="button"
                 onClick={() => setCurrentStep(prev => prev + 1)}
-                className="w-full h-12 bg-black text-white font-black rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-2"
+                className="w-full h-12 bg-black text-white rounded-md active:scale-95 transition-all outline-none"
               >
                 Next
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
               </Button>
             ) : isGuest ? (
               <DownloadPDFButton
                 filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
-                className="w-full h-12 bg-black text-white font-black rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-2 group"
+                className="w-full h-12 bg-black text-white rounded-md active:scale-95 transition-all outline-none"
               />
             ) : (
               <a
                 href="/dashboard"
-                className="w-full h-12 bg-black text-white font-black rounded-2xl text-xs uppercase tracking-widest shadow-lg shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-2 text-center"
+                className="w-full h-12 bg-black text-white rounded-md active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest"
               >
                 Finish
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
               </a>
             )}
           </div>
         </div>
 
         {/* Footer Navigation (Desktop) - Premium styled buttons */}
-        <div className="hidden lg:flex justify-between">
+        <div className="hidden lg:flex justify-between items-center py-12 border-t border-black/5 mt-10">
           {currentStep > 1 ? (
             <Button
               type="button"
               onClick={() => setCurrentStep(prev => prev - 1)}
-              className="px-8 py-3.5 border border-gray-200 text-gray-500 font-bold rounded-2xl hover:bg-gray-50 hover:text-black hover:border-gray-300 transition-all active:scale-95 flex items-center gap-2 group"
+              variant="outline"
+              className="px-10 py-3.5 border border-black/10 text-black font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-md hover:bg-black hover:text-white transition-all active:scale-95 flex items-center gap-3 group"
             >
               <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-              Previous Section
+              Back
             </Button>
           ) : <div />}
           {currentStep < 8 ? (
             <Button
               type="button"
               onClick={() => setCurrentStep(prev => prev + 1)}
-              className="px-10 py-3.5 bg-gray-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-xl hover:shadow-black/10 active:scale-95 flex items-center gap-3 group"
+              className="px-12 py-3.5 bg-black text-white font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-md hover:bg-black/90 transition-all active:scale-95 flex items-center gap-3 group"
             >
-              Next Phase
+              Next Step
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </Button>
           ) : isGuest ? (
             <DownloadPDFButton
-                filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
-                className="px-10 py-3.5 bg-black text-white font-black rounded-2xl hover:bg-gray-700 transition-all shadow-xl shadow-gray-100 active:scale-95 flex items-center gap-3 group"
-              />
+              filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
+              className="px-12 py-3.5 bg-black text-white font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-md hover:bg-black/90 transition-all active:scale-95 flex items-center gap-3"
+            />
           ) : (
             <a
               href="/dashboard"
-              className="px-10 py-3.5 bg-black text-white font-black rounded-2xl hover:bg-gray-700 transition-all shadow-xl shadow-gray-100 active:scale-95 flex items-center gap-3"
+              className="px-12 py-3.5 bg-black text-white font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-md hover:bg-black/90 transition-all active:scale-95 flex items-center gap-3"
             >
-              Finish & Exit
+              Finish Documentation
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
             </a>
           )}

@@ -4,7 +4,7 @@ import Link from "next/link";
 export function Logo({ className }: { className?: string }) {
   return (
     <Link href="/" className={`flex items-center gap-2 group transition-opacity hover:opacity-80 ${className}`}>
-      <div className="w-8 h-8 bg-black rounded-xl flex items-center justify-center shadow-lg shadow-black/10">
+      <div className="w-8 h-8 bg-black rounded-md flex items-center justify-center border border-black/10">
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -29,7 +29,7 @@ export function Logo({ className }: { className?: string }) {
         </svg>
       </div>
       <span className="text-xl font-black tracking-tighter text-black uppercase">
-        Biye<span className="text-gray-400">Profile</span>
+        Biye<span className="text-black/30">Profile</span>
       </span>
     </Link>
   );

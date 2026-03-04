@@ -1,59 +1,122 @@
 import Link from "next/link"
 import { auth } from "@/lib/auth"
+import { Button } from "@/components/ui/button"
 
 export default async function Home() {
   const session = await auth()
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white font-sans overflow-x-hidden">
+      {/* Texture Overlay (Consistent with Biodata) */}
+      <div className="fixed inset-0 bg-grain pointer-events-none opacity-5 z-50"></div>
+
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-20 pb-32">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
-        <div className="absolute top-0 left-0 -ml-20 mt-32 w-72 h-72 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+      <main className="relative pt-24 pb-24 max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
 
-        <div className="text-center relative z-10">
-          <h1 className="text-5xl md:text-7xl font-extrabold text-black tracking-tight mb-8 leading-tight">
-            Create Your <span className="underline decoration-gray-300 decoration-8 underline-offset-8">Perfect</span> <br className="hidden md:block" /> Marriage Biodata
-          </h1>
+          {/* Left Column: Heading & Intro */}
+          <div className="lg:col-span-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <div className="inline-block px-3 py-1 bg-black text-white font-mono text-[9px] font-black uppercase tracking-[0.4em] mb-8">
+              Registration Open / 2026
+            </div>
 
-          <p className="mt-4 max-w-2xl text-xl text-black mx-auto mb-10 leading-relaxed">
-            Beautiful, printable, and private. Generate your professional marriage biodata link in seconds and share it securely.
-          </p>
+            <h1 className="font-serif text-7xl md:text-[7.5rem] leading-[0.85] tracking-tight text-black mb-12">
+              The Standard <br />
+              for Marriage <br />
+              Documentation.
+            </h1>
 
-          <div className="flex justify-center flex-col sm:flex-row gap-4">
-            <Link
-              href={session?.user ? "/dashboard" : "/create"}
-              className="px-8 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-black hover:bg-gray-800 md:py-4 md:text-lg px-10 shadow-xl hover:shadow-black/10 transition-all transform hover:-translate-y-1"
-            >
-              Create Free Biodata
-            </Link>
-            <Link
-              href="/biodata"
-              className="px-8 py-4 border border-black/10 text-lg font-medium rounded-full text-black bg-white hover:bg-gray-50 md:py-4 md:text-lg px-10 shadow-sm transition-all transform hover:-translate-y-1"
-            >
-              Browse Profiles
-            </Link>
+            <p className="max-w-sm text-lg text-black/60 leading-relaxed font-medium mb-16 uppercase tracking-[-0.02em]">
+              A refined, digital-first approach to traditional marriage biodata.
+              Designed for clarity, privacy, and elegance.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-6">
+              <Link
+                href={session?.user ? "/dashboard" : "/create"}
+                className="px-10 py-5 bg-black text-white font-mono text-[11px] font-black uppercase tracking-[0.3em] hover:bg-black/90 active:scale-95 transition-all flex items-center justify-center shadow-2xl shadow-black/10"
+              >
+                Begin Registration
+              </Link>
+              <Link
+                href="/biodata"
+                className="px-10 py-5 bg-white text-black border border-black/10 font-mono text-[11px] font-black uppercase tracking-[0.3em] hover:bg-gray-50 active:scale-95 transition-all flex items-center justify-center"
+              >
+                Browse Directory
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column: Key Metics/Numbers */}
+          <div className="lg:col-span-4 lg:pt-16 border-l border-black/5 pl-12 hidden lg:block animate-in fade-in slide-in-from-right-8 duration-1000 delay-300">
+            <div className="space-y-8">
+              <div>
+                <span className="block font-mono text-[10px] font-black text-black/30 uppercase tracking-[0.2em] mb-1.5">Integrity</span>
+                <p className="text-sm font-medium leading-relaxed">
+                  Every document follows the 96/32 vertical rhythm grid used by premium registries.
+                </p>
+              </div>
+              <div>
+                <span className="block font-mono text-[10px] font-black text-black/30 uppercase tracking-[0.2em] mb-1.5">Privacy</span>
+                <p className="text-sm font-medium leading-relaxed">
+                  Total control over visibility. Your context is only shared on your terms.
+                </p>
+              </div>
+              <div className="pt-8 border-t border-black/5">
+                <div className="text-4xl font-serif text-black leading-none mb-1.5">100%</div>
+                <span className="block font-mono text-[10px] font-black text-black/30 uppercase tracking-[0.2em]">Black & White Neutral</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Features Preview */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+        {/* ─── Separator ─── */}
+        <div className="w-full h-px bg-black/5 my-24"></div>
+
+        {/* Features / Principles Section */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-black/5 divide-y md:divide-y-0 md:divide-x divide-black/5 overflow-hidden">
           {[
-            { title: "Beautiful Templates", desc: "Minimal, elegant designs that look great on any device and print perfectly to A4 PDF." },
-            { title: "Custom Link", desc: "Get a personalized biodata link (biyeprofile.com/yourname) to easily share via WhatsApp." },
-            { title: "Privacy First", desc: "Toggle your profile visibility on or off instantly. Only share when you're actively searching." }
-          ].map((feature, i) => (
-            <div key={i} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mb-6 text-black">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-black mb-3">{feature.title}</h3>
-              <p className="text-black leading-relaxed">{feature.desc}</p>
+            {
+              num: "01",
+              title: "Editorial Design",
+              desc: "Moving away from cluttered interfaces to a clean, typographic experience that honors your identity."
+            },
+            {
+              num: "02",
+              title: "Digital Delivery",
+              desc: "Get a secure, unique URL to share with guardians or interested parties instantly."
+            },
+            {
+              num: "03",
+              title: "Print Optimized",
+              desc: "Engineered to look exactly as intended when converted to physical paper documents."
+            }
+          ].map((item, i) => (
+            <div key={i} className="p-16 space-y-8 group animate-in fade-in slide-in-from-bottom-12 duration-700" style={{ transitionDelay: `${i * 200}ms` }}>
+              <div className="font-mono text-[10px] font-black text-black/30 tracking-[0.4em] mb-1.5 uppercase">Principle / {item.num}</div>
+              <h3 className="text-3xl font-serif text-black group-hover:underline underline-offset-8 decoration-black/5 transition-all italic">
+                {item.title}
+              </h3>
+              <p className="text-black/60 font-medium leading-[2] text-[15px] max-w-xs">
+                {item.desc}
+              </p>
             </div>
           ))}
-        </div>
+        </section>
+
+        {/* ─── CTA Banner ─── */}
+        <section className="mt-32 py-32 border-y border-black/5 text-center relative overflow-hidden bg-gray-50/30">
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <h2 className="text-5xl md:text-7xl font-serif text-black leading-[1] mb-12 italic">
+              Designed for the <br /> modern intentionality.
+            </h2>
+            <Link
+              href={session?.user ? "/dashboard" : "/api/auth/signin"}
+            >
+              <Button size="lg" className="px-16 h-14">Get Started Free →</Button>
+            </Link>
+          </div>
+        </section>
       </main>
     </div>
   )

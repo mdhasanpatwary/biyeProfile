@@ -5,16 +5,16 @@ type ButtonVariant = "default" | "outline" | "ghost" | "destructive"
 type ButtonSize = "default" | "sm" | "lg" | "icon"
 
 const variantClasses: Record<ButtonVariant, string> = {
-  default: "bg-black text-white hover:bg-gray-800",
-  outline: "border border-black bg-white text-black hover:bg-gray-100",
+  default: "bg-black text-white hover:bg-white hover:text-black border border-black",
+  outline: "border border-black bg-white text-black hover:bg-black hover:text-white",
   ghost: "text-black hover:bg-gray-100",
-  destructive: "bg-gray-200 text-black hover:bg-gray-300",
+  destructive: "bg-gray-100 text-black hover:bg-gray-200",
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
-  default: "h-10 px-4 py-2",
-  sm: "h-8 rounded-md px-3 text-xs",
-  lg: "h-11 rounded-md px-8",
+  default: "h-12 px-8",
+  sm: "h-9 px-4 text-[10px]",
+  lg: "h-14 px-10 text-[12px]",
   icon: "h-10 w-10",
 }
 
@@ -29,7 +29,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex items-center justify-center rounded-md text-[11px] font-mono font-black uppercase tracking-[0.2em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
           variantClasses[variant],
           sizeClasses[size],
           className,

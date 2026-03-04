@@ -44,11 +44,14 @@ export default function RootLayout({
         <Footer />
         <Toaster position="top-center" toastOptions={{
           style: {
-            background: 'black',
+            background: '#111111',
             color: 'white',
-            border: 'none',
-            borderRadius: '1rem',
-            fontFamily: 'inherit'
+            border: '1px border-black/10',
+            borderRadius: '4px',
+            fontFamily: 'var(--font-geist-mono)',
+            fontSize: '11px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em'
           }
         }} />
       </body>

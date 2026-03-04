@@ -80,9 +80,9 @@ export default async function BrowseBiodataPage(props: {
                     <div className="h-[1px] flex-1 bg-black/5" />
                 </div>
 
-                {/* The Grid */}
+                {/* The List (Editorial Style) */}
                 {biodata.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-y-16">
+                    <div className="flex flex-col border-t border-black/5">
                         {biodata.map((item) => (
                             <BiodataCard
                                 key={item.id}

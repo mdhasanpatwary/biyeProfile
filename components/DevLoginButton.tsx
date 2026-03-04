@@ -28,7 +28,7 @@ export function DevLoginButton({
       <Button
         onClick={handleDevLogin}
         disabled={loading}
-        className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50/50 border border-emerald-100 px-5 py-2.5 rounded-full hover:bg-emerald-50 transition-all active:scale-95 flex items-center gap-2 group cursor-pointer disabled:opacity-50"
+        className="text-[10px] font-mono font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 border border-emerald-100 px-5 py-2.5 rounded-md hover:bg-emerald-100 transition-all active:scale-95 flex items-center gap-2 group cursor-pointer disabled:opacity-50 shadow-sm"
       >
         {loading ? (
           <div className="w-3 h-3 border-2 border-emerald-600/20 border-t-emerald-600 rounded-full animate-spin" />
@@ -44,7 +44,7 @@ export function DevLoginButton({
     <Button
       onClick={handleDevLogin}
       disabled={loading}
-      className="w-full flex items-center justify-center gap-4 bg-white border border-black/10 text-black px-8 py-4 rounded-2xl font-black hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer disabled:opacity-50"
+      className="w-full flex items-center justify-center gap-4 bg-white border border-black/10 text-black px-8 py-4 rounded-md font-mono text-[11px] font-black uppercase tracking-widest hover:bg-gray-50 transition-all active:scale-95 group cursor-pointer disabled:opacity-50"
     >
       {loading ? (
         <div className="w-5 h-5 border-2 border-black/10 border-t-black rounded-full animate-spin" />

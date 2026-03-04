@@ -24,7 +24,7 @@ export function BiodataEditor({
         <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100]">
           <Button
             onClick={() => setMobileView("edit")}
-            className="px-8 py-3.5 bg-black text-white font-black rounded-2xl shadow-xl shadow-gray-200 flex items-center gap-3 active:scale-95 transition-all text-xs uppercase tracking-widest border border-gray-800"
+            className="px-8 py-3.5 bg-black text-white rounded-md shadow-2xl shadow-black/10 flex items-center gap-3 active:scale-95 transition-all outline-none"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -34,24 +34,24 @@ export function BiodataEditor({
         </div>
       )}
 
-      <div className={`flex-1 w-full bg-white rounded-[0.5rem] shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-gray-100 p-4 sm:p-6 min-h-screen min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 gap-4">
+      <div className={`flex-1 w-full bg-white rounded-lg border border-black/5 p-6 sm:p-10 min-h-screen min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-6 pb-8 border-b border-black/5">
           <div>
-            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-black">
+            <h1 className="text-4xl font-serif text-black tracking-tight">
               Edit Your Biodata
             </h1>
-            <p className="text-gray-500 font-medium text-[13px] mt-1">Update your professional and personal profile</p>
+            <p className="text-black/40 font-mono text-[10px] uppercase tracking-[0.2em] mt-1.5">Document Management</p>
           </div>
-          <div className="flex items-center bg-gray-100 p-1 rounded-xl border border-gray-200 shadow-sm h-[42px]">
+          <div className="flex items-center bg-gray-50 p-1 rounded-md border border-black/5 h-[42px]">
             <button
               onClick={() => setLanguage("en")}
-              className={`px-4 h-full rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${language === 'en' ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              className={`px-4 h-full rounded-sm text-[10px] font-mono font-black uppercase tracking-wider transition-all ${language === 'en' ? 'bg-black text-white shadow-sm' : 'text-black/30 hover:text-black'}`}
             >
               Eng
             </button>
             <button
               onClick={() => setLanguage("bn")}
-              className={`px-4 h-full rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${language === 'bn' ? 'bg-white text-black shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              className={`px-4 h-full rounded-sm text-[10px] font-mono font-black uppercase tracking-wider transition-all ${language === 'bn' ? 'bg-black text-white shadow-sm' : 'text-black/30 hover:text-black'}`}
             >
               বাংলা
             </button>
