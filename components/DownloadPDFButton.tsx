@@ -9,7 +9,7 @@ interface DownloadPDFButtonProps {
   /** Optional filename (without extension). Defaults to "biodata" */
   filename?: string
   /** Optional variant style */
-  variant?: "default" | "outline" | "ghost"
+  variant?: "primary" | "secondary" | "outline" | "ghost"
   className?: string
   children?: React.ReactNode
 }
@@ -19,6 +19,7 @@ export function DownloadPDFButton({
   filename = "biodata",
   className,
   children,
+  variant = "primary"
 }: DownloadPDFButtonProps) {
   const [loading, setLoading] = useState(false)
 
@@ -106,11 +107,11 @@ export function DownloadPDFButton({
 
   return (
     <Button
+      variant={variant}
       onClick={handleDownload}
       disabled={loading}
       className={
-        className ??
-        "group flex items-center gap-2.5 bg-black text-white px-8 py-3.5 rounded-full font-bold hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/10 hover:shadow-black/20 print:hidden cursor-pointer disabled:opacity-60 disabled:scale-100"
+        className ?? "w-full sm:w-auto"
       }
     >
       {loading ? (

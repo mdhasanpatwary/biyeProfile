@@ -3,30 +3,48 @@ import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="py-24 border-t border-black/5 bg-white print:hidden">
-      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12">
-        <div className="flex flex-col items-center md:items-start gap-4">
+    <footer className="py-32 border-t border-border bg-background print:hidden">
+      <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-16">
+        {/* Brand Column */}
+        <div className="md:col-span-4 flex flex-col items-start gap-8">
           <Logo />
-          <p className="font-mono text-[9px] font-black text-black/30 uppercase tracking-[0.4em]">
-            Premium Marriage Biodata Builder
+          <p className="font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.4em] leading-relaxed max-w-[240px]">
+            The definitive platform for marriage biodata documentation.
           </p>
-        </div>
-
-        <div className="flex gap-16">
-          <div className="flex flex-col gap-4">
-            <span className="font-mono text-[10px] font-black text-black uppercase tracking-[0.2em] mb-1.5">Navigation</span>
-            <Link href="/biodata" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Directory</Link>
-            <Link href="/dashboard" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Dashboard</Link>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="font-mono text-[10px] font-black text-black uppercase tracking-[0.2em] mb-1.5">Legal</span>
-            <Link href="#" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Privacy</Link>
-            <Link href="#" className="text-[11px] font-bold text-gray-400 hover:text-black transition-colors uppercase">Terms</Link>
+          <div className="mt-12 text-[10px] font-mono text-foreground/25 uppercase tracking-widest">
+            Established 2026. <br /> All Rights Reserved.
           </div>
         </div>
 
-        <div className="pt-8 md:pt-0 text-[10px] font-mono text-black/30 uppercase tracking-[0.2em]">
-          © {new Date().getFullYear()} BiyeProfile.
+        {/* Navigation Grid */}
+        <div className="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-12">
+          <div className="flex flex-col gap-6">
+            <span className="font-mono text-[10px] font-black text-foreground uppercase tracking-[0.2em] mb-2">Platform</span>
+            <Link href="/create" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Create Entry</Link>
+            <Link href="/biodata" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">The Directory</Link>
+            <Link href="/pricing" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Premium Tiers</Link>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            <span className="font-mono text-[10px] font-black text-foreground uppercase tracking-[0.2em] mb-2">Institutional</span>
+            <Link href="/dashboard" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Archive Access</Link>
+            <Link href="/about" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Core Mission</Link>
+            <Link href="/contact" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Inquiry</Link>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            <span className="font-mono text-[10px] font-black text-foreground uppercase tracking-[0.2em] mb-2">Registry</span>
+            <Link href="#" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Private Links</Link>
+            <Link href="#" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">PDF Export</Link>
+            <Link href="#" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Verification</Link>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            <span className="font-mono text-[10px] font-black text-foreground uppercase tracking-[0.2em] mb-2">Legal</span>
+            <Link href="#" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Privacy Policy</Link>
+            <Link href="#" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Terms of Use</Link>
+            <Link href="#" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Security</Link>
+          </div>
         </div>
       </div>
     </footer>

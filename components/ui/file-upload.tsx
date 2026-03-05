@@ -11,12 +11,21 @@ interface CloudinaryResult {
   };
 }
 
-interface PhotoUploadProps {
+interface FileUploadProps {
   value: string;
   onChange: (publicId: string) => void;
+  /** Optional overlay text for the uploader */
+  label?: string;
+  /** Optional sub-text */
+  subLabel?: string;
 }
 
-export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
+export function FileUpload({
+  value,
+  onChange,
+  label = "Add Profile Photo",
+  subLabel = "PNG or JPG up to 10MB (Square Crop Forced)"
+}: FileUploadProps) {
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -52,13 +61,13 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       {value ? (
-        <div className="flex items-center gap-6 p-4 bg-gray-50/30 rounded-2xl border border-gray-100/50">
-          <div className="relative w-24 h-24 rounded-2xl overflow-hidden border-2 border-white shadow-md shrink-0 bg-gray-100">
+        <div className="flex items-center gap-6 p-4 bg-accent/30 rounded-none border border-border-muted/50 w-full md:w-fit">
+          <div className="relative w-24 h-24 rounded-none overflow-hidden border-2 border-background shadow-md shrink-0 bg-accent">
             <Image
               src={previewUrl}
-              alt="Profile preview"
+              alt="Uploaded file preview"
               fill
               className="object-cover"
               sizes="96px"
@@ -83,9 +92,9 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
                   type="button"
                   onClick={() => open()}
                   variant="outline"
-                  className="text-xs font-bold text-black hover:text-gray-800 bg-white px-4 py-2 rounded-full border border-gray-100 shadow-sm"
+                  className="text-xs font-bold text-foreground hover:opacity-80 bg-background px-4 py-2 rounded-none border border-border-muted shadow-sm"
                 >
-                  Change Photo
+                  Change File
                 </Button>
               )}
             </CldUploadWidget>
@@ -93,7 +102,7 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
               type="button"
               onClick={() => onChange("")}
               variant="ghost"
-              className="text-xs font-bold text-gray-500 hover:text-black px-4 py-1 text-left justify-start"
+              className="text-xs font-bold px-4 py-1 text-left justify-start"
             >
               Remove
             </Button>
@@ -122,29 +131,29 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
               type="button"
               disabled={isUploading}
               variant="outline"
-              className={`relative overflow-hidden group w-full sm:w-64 h-32 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2 ${isUploading ? 'bg-gray-50 border-gray-200' : 'bg-gray-50 border-gray-200 hover:border-gray-400 hover:bg-gray-50/30'}`}
+              className={`relative overflow-hidden w-full sm:w-64 h-32 flex flex-col items-center justify-center gap-2 group border-dashed transition-all ${isUploading ? 'bg-accent border-border-muted' : 'bg-background border-border-muted hover:border-foreground hover:bg-accent/30'}`}
               onClick={() => open()}
             >
               <div className="w-10 h-10 aspect-square shrink-0">
                 {isUploading ? (
-                  <div className="w-full h-full border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-full h-full border-4 border-foreground border-t-transparent rounded-none animate-spin"></div>
                 ) : (
-                  <div className="w-full h-full bg-gray-100 rounded-full flex items-center justify-center text-black group-hover:scale-110 transition-transform">
+                  <div className="w-full h-full bg-accent rounded-none flex items-center justify-center text-foreground-muted group-hover:text-foreground group-hover:scale-110 group-hover:bg-background border border-transparent group-hover:border-foreground/10 transition-all">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                   </div>
                 )}
               </div>
-              <span className={`text-xs font-bold uppercase tracking-wider ${isUploading ? 'text-black animate-pulse' : 'text-gray-500'}`}>
-                {isUploading ? 'Uploading...' : 'Add Profile Photo'}
+              <span className={`text-xs font-bold uppercase tracking-wider ${isUploading ? 'text-foreground animate-pulse' : 'text-foreground-muted'}`}>
+                {isUploading ? 'Uploading...' : label}
               </span>
             </Button>
           )}
         </CldUploadWidget>
       )}
-      {error && <span className="text-xs font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-md border border-gray-100 w-fit">{error}</span>}
-      <p className="text-[10px] text-gray-400 font-medium px-1">PNG or JPG up to 10MB (Square Crop Forced)</p>
+      {error && <span className="text-xs font-medium text-destructive bg-destructive/10 px-3 py-1 rounded-none border border-destructive/20 w-fit">{error}</span>}
+      {subLabel && <p className="text-[10px] text-foreground-muted/60 font-medium px-1">{subLabel}</p>}
     </div>
   )
 }

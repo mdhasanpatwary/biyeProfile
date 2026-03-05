@@ -1,6 +1,5 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
-import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -9,22 +8,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
-    Credentials({
-      name: "Development Login",
-      credentials: {},
-      async authorize() {
-        // Only allow in development
-        if (process.env.NODE_ENV !== "development") return null;
-
-        return {
-          id: "dev-user-id",
-          name: "Dev User",
-          email: "dev@biyeprofile.com",
-          image: "https://ui-avatars.com/api/?name=Dev+User",
-          role: "admin",
-        }
-      }
-    })
   ],
   pages: {
     signIn: "/auth/signin",

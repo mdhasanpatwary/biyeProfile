@@ -28,9 +28,10 @@ export function CreateBiodataButton() {
 
   return (
     <Button
+      variant="primary"
       onClick={handleCreate}
       disabled={loading}
-      className="bg-black text-white px-6 py-3 rounded-md font-medium hover:bg-gray-900 disabled:opacity-50 transition-colors"
+      className="px-8 py-6 font-bold text-xs"
     >
       {loading ? "Creating..." : "Create My Biodata"}
     </Button>

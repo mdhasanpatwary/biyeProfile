@@ -7,19 +7,21 @@ export function UserNav({ username }: { username: string }) {
   return (
     <div className="flex items-center gap-4">
       <div className="flex flex-col items-end hidden sm:flex">
-        <span className="text-xs font-black text-black uppercase tracking-widest">
+        <span className="text-xs font-black text-foreground uppercase tracking-widest">
           @{username}
         </span>
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="text-[10px] font-bold text-gray-400 hover:text-black transition-colors uppercase tracking-tight"
+          className="text-[10px] font-bold text-foreground-muted hover:text-foreground transition-all uppercase tracking-tight p-0 h-auto hover:bg-transparent"
         >
           Sign Out
-        </button>
+        </Button>
       </div>
-      <div className="w-10 h-10 rounded-sm bg-gray-50 border border-black/5 flex items-center justify-center overflow-hidden grayscale">
+      <div className="w-10 h-10 rounded-none bg-accent border border-border-muted flex items-center justify-center overflow-hidden grayscale">
         <svg
-          className="w-5 h-5 text-black/20"
+          className="w-5 h-5 text-foreground/20"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -34,9 +36,9 @@ export function UserNav({ username }: { username: string }) {
       </div>
       <Button
         variant="ghost"
-        size="sm"
+        size="icon"
         onClick={() => signOut({ callbackUrl: "/" })}
-        className="sm:hidden p-2 text-gray-400 hover:text-black"
+        className="sm:hidden text-foreground-muted hover:text-foreground hover:bg-transparent"
       >
         <svg
           className="w-5 h-5"

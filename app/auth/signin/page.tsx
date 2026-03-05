@@ -1,25 +1,26 @@
 "use client"
 
 import { signIn } from "next-auth/react"
-import { DevLoginButton } from "@/components/DevLoginButton"
+import { Button } from "@/components/ui/button"
 
 export default function SignInPage() {
   return (
-    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 bg-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#fbfbfb] opacity-50 pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 bg-background relative overflow-hidden">
+      <div className="absolute inset-0 bg-accent opacity-50 pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
 
-      <div className="max-w-md w-full bg-white rounded-lg border border-black/5 p-12 flex flex-col items-center relative z-10">
+      <div className="max-w-md w-full bg-background rounded-none border border-border-muted p-12 flex flex-col items-center relative z-10">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-serif text-black mb-4 tracking-tight">The Registry.</h1>
-          <p className="text-black/40 font-mono text-[10px] uppercase tracking-[0.2em] max-w-[240px] mx-auto">
+          <h1 className="text-5xl font-serif text-foreground mb-4 tracking-tight">The Registry.</h1>
+          <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] max-w-[240px] mx-auto">
             Secure access to your professional marriage documentation
           </p>
         </div>
 
         <div className="w-full space-y-6">
-          <button
+          <Button
+            variant="outline"
             onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-            className="w-full h-[52px] flex items-center justify-center gap-4 bg-white border border-black/10 text-black px-8 rounded-md font-mono text-[11px] font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all active:scale-95 group"
+            className="w-full flex items-center justify-center gap-4 px-8 active:scale-95 group"
           >
             <svg className="w-4 h-4 group-hover:scale-110 transition-all" viewBox="0 0 24 24">
               <path
@@ -40,13 +41,11 @@ export default function SignInPage() {
               />
             </svg>
             Continue with Google
-          </button>
-
-          <DevLoginButton />
+          </Button>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-black/5 w-full text-center">
-          <p className="text-[9px] text-black/30 font-mono uppercase tracking-widest leading-relaxed">
+        <div className="mt-12 pt-8 border-t border-border-muted w-full text-center">
+          <p className="text-[9px] text-foreground-muted font-mono uppercase tracking-widest leading-relaxed">
             By accessing the Registry, you agree to our <br /> Terms and Privacy Policy.
           </p>
         </div>

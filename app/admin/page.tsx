@@ -35,61 +35,61 @@ export default async function AdminPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500">Total Users</p>
-          <p className="text-3xl font-bold text-black">{totalUsers}</p>
+        <div className="bg-background p-6 rounded-none shadow-sm border border-border-muted">
+          <p className="text-sm text-foreground-muted">Total Users</p>
+          <p className="text-3xl font-bold text-foreground">{totalUsers}</p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500">Total Biodatas</p>
-          <p className="text-3xl font-bold text-black">{totalBiodatas}</p>
+        <div className="bg-background p-6 rounded-none shadow-sm border border-border-muted">
+          <p className="text-sm text-foreground-muted">Total Biodatas</p>
+          <p className="text-3xl font-bold text-foreground">{totalBiodatas}</p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500">Public Profiles</p>
+        <div className="bg-background p-6 rounded-none shadow-sm border border-border-muted">
+          <p className="text-sm text-foreground-muted">Public Profiles</p>
           <p className="text-3xl font-bold text-green-600">{publicBiodatas}</p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500">Private Profiles</p>
-          <p className="text-3xl font-bold text-black">{privateBiodatas}</p>
+        <div className="bg-background p-6 rounded-none shadow-sm border border-border-muted">
+          <p className="text-sm text-foreground-muted">Private Profiles</p>
+          <p className="text-3xl font-bold text-foreground">{privateBiodatas}</p>
         </div>
       </div>
 
       {/* Recent Users Table */}
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-        <div className="px-6 py-4 border-b">
-          <h2 className="text-lg font-semibold">Recent Users</h2>
+      <div className="bg-background rounded-none shadow-sm border border-border-muted overflow-hidden">
+        <div className="px-6 py-4 border-b border-border-muted">
+          <h2 className="text-lg font-semibold text-foreground">Recent Users</h2>
         </div>
         <table className="w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-accent">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Username</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Biodata</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Joined</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase">Email</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase">Username</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase">Biodata</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-foreground-muted uppercase">Joined</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border-muted">
             {recentUsers.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-gray-900">{user.email}</td>
+              <tr key={user.id} className="hover:bg-accent/50 transition-colors">
+                <td className="px-6 py-4 text-sm text-foreground">{user.email}</td>
                 <td className="px-6 py-4 text-sm">
                   {user.username ? (
-                    <a href={`/biodata/${user.username}`} className="text-black hover:underline">
+                    <a href={`/biodata/${user.username}`} className="text-foreground hover:underline">
                       @{user.username}
                     </a>
                   ) : (
-                    <span className="text-gray-400">Not set</span>
+                    <span className="text-foreground-muted/50">Not set</span>
                   )}
                 </td>
                 <td className="px-6 py-4 text-sm">
                   {user.biodata ? (
-                    <span className={user.biodata.isPublic ? "text-green-600" : "text-gray-500"}>
+                    <span className={user.biodata.isPublic ? "text-green-600" : "text-foreground-muted"}>
                       {user.biodata.isPublic ? "Public" : "Private"}
                     </span>
                   ) : (
-                    <span className="text-gray-400">None</span>
+                    <span className="text-foreground-muted/50">None</span>
                   )}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-foreground-muted">
                   {user.createdAt.toLocaleDateString()}
                 </td>
               </tr>

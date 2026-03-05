@@ -14,14 +14,17 @@ export default async function SetupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 shadow rounded-lg border">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Choose your username
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-background p-8 shadow-2xl rounded-none border border-border-muted relative overflow-hidden">
+        {/* Subtle accent corner */}
+        <div className="absolute top-0 right-0 w-16 h-16 bg-accent opacity-50 -mr-8 -mt-8 rotate-45" />
+
+        <div className="relative z-10">
+          <h2 className="mt-6 text-center text-4xl font-serif italic text-foreground tracking-tight">
+            The Registry.
           </h2>
-          <p className="mt-2 text-center text-sm text-black">
-            This will be your public profile link and cannot be changed later.
+          <p className="mt-4 text-center text-[10px] font-mono font-black text-foreground-muted uppercase tracking-[0.3em]">
+            Choose your identification
           </p>
         </div>
         <SetupForm />

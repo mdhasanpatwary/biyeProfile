@@ -6,9 +6,9 @@ export function BiodataPreview({ data }: { data: Partial<BiodataFormValues> }) {
 
   return (
     <div>
-      <div className="flex-1 overflow-x-hidden overflow-y-auto p-0 bg-white custom-scrollbar flex flex-col items-center w-full">
+      <div className="flex-1 overflow-x-hidden overflow-y-auto p-0 bg-background/50 custom-scrollbar flex flex-col items-center w-full">
         <div
-          className="bg-white shadow-2xl rounded-none border-black/5 border p-0 origin-top transition-all duration-300 preview-scaled-container w-full sm:w-[920px]"
+          className="bg-background shadow-2xl rounded-none border-border-muted border p-0 origin-top transition-all duration-300 preview-scaled-container w-full sm:w-[920px]"
           style={{
             transform: 'scale(var(--preview-scale, 1))',
             marginBottom: 'calc(var(--preview-margin-bottom, 0px))'
@@ -37,7 +37,7 @@ export function BiodataPreview({ data }: { data: Partial<BiodataFormValues> }) {
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: #e2e8f0;
-          border-radius: 10px;
+          border-radius: 0;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: #cbd5e1;

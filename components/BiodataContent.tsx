@@ -1,6 +1,6 @@
-import Image from "next/image"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { getCloudinaryUrl } from "@/lib/cloudinary"
+import { Avatar } from "@/components/ui/avatar"
 
 interface CustomField {
   label: string;
@@ -139,41 +139,7 @@ const LABELS: Record<string, Record<string, string>> = {
   }
 };
 
-// Reusable section title with subtle underline rule
-function SectionTitle({ label }: { label: string }) {
-  return (
-    <div className="sticky top-8">
-      <h2 className="font-mono text-[11px] font-semibold tracking-[0.35em] text-black/50 uppercase">
-        {label}
-      </h2>
-      <div className="w-6 h-px bg-black/20 mt-2" />
-    </div>
-  );
-}
-
-// Reusable key-value field cell
-function Field({
-  label,
-  value,
-  className = "",
-  valueClassName = "",
-}: {
-  label: string;
-  value: React.ReactNode;
-  className?: string;
-  valueClassName?: string;
-}) {
-  return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
-      <span className="font-mono text-[9px] font-bold text-black/45 uppercase tracking-[0.22em]">
-        {label}
-      </span>
-      <span className={`text-base font-medium text-black leading-snug ${valueClassName}`}>
-        {value}
-      </span>
-    </div>
-  );
-}
+import { BiodataSectionTitle as SectionTitle, BiodataSectionField as Field } from "@/components/BiodataSection"
 
 export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   if (!data) return null;
@@ -181,45 +147,41 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   const t = LABELS[lang];
 
   return (
-    <div id="biodata-content" className="relative bg-white text-black font-sans selection:bg-black selection:text-white p-8 sm:p-16 min-h-screen overflow-hidden">
+    <div id="biodata-content" className="relative bg-background text-foreground font-sans selection:bg-foreground selection:text-background p-8 sm:p-16 min-h-screen overflow-hidden">
       {/* Texture Layer */}
-      <div className="absolute inset-0 bg-grain pointer-events-none opacity-5"></div>
+      <div className="absolute inset-0 bg-grain pointer-events-none opacity-[0.03] dark:opacity-[0.02]"></div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
 
         {/* Document Meta */}
-        <div className="flex justify-between items-baseline mb-16 font-mono text-[10px] tracking-[0.35em] text-black/40 uppercase">
+        <div className="flex justify-between items-baseline mb-16 font-mono text-[10px] tracking-[0.35em] text-foreground-muted uppercase">
           <span>{t.title}</span>
           <span>{new Date().toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'short' })}</span>
         </div>
 
         {/* ─── Header Block ─── */}
-        <header className="flex flex-col md:flex-row items-center gap-14 mb-24 border-b border-black/8 pb-12">
+        <header className="flex flex-col md:flex-row items-center gap-14 mb-24 border-b border-border-muted pb-12">
           {data.basicInfo?.photoUrl && (
             <div className="relative group shrink-0">
-              <div className="w-44 h-44 bg-gray-50 overflow-hidden grayscale contrast-[1.1] ring-1 ring-black/8 rounded-none shadow-sm">
-                <Image
-                  src={getCloudinaryUrl(data.basicInfo.photoUrl, "full")}
-                  alt="Profile photo"
-                  fill
-                  sizes="176px"
-                  priority
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
+              <Avatar
+                src={getCloudinaryUrl(data.basicInfo.photoUrl, "full")}
+                alt="Profile photo"
+                size="xl"
+                className="w-44 h-44 bg-accent grayscale contrast-[1.1] ring-1 ring-border-muted shadow-sm transition-transform duration-700 group-hover:scale-105"
+              />
               {/* Corner accent */}
-              <div className="absolute -bottom-3 -right-3 w-6 h-6 border-r-[1.5px] border-b-[1.5px] border-black/25" />
+              <div className="absolute -bottom-3 -right-3 w-6 h-6 border-r-[1.5px] border-b-[1.5px] border-border-muted" />
             </div>
           )}
 
           <div className="flex-1 w-full text-left">
-            <p className="font-mono text-[11px] tracking-[0.4em] text-black/40 uppercase mb-3">
+            <p className="font-mono text-[11px] tracking-[0.4em] text-foreground-muted uppercase mb-3">
               {data.basicInfo?.religion || 'Profile'}
             </p>
-            <h1 className="text-5xl sm:text-6xl font-serif leading-none tracking-tighter mb-3 text-black">
+            <h1 className="text-5xl sm:text-6xl font-serif leading-none tracking-tighter mb-3 text-foreground">
               {data?.basicInfo?.fullName || 'Full Member'}
             </h1>
-            <p className="text-base text-black/55 tracking-wide">
+            <p className="text-base text-foreground-muted tracking-wide">
               {data.profession?.occupation || (lang === 'en' ? 'Personal Profile' : 'ব্যক্তিগত তথ্য')}
             </p>
           </div>
@@ -231,7 +193,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Basic Info */}
           {hasContent(data.basicInfo) && (
             <section className="group">
-              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
                 <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.basic} />
                 </div>
@@ -255,7 +217,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Personal Info */}
           {hasContent(data.personalInfo) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
                 <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.personal} />
                 </div>
@@ -276,9 +238,9 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                         className={item.full ? 'sm:col-span-2' : ''}
                         valueClassName={
                           item.address
-                            ? 'text-sm font-normal leading-relaxed text-black/75 max-w-sm'
+                            ? 'text-sm font-normal leading-relaxed text-foreground-muted max-w-sm border-l border-border-muted/50 pl-4 py-1'
                             : item.italic
-                              ? 'italic font-light text-black/70'
+                              ? 'italic font-light text-foreground-muted'
                               : ''
                         }
                       />
@@ -292,7 +254,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Education */}
           {hasContent(data.education) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
                 <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.education} />
                 </div>
@@ -302,19 +264,19 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                     return (
                       <div
                         key={idx}
-                        className={`group relative ${!isLast ? 'border-b border-black/8 pb-8' : ''}`}
+                        className={`group relative ${!isLast ? 'border-b border-border-muted/50 pb-8' : ''}`}
                       >
-                        <p className="font-mono text-[10px] text-black/35 mb-1.5 tracking-[0.2em] uppercase">
+                        <p className="font-mono text-[10px] text-foreground-muted mb-1.5 tracking-[0.2em] uppercase">
                           {edu.passingYear || '—'}
                         </p>
-                        <h3 className="text-xl font-serif text-black mb-2 leading-snug italic">
+                        <h3 className="text-xl font-serif text-foreground mb-2 leading-snug italic">
                           {edu.degree}
                         </h3>
-                        <p className="text-sm text-black/60 font-medium tracking-wide border-l border-black/15 pl-4">
+                        <p className="text-sm text-foreground-muted font-medium tracking-wide border-l border-border-muted pl-4">
                           {edu.institution}
                         </p>
                         {edu.result && (
-                          <p className="text-xs font-mono text-black/35 mt-2 pl-4 tracking-wide">
+                          <p className="text-xs font-mono text-foreground-muted mt-2 pl-4 tracking-wide">
                             Result — {edu.result}
                           </p>
                         )}
@@ -322,11 +284,11 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                     );
                   })}
                   {hasContent(data.education?.additionalQualifications) && (
-                    <div className="bg-gray-50/70 p-6 border-l-2 border-black">
-                      <span className="font-mono text-[9px] font-bold text-black/45 uppercase tracking-widest block mb-2">
+                    <div className="bg-accent/40 p-6 border-l-2 border-foreground">
+                      <span className="font-mono text-[9px] font-bold text-foreground-muted uppercase tracking-widest block mb-2">
                         {t.additionalQualifications}
                       </span>
-                      <p className="text-sm leading-relaxed text-black/75 whitespace-pre-wrap">
+                      <p className="text-sm leading-relaxed text-foreground-muted whitespace-pre-wrap">
                         {data.education?.additionalQualifications}
                       </p>
                     </div>
@@ -339,7 +301,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Professional */}
           {hasContent(data.profession) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
                 <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.profession} />
                 </div>
@@ -361,7 +323,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Family */}
           {hasContent(data.familyInfo) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
                 <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.family} />
                 </div>
@@ -387,14 +349,14 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
             </section>
           )}
 
-          {/* Section: Marriage Expectations (Black Card) */}
+          {/* Section: Marriage Expectations (Themed Contrasting Card) */}
           {hasContent(data.expectations) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
                 <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.expectations} />
                 </div>
-                <div className="w-full md:w-2/3 bg-black text-white p-8 sm:p-12 relative overflow-hidden">
+                <div className="w-full md:w-2/3 bg-foreground dark:bg-accent text-background dark:text-foreground p-8 sm:p-12 relative overflow-hidden">
                   {/* Texture overlay */}
                   <div className="absolute inset-0 bg-grain opacity-10 pointer-events-none" />
                   {/* Fields grid */}
@@ -405,19 +367,19 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                       { label: t.expectedEducation, value: data.expectations?.expectedEducation },
                       { label: t.expectedProfession, value: data.expectations?.expectedProfession },
                     ].map((item, i) => hasContent(item.value) && (
-                      <div key={i} className="flex flex-col gap-1.5 border-b border-white/15 py-6">
-                        <span className="font-mono text-[10px] text-white/50 uppercase tracking-[0.22em]">
+                      <div key={i} className="flex flex-col gap-1.5 border-b border-background/15 dark:border-foreground/15 py-6">
+                        <span className="font-mono text-[10px] text-background/50 dark:text-foreground/50 uppercase tracking-[0.22em]">
                           {item.label}
                         </span>
-                        <span className="text-lg font-serif italic leading-snug text-white">
+                        <span className="text-lg font-serif italic leading-snug text-background dark:text-foreground">
                           {item.value}
                         </span>
                       </div>
                     ))}
                   </div>
                   {hasContent(data.expectations?.additionalExpectations) && (
-                    <div className="relative z-10 border-t border-white/10 pt-8 mt-8">
-                      <p className="text-base font-light italic leading-relaxed text-white/85">
+                    <div className="relative z-10 border-t border-background/10 dark:border-foreground/10 pt-8 mt-8">
+                      <p className="text-base font-light italic leading-relaxed text-background/85 dark:text-foreground/85">
                         &ldquo;{data.expectations?.additionalExpectations}&rdquo;
                       </p>
                     </div>
@@ -430,7 +392,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Custom Sections */}
           {hasContent(data.customSections) && (data.customSections as CustomSection[])?.map((section: CustomSection, sIdx: number) => (
             <section key={sIdx}>
-              <div className="flex flex-col md:flex-row border-t border-black/10 pt-8">
+              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
                 <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={section.title} />
                 </div>
@@ -447,18 +409,18 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         {/* ─── Contact Footer ─── */}
         {hasContent(data.contactInfo) && (
-          <footer className="mt-24 pt-12 border-t-4 border-black border-double">
+          <footer className="mt-24 pt-12 border-t-4 border-foreground border-double">
             <div className="flex flex-col md:flex-row justify-between items-start gap-12">
 
               {/* Left: Contact hierarchy */}
               <div className="space-y-6">
                 {/* Section label */}
-                <p className="font-mono text-[10px] font-bold tracking-[0.35em] uppercase text-black/45">
+                <p className="font-mono text-[10px] font-bold tracking-[0.35em] uppercase text-foreground-muted">
                   {t.contact}
                 </p>
 
                 {/* Primary — Email */}
-                <p className="text-2xl font-serif tracking-tight text-black underline decoration-black/15 underline-offset-8">
+                <p className="text-2xl font-serif tracking-tight text-foreground underline decoration-foreground/15 underline-offset-8">
                   {data.contactInfo?.emailAddress || 'Not Provided'}
                 </p>
 
@@ -466,20 +428,20 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 <div className="flex gap-8">
                   {hasContent(data.contactInfo?.contactNumber) && (
                     <div>
-                      <p className="font-mono text-[9px] text-black/45 uppercase tracking-widest mb-1.5">
+                      <p className="font-mono text-[9px] text-foreground-muted uppercase tracking-widest mb-1.5">
                         {t.contactNumber}
                       </p>
-                      <p className="text-base font-semibold text-black">
+                      <p className="text-base font-semibold text-foreground">
                         {data.contactInfo?.contactNumber}
                       </p>
                     </div>
                   )}
                   {hasContent(data.contactInfo?.whatsAppNumber) && (
                     <div>
-                      <p className="font-mono text-[9px] text-black/45 uppercase tracking-widest mb-1.5">
+                      <p className="font-mono text-[9px] text-foreground-muted uppercase tracking-widest mb-1.5">
                         {t.whatsApp}
                       </p>
-                      <p className="text-base font-semibold text-black">
+                      <p className="text-base font-semibold text-foreground">
                         {data.contactInfo?.whatsAppNumber}
                       </p>
                     </div>
@@ -489,11 +451,11 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
               {/* Right: Guardian */}
               {hasContent(data.contactInfo?.guardianContact) && (
-                <div className="text-left md:text-right bg-gray-50 p-6 border-l-2 md:border-l-0 md:border-r-2 border-black/10 rounded-none">
-                  <p className="font-mono text-[9px] text-black/45 uppercase tracking-widest mb-1.5">
+                <div className="text-left md:text-right bg-accent/40 p-6 border-l-2 md:border-l-0 md:border-r-2 border-foreground/10 rounded-none">
+                  <p className="font-mono text-[9px] text-foreground-muted uppercase tracking-widest mb-1.5">
                     {t.guardianContact}
                   </p>
-                  <p className="text-sm font-bold text-black/80">
+                  <p className="text-sm font-bold text-foreground">
                     {data.contactInfo?.guardianContact}
                   </p>
                 </div>
@@ -501,7 +463,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
             </div>
 
             {/* Footer bar */}
-            <div className="mt-24 pt-6 border-t border-black/8 flex justify-between items-center text-[9px] font-mono text-black/35 uppercase tracking-[0.4em]">
+            <div className="mt-24 pt-6 border-t border-border-muted flex justify-between items-center text-[9px] font-mono text-foreground-muted uppercase tracking-[0.4em]">
               <span>BiyeProfile 2026</span>
               <span>·</span>
               <span>All Rights Reserved</span>
