@@ -15,6 +15,7 @@ const educationQualificationSchema = z.object({
   institution: z.string().min(1, "Institution is required").max(200),
   passingYear: z.union([z.number(), z.literal(""), z.string()]),
   result: z.string().optional(),
+  extraFields: z.array(customFieldSchema).optional(),
 })
 
 export const biodataSchema = z.object({
@@ -46,7 +47,6 @@ export const biodataSchema = z.object({
   education: z.object({
     qualifications: z.array(educationQualificationSchema).min(1, "At least one qualification is required"),
     additionalQualifications: z.string(),
-    extraFields: z.array(customFieldSchema),
   }),
   profession: z.object({
     occupation: z.string().min(2, "Occupation is required").max(200),

@@ -11,7 +11,7 @@ export async function Navbar() {
     <nav className="border-b border-border bg-background sticky top-0 z-50 print:hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
         {/* Logo Section */}
-        <div className="flex items-center gap-4 sm:gap-12 shrink-0">
+        <div className="flex items-center gap-4 sm:gap-10 shrink-0">
           <Logo hideTextOnMobile />
 
           {/* Desktop Links */}
@@ -52,7 +52,7 @@ export async function Navbar() {
             <div className="flex items-center gap-3 sm:gap-8">
               <Link
                 href="/api/auth/signin"
-                className="font-mono text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-foreground border border-foreground px-3 sm:px-6 py-2 sm:py-2.5 hover:bg-foreground hover:text-background transition-all whitespace-nowrap"
+                className="font-mono text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-foreground border border-foreground px-3 sm:px-6 py-2 sm:py-3 hover:bg-foreground hover:text-background transition-all whitespace-nowrap"
               >
                 Sign In
               </Link>

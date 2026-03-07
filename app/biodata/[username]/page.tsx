@@ -50,7 +50,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   if (!user.biodata.isPublic && !isOwner) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="bg-background p-12 rounded-none shadow-2xl text-center border border-border-muted max-w-md mx-6">
+        <div className="bg-background p-10 rounded-none shadow-2xl text-center border border-border-muted max-w-md mx-6">
           <div className="w-16 h-16 bg-accent rounded-none border border-border-muted flex items-center justify-center mx-auto mb-8">
             <svg className="w-8 h-8 text-foreground-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -66,8 +66,8 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
-    <div className="bg-background py-8 sm:py-16 md:py-24 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
-      <div className="max-w-4xl mx-auto bg-background print:shadow-none p-6 sm:p-14 print:p-0 sm:rounded-none border border-border-muted relative">
+    <div className="bg-background py-8 sm:py-10 md:py-10 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
+      <div className="max-w-4xl mx-auto bg-background print:shadow-none p-6 sm:p-10 print:p-0 sm:rounded-none border border-border-muted relative">
         {isOwner && !user.biodata.isPublic && (
           <div className="absolute top-8 right-8 print:hidden">
             <span className="bg-accent text-foreground-muted text-[10px] font-mono font-black px-4 py-2 rounded-none uppercase tracking-[0.2em] border border-border-muted shadow-sm">
@@ -77,7 +77,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
         )}
         <BiodataContent data={data} />
 
-        <div className="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-border-muted print:hidden flex justify-center items-center px-4">
+        <div className="mt-10 md:mt-10 pt-8 md:pt-10 border-t border-border-muted print:hidden flex justify-center items-center px-4">
           <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
         </div>
       </div>

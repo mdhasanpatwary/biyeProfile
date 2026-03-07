@@ -18,14 +18,14 @@ export function BiodataEditor({
   const [language, setLanguage] = useState<"en" | "bn">((initialData.language as "en" | "bn") || "en")
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start relative pb-24 lg:pb-0 w-full max-w-full overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-6 items-start relative pb-10 lg:pb-0 w-full max-w-full overflow-hidden">
       {/* Mobile Preview Exit Button */}
       {mobileView === "preview" && (
         <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100]">
           <Button
             variant="primary"
             onClick={() => setMobileView("edit")}
-            className="px-8 py-3.5 shadow-2xl shadow-foreground/10 flex items-center gap-3 active:scale-95 transition-all outline-none"
+            className="px-8 py-4 shadow-2xl shadow-foreground/10 flex items-center gap-3 active:scale-95 transition-all outline-none"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -35,13 +35,13 @@ export function BiodataEditor({
         </div>
       )}
 
-      <div className={`flex-1 w-full bg-background rounded-none border border-border-muted p-6 sm:p-12 min-h-screen min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
+      <div className={`flex-1 w-full bg-background rounded-none border border-border-muted p-6 sm:p-10 min-h-screen min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 md:gap-6 pb-8 border-b border-border-muted">
           <div>
             <h1 className="text-4xl font-serif text-foreground tracking-tight">
               Edit Your Biodata
             </h1>
-            <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] mt-1.5">Document Management</p>
+            <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] mt-2">Document Management</p>
           </div>
           <div className="flex items-center bg-accent p-1 rounded-none border border-border-muted h-[42px]">
             <Button

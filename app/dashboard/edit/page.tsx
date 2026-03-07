@@ -60,8 +60,7 @@ function migrateBiodataData(data: Record<string, unknown>): Partial<BiodataFormV
   if (typeof migrated.education === 'string') {
     migrated.education = {
       qualifications: [{ degree: "", institution: "", passingYear: "", result: "" }],
-      additionalQualifications: migrated.education as string,
-      extraFields: []
+      additionalQualifications: migrated.education as string
     }
   }
   if (typeof migrated.profession === 'string') {

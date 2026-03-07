@@ -1,9 +1,9 @@
 "use client"
 
-import { useForm, useFieldArray } from "react-hook-form"
+import { useForm, useFieldArray, Control, UseFormRegister, ArrayPath, FieldPath } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { biodataSchema, type BiodataFormValues } from "@/lib/validations/biodata"
-import { useEffect, useState, useCallback, useRef } from "react"
+import { useEffect, useState } from "react"
 import { FileUpload } from "@/components/ui/file-upload"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -15,18 +15,6 @@ import { StepWizard } from "@/components/ui/step-wizard"
 import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function useDebounce<T extends (...args: any[]) => any>(cb: T, delay: number) {
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return useCallback((...args: any[]) => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      cb(...args);
-    }, delay);
-  }, [cb, delay]);
-}
 
 const HEIGHT_OPTIONS = Array.from({ length: 20 }, (_, i) => {
   const inches = 58 + i; // 4'10" is 58 inches
@@ -40,6 +28,76 @@ const COMPLEXION_OPTIONS = ["Fair", "Medium", "Dark"];
 const EMPLOYMENT_TYPES = ["Private", "Govt", "Business", "Freelancer", "Other"];
 const FAMILY_STATUS_OPTIONS = ["Nuclear Family", "Joint Family", "Middle Class", "Upper Middle Class", "Affluent"];
 const MARITAL_STATUS_OPTIONS = ["Unmarried", "Divorced", "Widow/Widower"];
+
+export function CustomFieldsFormBlock({
+  control,
+  register,
+  name,
+}: {
+  control: Control<BiodataFormValues>
+  register: UseFormRegister<BiodataFormValues>
+  name: ArrayPath<BiodataFormValues>
+}) {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name
+  });
+
+  return (
+    <div className="sm:col-span-2 space-y-4 mt-10 pt-10 border-t border-border-muted border-dashed">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h4 className="font-serif text-lg text-foreground italic">Additional Information</h4>
+          <p className="text-xs text-foreground-muted font-mono uppercase tracking-widest mt-1">Add any custom details not listed above</p>
+        </div>
+      </div>
+
+      {fields.map((field, index) => (
+        <div key={field.id} className="flex gap-4 items-end group/custom">
+          <div className="flex-1">
+            <FormField label="Custom Label">
+              <Input
+                type="text"
+                {...register(`${name}.${index}.label` as FieldPath<BiodataFormValues>)}
+                placeholder="e.g. Special Note"
+                className="block w-full"
+              />
+            </FormField>
+          </div>
+          <div className="flex-[2]">
+            <FormField label="Custom Value">
+              <Input
+                type="text"
+                {...register(`${name}.${index}.value` as FieldPath<BiodataFormValues>)}
+                placeholder="Enter detail here..."
+                className="block w-full"
+              />
+            </FormField>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => remove(index)}
+            className="w-12 border border-transparent hover:border-border-muted opacity-0 group-hover/custom:opacity-100"
+          >
+            <svg className="w-4 h-4 text-foreground-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 0 00-1 1v3M4 7h16" /></svg>
+          </Button>
+        </div>
+      ))}
+
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => append({ label: "", value: "" })}
+        className="flex items-center gap-2 mt-4 w-full justify-center border-dashed font-mono text-[10px] font-black uppercase tracking-widest"
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
+        Add Custom Field
+      </Button>
+    </div>
+  )
+}
 
 export function BiodataForm({
   initialData,
@@ -57,6 +115,7 @@ export function BiodataForm({
   isGuest?: boolean,
 }) {
   const [currentStep, setCurrentStep] = useState(1)
+  const [lastSavedData, setLastSavedData] = useState<Partial<BiodataFormValues>>(initialData)
 
   const steps = [
     { title: "Basic", icon: "👤" },
@@ -68,6 +127,17 @@ export function BiodataForm({
     { title: "Contact", icon: "📞" },
     { title: "Custom", icon: "➕" }
   ]
+
+  const stepKeys = [
+    "basicInfo",
+    "personalInfo",
+    "education",
+    "profession",
+    "familyInfo",
+    "expectations",
+    "contactInfo",
+    "customSections"
+  ] as const;
 
   const form = useForm<BiodataFormValues>({
     resolver: zodResolver(biodataSchema),
@@ -102,7 +172,6 @@ export function BiodataForm({
           { degree: "", institution: "", passingYear: "", result: "" }
         ],
         additionalQualifications: initialData?.education?.additionalQualifications || "",
-        extraFields: initialData?.education?.extraFields || [],
       },
       profession: {
         occupation: initialData?.profession?.occupation || "",
@@ -158,10 +227,6 @@ export function BiodataForm({
   }, [dob, form]);
 
   // Field arrays for sections
-  useFieldArray({
-    control: form.control,
-    name: "basicInfo.extraFields"
-  })
 
   const { fields: customSectionsFields, append: appendSection, remove: removeSection } = useFieldArray({
     control: form.control,
@@ -174,31 +239,95 @@ export function BiodataForm({
   })
 
 
-  // Conditional autosave — DISABLED for guest mode
-  const debouncedSave = useDebounce(async (data: BiodataFormValues) => {
-    if (isGuest) return; // Skip API save in guest mode
-    try {
-      const res = await fetch("/api/biodata", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data })
-      })
-      if (res.ok) {
-        toast.success("Changes autosaved", { duration: 1500 })
-      }
-    } catch (error) {
-      console.error("Autosave failed:", error);
-    }
-  }, 2000)
-
   useEffect(() => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const subscription = form.watch((value) => {
       onDataChange?.(value as BiodataFormValues)
-      debouncedSave(value as BiodataFormValues)
     })
     return () => subscription.unsubscribe()
-  }, [form, debouncedSave, onDataChange])
+  }, [form, onDataChange])
+
+  const handleNextStep = async () => {
+    const currentStepKey = stepKeys[currentStep - 1];
+    const isStepValid = await form.trigger(currentStepKey);
+
+    if (isStepValid) {
+      if (!isGuest) {
+        const currentData = form.getValues();
+        // Check if data actually changed for this specific step by stringifying the chunk
+        // If it's the "customSections" step, check the whole array.
+        const currentChunk = currentStepKey ? currentData[currentStepKey as keyof BiodataFormValues] : null;
+        const lastSavedChunk = currentStepKey ? lastSavedData[currentStepKey as keyof BiodataFormValues] : null;
+
+        const hasChanged = JSON.stringify(currentChunk) !== JSON.stringify(lastSavedChunk);
+
+        if (hasChanged) {
+          try {
+            const res = await fetch("/api/biodata", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ data: currentData })
+            });
+            if (res.ok) {
+              setLastSavedData(currentData);
+            } else {
+              toast.error("Failed to save step");
+              return;
+            }
+          } catch (error) {
+            console.error("Save failed:", error);
+            toast.error("Failed to save step");
+            return;
+          }
+        }
+      }
+      setCurrentStep(prev => prev + 1);
+    } else {
+      toast.error("Please fill in all required fields correctly.");
+    }
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep(prev => prev - 1);
+  };
+
+  const handleFinish = async () => {
+    const currentStepKey = stepKeys[currentStep - 1];
+    const isStepValid = await form.trigger(currentStepKey);
+
+    if (isStepValid) {
+      if (!isGuest) {
+        const currentData = form.getValues();
+        const currentChunk = currentStepKey ? currentData[currentStepKey as keyof BiodataFormValues] : null;
+        const lastSavedChunk = currentStepKey ? lastSavedData[currentStepKey as keyof BiodataFormValues] : null;
+
+        const hasChanged = JSON.stringify(currentChunk) !== JSON.stringify(lastSavedChunk);
+
+        if (hasChanged) {
+          try {
+            const res = await fetch("/api/biodata", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ data: currentData })
+            });
+            if (res.ok) {
+              toast.success("Biodata saved successfully", { duration: 1500 });
+            } else {
+              toast.error("Failed to save biodata");
+              return;
+            }
+          } catch (error) {
+            console.error("Save failed:", error);
+            toast.error("Failed to save biodata");
+            return;
+          }
+        }
+      }
+      window.location.href = "/dashboard";
+    } else {
+      toast.error("Please fill in all required fields correctly.");
+    }
+  };
 
   // Sync external language change
   useEffect(() => {
@@ -213,12 +342,12 @@ export function BiodataForm({
   return (
     <div className="relative">
 
-      <div className="flex items-center justify-between gap-3 mb-16 bg-background/90 backdrop-blur-md p-4 border-b border-border sticky top-0 z-50 transition-all duration-300">
-        <div className="flex items-start gap-1.5 flex-1 min-w-0">
+      <div className="flex items-center justify-between gap-3 mb-10 bg-background/90 backdrop-blur-md p-4 border-b border-border sticky top-0 z-50 transition-all duration-300">
+        <div className="flex items-start gap-2 flex-1 min-w-0">
           <Button
             type="button"
             disabled={currentStep === 1}
-            onClick={() => setCurrentStep(prev => prev - 1)}
+            onClick={handlePrevStep}
             variant="outline"
             size="icon"
             className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group mt-1"
@@ -235,7 +364,7 @@ export function BiodataForm({
           <Button
             type="button"
             disabled={currentStep === steps.length}
-            onClick={() => setCurrentStep(prev => prev + 1)}
+            onClick={handleNextStep}
             variant="outline"
             size="icon"
             className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group relative z-10 mt-1"
@@ -245,18 +374,18 @@ export function BiodataForm({
         </div>
       </div>
 
-      <form onSubmit={(e) => e.preventDefault()} className="space-y-12 pb-20">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-10 pb-0">
         {/* Step 1: Basic Information */}
         {currentStep === 1 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-16">
+            <CardHeader className="border-b border-border-muted pb-10 mb-10">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 01</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Basic Information' : 'প্রাথমিক তথ্য'}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-12 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
                 <div className="sm:col-span-2 mb-4">
                   <FormField label="Profile Photo (Optional)">
                     <FileUpload
@@ -310,6 +439,8 @@ export function BiodataForm({
                 <FormField label="Nationality">
                   <Input type="text" {...form.register("basicInfo.nationality")} placeholder="e.g. Bangladeshi / American" className="block w-full" />
                 </FormField>
+
+                <CustomFieldsFormBlock control={form.control} register={form.register} name="basicInfo.extraFields" />
               </div>
             </CardContent>
           </Card>
@@ -318,7 +449,7 @@ export function BiodataForm({
         {/* Step 2: Personal Information */}
         {currentStep === 2 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-16">
+            <CardHeader className="border-b border-border-muted pb-10 mb-10">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 02</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Personal Information' : 'ব্যক্তিগত তথ্য'}
@@ -326,7 +457,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-12 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <FormField label="Present Address" error={form.formState.errors.personalInfo?.presentAddress?.message}>
                     <Textarea {...form.register("personalInfo.presentAddress")} placeholder="e.g. House 12, Road 4, Banani, Dhaka" rows={3} className="block w-full" />
@@ -367,6 +498,8 @@ export function BiodataForm({
                     <Textarea {...form.register("personalInfo.hobby")} placeholder="e.g. Reading, Traveling, Photography" rows={2} className="block w-full" />
                   </FormField>
                 </div>
+
+                <CustomFieldsFormBlock control={form.control} register={form.register} name="personalInfo.extraFields" />
               </div>
             </CardContent>
           </Card>
@@ -375,7 +508,7 @@ export function BiodataForm({
         {/* Step 3: Education Information */}
         {currentStep === 3 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-16">
+            <CardHeader className="border-b border-border-muted pb-10 mb-10">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 03</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Education Information' : 'শিক্ষাগত তথ্য'}
@@ -396,7 +529,7 @@ export function BiodataForm({
                       </Button>
                     )}
 
-                    <div className="grid grid-cols-1 gap-y-12 gap-x-4 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
                       <div className="sm:col-span-1">
                         <FormField label="Degree / Level" error={form.formState.errors.education?.qualifications?.[index]?.degree?.message}>
                           <Input
@@ -441,6 +574,9 @@ export function BiodataForm({
                         </FormField>
                       </div>
                     </div>
+                    <div className="mt-6 md:-mx-2">
+                      <CustomFieldsFormBlock control={form.control} register={form.register} name={`education.qualifications.${index}.extraFields`} />
+                    </div>
                   </div>
                 ))}
 
@@ -456,11 +592,12 @@ export function BiodataForm({
                   Add Another Qualification
                 </Button>
 
-                <div className="sm:col-span-2 mt-12 py-6 border-t border-border-muted">
+                <div className="sm:col-span-2 mt-10 py-6 border-t border-border-muted">
                   <FormField label="Additional Educational Details (Optional)">
                     <Textarea {...form.register("education.additionalQualifications")} placeholder="e.g. Won national debate championship" rows={3} className="block w-full" />
                   </FormField>
                 </div>
+
               </div>
             </CardContent>
           </Card>
@@ -469,7 +606,7 @@ export function BiodataForm({
         {/* Step 4: Profession Information */}
         {currentStep === 4 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-16">
+            <CardHeader className="border-b border-border-muted pb-10 mb-10">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 04</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Profession Information' : 'পেশাগত তথ্য'}
@@ -477,7 +614,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-12 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
                 <FormField label="Occupation / Job Title" error={form.formState.errors.profession?.occupation?.message}>
                   <Input type="text" {...form.register("profession.occupation")} placeholder="e.g. Software Engineer" className="block w-full" />
                 </FormField>
@@ -502,6 +639,8 @@ export function BiodataForm({
                     <Input type="text" {...form.register("profession.workplaceLocation")} placeholder="e.g. Banani, Dhaka" className="block w-full" />
                   </FormField>
                 </div>
+
+                <CustomFieldsFormBlock control={form.control} register={form.register} name="profession.extraFields" />
               </div>
             </CardContent>
           </Card>
@@ -510,7 +649,7 @@ export function BiodataForm({
         {/* Step 5: Family Information */}
         {currentStep === 5 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-16">
+            <CardHeader className="border-b border-border-muted pb-10 mb-10">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 05</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Family Information' : 'পারিবারিক তথ্য'}
@@ -518,7 +657,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-12 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
                 <FormField label="Father's Name" error={form.formState.errors.familyInfo?.fatherName?.message}>
                   <Input type="text" {...form.register("familyInfo.fatherName")} placeholder="e.g. Md. Rahman" className="block w-full" />
                 </FormField>
@@ -551,6 +690,8 @@ export function BiodataForm({
                     </Select>
                   </FormField>
                 </div>
+
+                <CustomFieldsFormBlock control={form.control} register={form.register} name="familyInfo.extraFields" />
               </div>
             </CardContent>
           </Card>
@@ -559,7 +700,7 @@ export function BiodataForm({
         {/* Step 6: Marriage Expectations */}
         {currentStep === 6 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-16">
+            <CardHeader className="border-b border-border-muted pb-10 mb-10">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 06</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Marriage Expectations' : 'বিয়ে সংক্রান্ত প্রত্যাশা'}
@@ -567,7 +708,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-12 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
                 <FormField label="Expected Age Range (Optional)">
                   <Input type="text" {...form.register("expectations.expectedAgeRange")} placeholder="e.g. 22-26" className="block w-full" />
                 </FormField>
@@ -595,6 +736,8 @@ export function BiodataForm({
                     <Textarea {...form.register("expectations.additionalExpectations")} placeholder="e.g. Looking for someone with a good family background..." rows={4} className="block w-full" />
                   </FormField>
                 </div>
+
+                <CustomFieldsFormBlock control={form.control} register={form.register} name="expectations.extraFields" />
               </div>
             </CardContent>
           </Card>
@@ -603,7 +746,7 @@ export function BiodataForm({
         {/* Step 7: Contact Information */}
         {currentStep === 7 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-16">
+            <CardHeader className="border-b border-border-muted pb-10 mb-10">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 07</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Contact Information' : 'যোগাযোগের তথ্য'}
@@ -611,7 +754,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-12 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
                 <FormField label="Contact Number" error={form.formState.errors.contactInfo?.contactNumber?.message}>
                   <Input type="text" {...form.register("contactInfo.contactNumber")} placeholder="e.g. 01712345678" className="block w-full" />
                 </FormField>
@@ -627,6 +770,8 @@ export function BiodataForm({
                 <FormField label="Guardian Contact Info (Optional)">
                   <Input type="text" {...form.register("contactInfo.guardianContact")} placeholder="e.g. Father: 017..." className="block w-full" />
                 </FormField>
+
+                <CustomFieldsFormBlock control={form.control} register={form.register} name="contactInfo.extraFields" />
               </div>
             </CardContent>
           </Card>
@@ -635,7 +780,7 @@ export function BiodataForm({
         {/* Step 8: Custom Sections */}
         {currentStep === 8 && (
           <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <CardHeader className="flex flex-row justify-between items-center mb-16 pb-12 border-b border-border-muted space-y-0">
+            <CardHeader className="flex flex-row justify-between items-center mb-10 pb-10 border-b border-border-muted space-y-0">
               <div>
                 <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 08</p>
                 <CardTitle className="text-5xl font-serif text-foreground italic">
@@ -655,7 +800,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="space-y-12">
+              <div className="space-y-10">
                 {customSectionsFields.map((section, sectionIdx) => (
                   <div key={section.id} className="p-10 bg-background rounded-none border border-border-muted relative group transition-all overflow-hidden"
                   >
@@ -669,7 +814,7 @@ export function BiodataForm({
                       Delete Section
                     </Button>
 
-                    <div className="mb-12">
+                    <div className="mb-10">
                       <FormField label="Section Title">
                         <Input
                           type="text"
@@ -683,7 +828,7 @@ export function BiodataForm({
                     <div className="space-y-6">
                       <p className="font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.4em] mb-4">Entries</p>
                       {form.watch(`customSections.${sectionIdx}.fields`)?.map((_, fieldIdx) => (
-                        <div key={fieldIdx} className="flex gap-12 items-end group/field pb-4 border-b border-border-muted/50">
+                        <div key={fieldIdx} className="flex gap-10 items-end group/field pb-4 border-b border-border-muted/50">
                           <div className="flex-1">
                             <FormField label="Label">
                               <Input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.label`)} placeholder="e.g. Prayer" className="block w-full" />
@@ -726,7 +871,7 @@ export function BiodataForm({
                 ))}
 
                 {customSectionsFields.length === 0 && (
-                  <div className="text-center py-24 border-2 border-dashed border-border-muted rounded-none bg-accent/20">
+                  <div className="text-center py-10 border-2 border-dashed border-border-muted rounded-none bg-accent/20">
                     <div className="w-16 h-16 bg-background border border-border-muted rounded-none flex items-center justify-center mx-auto mb-6">
                       <svg className="w-8 h-8 text-foreground-muted/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
@@ -744,7 +889,7 @@ export function BiodataForm({
             <Button
               type="button"
               disabled={currentStep === 1}
-              onClick={() => setCurrentStep(prev => prev - 1)}
+              onClick={handlePrevStep}
               variant="outline"
               className="w-12 h-12 bg-background text-foreground rounded-none border-border-muted flex items-center justify-center shrink-0 active:scale-90 transition-all"
             >
@@ -774,7 +919,7 @@ export function BiodataForm({
               <Button
                 type="button"
                 variant="primary"
-                onClick={() => setCurrentStep(prev => prev + 1)}
+                onClick={handleNextStep}
                 className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] font-black uppercase tracking-widest"
               >
                 Next
@@ -785,22 +930,23 @@ export function BiodataForm({
                 className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all outline-none"
               />
             ) : (
-              <a
-                href="/dashboard"
+              <Button
+                type="button"
+                onClick={handleFinish}
                 className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest"
               >
                 Finish
-              </a>
+              </Button>
             )}
           </div>
         </div>
 
         {/* Footer Navigation (Desktop) - Premium styled buttons */}
-        <div className="hidden lg:flex justify-between items-center py-12 border-t border-border-muted mt-10">
+        <div className="hidden lg:flex justify-between items-center py-10 border-t border-border-muted">
           {currentStep > 1 ? (
             <Button
               type="button"
-              onClick={() => setCurrentStep(prev => prev - 1)}
+              onClick={handlePrevStep}
               variant="outline"
               className="flex items-center gap-3 group"
             >
@@ -812,7 +958,7 @@ export function BiodataForm({
             <Button
               type="button"
               variant="primary"
-              onClick={() => setCurrentStep(prev => prev + 1)}
+              onClick={handleNextStep}
               className="flex items-center gap-3 group"
             >
               Next Step
@@ -821,16 +967,17 @@ export function BiodataForm({
           ) : isGuest ? (
             <DownloadPDFButton
               filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
-              className="px-12 py-3.5 bg-foreground text-background font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-none hover:bg-foreground/90 transition-all active:scale-95 flex items-center gap-3"
+              className="px-10 py-4 bg-foreground text-background font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-none hover:bg-foreground/90 transition-all active:scale-95 flex items-center gap-3"
             />
           ) : (
-            <a
-              href="/dashboard"
-              className="px-12 py-3.5 bg-foreground text-background font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-none hover:bg-foreground/90 transition-all active:scale-95 flex items-center gap-3"
+            <Button
+              type="button"
+              onClick={handleFinish}
+              className="px-10 py-4 bg-foreground text-background font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-none hover:bg-foreground/90 transition-all active:scale-95 flex items-center gap-3"
             >
               Finish Documentation
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-            </a>
+            </Button>
           )}
         </div>
       </form>

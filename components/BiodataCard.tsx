@@ -21,7 +21,7 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
             href={`/biodata/${username}`}
             className="group block border-b border-border-muted animate-in fade-in slide-in-from-bottom-4 duration-500 hover:bg-accent/50 transition-all font-sans"
         >
-            <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-12 py-8 sm:py-10 px-4 sm:px-0">
+            <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 py-8 sm:py-10 px-4 sm:px-0">
 
                 {/* Thumbnail */}
                 <Avatar

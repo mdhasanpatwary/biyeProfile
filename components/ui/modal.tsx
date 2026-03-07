@@ -65,7 +65,7 @@ export function Modal({
         </button>
 
         {(title || description) && (
-          <div className="flex flex-col space-y-1.5 text-center sm:text-left">
+          <div className="flex flex-col space-y-2 text-center sm:text-left">
             {title && (
               <h2 className="text-lg font-serif font-semibold leading-none tracking-tight">
                 {title}

@@ -14,7 +14,7 @@ export default async function SetupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex items-center justify-center py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-background p-8 shadow-2xl rounded-none border border-border-muted relative overflow-hidden">
         {/* Subtle accent corner */}
         <div className="absolute top-0 right-0 w-16 h-16 bg-accent opacity-50 -mr-8 -mt-8 rotate-45" />

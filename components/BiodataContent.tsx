@@ -11,6 +11,7 @@ interface Qualification {
   institution: string;
   passingYear: string | number;
   result?: string;
+  extraFields?: CustomField[];
 }
 
 interface CustomSection {
@@ -57,7 +58,7 @@ function formatHeight(val: string | undefined | null): string {
     const ft = match[1];
     const in_ = match[2];
     if (in_) {
-       return `${ft}′ ${in_}″`;
+      return `${ft}′ ${in_}″`;
     }
     return `${ft}′`;
   }
@@ -82,7 +83,7 @@ function formatPhone(val: string | undefined | null): string {
   }
   // 01738721411 -> 01738 721411
   if (s.length === 11 && s.startsWith('01')) {
-     return `${s.slice(0, 5)} ${s.slice(5)}`;
+    return `${s.slice(0, 5)} ${s.slice(5)}`;
   }
   return s;
 }
@@ -212,7 +213,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   return (
     <div
       id="biodata-content"
-      className="relative bg-background text-foreground font-sans overflow-hidden p-6 sm:p-10 md:p-14"
+      className="relative bg-background text-foreground font-sans overflow-hidden p-6 sm:p-8 md:p-10"
     >
       {/* Subtle texture */}
       <div className="absolute inset-0 bg-grain pointer-events-none opacity-[0.025]" />
@@ -221,7 +222,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         {/* ── Document Meta Bar ── */}
         <div
-          className="flex justify-between items-baseline mb-10 font-mono uppercase"
+          className="flex justify-between items-baseline mb-8 font-mono uppercase"
           style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)', borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '10px' }}
         >
           <span>{t.title}</span>
@@ -229,7 +230,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         </div>
 
         {/* ── Header Block ── */}
-        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 mb-12 sm:mb-16" style={{ borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '28px' }}>
+        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 mb-10" style={{ borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '32px' }}>
           {/* Profile photo — plain <img> so html2canvas can render it */}
           {data.basicInfo?.photoUrl ? (
             <div className="shrink-0 flex justify-center w-full sm:w-auto">
@@ -282,7 +283,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         </header>
 
         {/* ── Content Sections ── */}
-        <div className="space-y-10">
+        <div className="space-y-8">
 
           {/* Section: Basic Info */}
           {hasContent(data.basicInfo) && (
@@ -293,14 +294,15 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 </div>
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                   {[
-                    { label: t.dob,           value: formatDate(data.basicInfo?.dateOfBirth as string, lang) },
-                    { label: t.age,           value: data.basicInfo?.age ? `${data.basicInfo.age} ${lang === 'en' ? 'years' : 'বছর'}` : null },
-                    { label: t.height,        value: formatHeight(data.basicInfo?.height as string) },
-                    { label: t.weight,        value: formatUnit(data.basicInfo?.weight as string) },
-                    { label: t.bloodGroup,    value: data.basicInfo?.bloodGroup },
+                    { label: t.dob, value: formatDate(data.basicInfo?.dateOfBirth as string, lang) },
+                    { label: t.age, value: data.basicInfo?.age ? `${data.basicInfo.age} ${lang === 'en' ? 'years' : 'বছর'}` : null },
+                    { label: t.height, value: formatHeight(data.basicInfo?.height as string) },
+                    { label: t.weight, value: formatUnit(data.basicInfo?.weight as string) },
+                    { label: t.bloodGroup, value: data.basicInfo?.bloodGroup },
                     { label: t.maritalStatus, value: data.basicInfo?.maritalStatus },
-                    { label: t.nationality,   value: data.basicInfo?.nationality },
-                    { label: t.religion,      value: data.basicInfo?.religion },
+                    { label: t.nationality, value: data.basicInfo?.nationality },
+                    { label: t.religion, value: data.basicInfo?.religion },
+                    ...((data.basicInfo?.extraFields || []).map(f => ({ label: f.label, value: f.value })))
                   ].map((item, i) => hasContent(item.value) && (
                     <Field key={i} label={item.label} value={item.value} />
                   ))}
@@ -317,14 +319,15 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                   <SectionTitle label={t.personal} />
                 </div>
                 <div className="w-full md:w-2/3">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     {[
-                      { label: t.presentAddress,   value: data.personalInfo?.presentAddress,  full: true,  address: true },
-                      { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, full: true,  address: true },
-                      { label: t.district,         value: data.personalInfo?.district },
-                      { label: t.nativeVillage,    value: data.personalInfo?.nativeVillage },
-                      { label: t.complexion,       value: data.personalInfo?.complexion },
-                      { label: t.hobby,            value: data.personalInfo?.hobby, full: true, italic: true },
+                      { label: t.presentAddress, value: data.personalInfo?.presentAddress, full: true, address: true },
+                      { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, full: true, address: true },
+                      { label: t.district, value: data.personalInfo?.district },
+                      { label: t.nativeVillage, value: data.personalInfo?.nativeVillage },
+                      { label: t.complexion, value: data.personalInfo?.complexion },
+                      { label: t.hobby, value: data.personalInfo?.hobby, full: true, italic: true },
+                      ...((data.personalInfo?.extraFields || []).map(f => ({ label: f.label, value: f.value })))
                     ].map((item, i) => hasContent(item.value) && (
                       <Field
                         key={i}
@@ -380,11 +383,21 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                             Result — {edu.result}
                           </p>
                         )}
+                        {edu.extraFields && edu.extraFields.length > 0 && (
+                          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                            {edu.extraFields.map((field, i) => hasContent(field.value) && (
+                              <div key={`edu_extra_${idx}_${i}`} className="text-sm">
+                                <span className="font-mono text-[9px] uppercase tracking-widest text-foreground-muted block mb-0.5">{field.label}</span>
+                                <span className="text-foreground">{field.value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     );
                   })}
                   {hasContent(data.education?.additionalQualifications) && (
-                    <div style={{ background: 'var(--accent)', padding: '14px 16px', borderLeft: '2px solid var(--foreground)' }}>
+                    <div style={{ background: 'var(--accent)', padding: '16px', borderLeft: '2px solid var(--foreground)' }}>
                       <span
                         className="font-mono uppercase block mb-1.5"
                         style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
@@ -410,11 +423,12 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 </div>
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                   {[
-                    { label: t.occupation,      value: data.profession?.occupation },
-                    { label: t.organization,    value: data.profession?.organizationName },
-                    { label: t.employmentType,  value: data.profession?.employmentType },
-                    { label: t.monthlyIncome,   value: formatIncome(data.profession?.monthlyIncome as string) },
-                    { label: t.workplace,       value: data.profession?.workplaceLocation },
+                    { label: t.occupation, value: data.profession?.occupation },
+                    { label: t.organization, value: data.profession?.organizationName },
+                    { label: t.employmentType, value: data.profession?.employmentType },
+                    { label: t.monthlyIncome, value: formatIncome(data.profession?.monthlyIncome as string) },
+                    { label: t.workplace, value: data.profession?.workplaceLocation },
+                    ...((data.profession?.extraFields || []).map(f => ({ label: f.label, value: f.value })))
                   ].map((item, i) => hasContent(item.value) && (
                     <Field key={i} label={item.label} value={item.value} />
                   ))}
@@ -432,13 +446,14 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 </div>
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                   {[
-                    { label: t.fatherName,       value: data.familyInfo?.fatherName },
+                    { label: t.fatherName, value: data.familyInfo?.fatherName },
                     { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
-                    { label: t.motherName,       value: data.familyInfo?.motherName },
+                    { label: t.motherName, value: data.familyInfo?.motherName },
                     { label: t.motherProfession, value: data.familyInfo?.motherProfession },
-                    { label: t.brothers,         value: data.familyInfo?.numberOfBrothers?.toString() },
-                    { label: t.sisters,          value: data.familyInfo?.numberOfSisters?.toString() },
-                    { label: t.familyStatus,     value: data.familyInfo?.familyStatus, full: true },
+                    { label: t.brothers, value: data.familyInfo?.numberOfBrothers?.toString() },
+                    { label: t.sisters, value: data.familyInfo?.numberOfSisters?.toString() },
+                    { label: t.familyStatus, value: data.familyInfo?.familyStatus, full: true },
+                    ...((data.familyInfo?.extraFields || []).map(f => ({ label: f.label, value: f.value })))
                   ].map((item, i) => hasContent(item.value) && item.value !== "NaN" && (
                     <Field
                       key={i}
@@ -463,7 +478,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                   className="w-full md:w-2/3 relative overflow-hidden"
                   style={{
                     background: 'var(--surface)',
-                    padding: '24px 28px',
+                    padding: '24px 32px',
                     color: 'var(--foreground)',
                     border: '0.5px solid var(--border-muted)',
                     borderLeft: '2.5px solid var(--foreground)'
@@ -471,12 +486,13 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-0">
                     {[
-                      { label: t.expectedAge,       value: data.expectations?.expectedAgeRange },
-                      { label: t.expectedHeight,    value: data.expectations?.expectedHeight },
+                      { label: t.expectedAge, value: data.expectations?.expectedAgeRange },
+                      { label: t.expectedHeight, value: data.expectations?.expectedHeight },
                       { label: t.expectedEducation, value: data.expectations?.expectedEducation },
-                      { label: t.expectedProfession,value: data.expectations?.expectedProfession },
+                      { label: t.expectedProfession, value: data.expectations?.expectedProfession },
+                      ...((data.expectations?.extraFields || []).map(f => ({ label: f.label, value: f.value })))
                     ].map((item, i) => hasContent(item.value) && (
-                      <div key={i} className="flex flex-col gap-1" style={{ borderBottom: '0.5px solid var(--border-muted)', padding: '14px 0' }}>
+                      <div key={i} className="flex flex-col gap-1" style={{ borderBottom: '0.5px solid var(--border-muted)', padding: '16px 0' }}>
                         <span
                           className="font-mono uppercase transition-opacity"
                           style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'var(--foreground-muted)', opacity: 0.8 }}
@@ -521,7 +537,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         {/* ── Contact Footer ── */}
         {hasContent(data.contactInfo) && (
-          <footer className="mt-12" style={{ borderTop: '1.5px solid var(--foreground)', paddingTop: '24px' }}>
+          <footer className="mt-10" style={{ borderTop: '1.5px solid var(--foreground)', paddingTop: '32px' }}>
             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
               {/* Left: Contact hierarchy */}
@@ -570,20 +586,40 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 </div>
               </div>
 
-              {/* Right: Guardian */}
-              {hasContent(data.contactInfo?.guardianContact) && (
-                <div style={{ background: 'var(--accent)', padding: '16px 20px', borderLeft: '2px solid var(--border-muted)' }}>
-                  <p
-                    className="font-mono uppercase mb-1.5"
-                    style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
-                  >
-                    {t.guardianContact}
-                  </p>
-                  <p className="font-bold" style={{ fontSize: '13px', color: 'var(--foreground)' }}>
-                    {data.contactInfo?.guardianContact}
-                  </p>
-                </div>
-              )}
+              {/* Right: Guardian and Extra Fields */}
+              <div className="flex flex-col gap-6 w-full md:w-auto md:min-w-[200px]">
+                {hasContent(data.contactInfo?.guardianContact) && (
+                  <div style={{ background: 'var(--accent)', padding: '16px 20px', borderLeft: '2px solid var(--border-muted)' }}>
+                    <p
+                      className="font-mono uppercase mb-1.5"
+                      style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
+                    >
+                      {t.guardianContact}
+                    </p>
+                    <p className="font-bold" style={{ fontSize: '13px', color: 'var(--foreground)' }}>
+                      {data.contactInfo?.guardianContact}
+                    </p>
+                  </div>
+                )}
+
+                {data.contactInfo?.extraFields && data.contactInfo.extraFields.length > 0 && (
+                  <div className="space-y-4">
+                    {data.contactInfo.extraFields.map((field, i) => hasContent(field.value) && (
+                      <div key={`contact_extra_${i}`}>
+                        <p
+                          className="font-mono uppercase mb-1"
+                          style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
+                        >
+                          {field.label}
+                        </p>
+                        <p className="font-semibold" style={{ fontSize: '13.5px', color: 'var(--foreground)' }}>
+                          {field.value}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </footer>
         )}

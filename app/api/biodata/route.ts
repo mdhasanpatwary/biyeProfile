@@ -31,8 +31,7 @@ const defaultBiodata = {
   },
   education: {
     qualifications: [{ degree: "", institution: "", passingYear: "", result: "" }],
-    additionalQualifications: "",
-    extraFields: []
+    additionalQualifications: ""
   },
   profession: {
     occupation: "",

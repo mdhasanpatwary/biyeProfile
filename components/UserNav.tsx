@@ -7,7 +7,7 @@ export function UserNav({ username }: { username: string }) {
   return (
     <div className="flex items-center gap-4">
       <div className="flex flex-col items-end hidden sm:flex">
-        <span className="text-xs font-black text-foreground uppercase tracking-widest leading-none mb-1.5">
+        <span className="text-xs font-black text-foreground uppercase tracking-widest leading-none mb-2">
           @{username}
         </span>
         <button
