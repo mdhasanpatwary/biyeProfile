@@ -7,17 +7,15 @@ export function UserNav({ username }: { username: string }) {
   return (
     <div className="flex items-center gap-4">
       <div className="flex flex-col items-end hidden sm:flex">
-        <span className="text-xs font-black text-foreground uppercase tracking-widest">
+        <span className="text-xs font-black text-foreground uppercase tracking-widest leading-none mb-1.5">
           @{username}
         </span>
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="text-[10px] font-bold text-foreground-muted hover:text-foreground transition-all uppercase tracking-tight p-0 h-auto hover:bg-transparent"
+          className="text-[9px] font-bold text-foreground-muted hover:text-foreground transition-all uppercase tracking-[0.2em] p-0 h-auto cursor-pointer border-b border-transparent hover:border-foreground/20 leading-none"
         >
           Sign Out
-        </Button>
+        </button>
       </div>
       <div className="w-10 h-10 rounded-none bg-accent border border-border-muted flex items-center justify-center overflow-hidden grayscale">
         <svg

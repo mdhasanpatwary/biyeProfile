@@ -57,7 +57,6 @@ export function BiodataForm({
   isGuest?: boolean,
 }) {
   const [currentStep, setCurrentStep] = useState(1)
-  const tabsRef = useRef<HTMLDivElement>(null)
 
   const steps = [
     { title: "Basic", icon: "👤" },
@@ -174,23 +173,6 @@ export function BiodataForm({
     name: "education.qualifications"
   })
 
-  // Auto-center active tab
-  useEffect(() => {
-    if (tabsRef.current) {
-      const activeTab = tabsRef.current.children[0].children[currentStep - 1] as HTMLElement;
-      if (activeTab) {
-        const containerWidth = tabsRef.current.offsetWidth;
-        const tabWidth = activeTab.offsetWidth;
-        const scrollLeft = activeTab.offsetLeft - (containerWidth / 2) + (tabWidth / 2);
-
-        tabsRef.current.scrollTo({
-          left: scrollLeft,
-          behavior: 'smooth'
-        });
-      }
-    }
-  }, [currentStep]);
-
 
   // Conditional autosave — DISABLED for guest mode
   const debouncedSave = useDebounce(async (data: BiodataFormValues) => {
@@ -232,14 +214,14 @@ export function BiodataForm({
     <div className="relative">
 
       <div className="flex items-center justify-between gap-3 mb-16 bg-background/90 backdrop-blur-md p-4 border-b border-border sticky top-0 z-50 transition-all duration-300">
-        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+        <div className="flex items-start gap-1.5 flex-1 min-w-0">
           <Button
             type="button"
             disabled={currentStep === 1}
             onClick={() => setCurrentStep(prev => prev - 1)}
             variant="outline"
             size="icon"
-            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group"
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group mt-1"
           >
             <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
           </Button>
@@ -256,7 +238,7 @@ export function BiodataForm({
             onClick={() => setCurrentStep(prev => prev + 1)}
             variant="outline"
             size="icon"
-            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group relative z-10"
+            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group relative z-10 mt-1"
           >
             <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
           </Button>

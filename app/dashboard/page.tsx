@@ -71,7 +71,7 @@ export default async function DashboardPage() {
   }
 
   // If biodata exists, show the summary dashboard
-  const publicUrl = `biyeprofile.com/${session.user.username}`
+  const publicUrl = `biyeprofile.com/biodata/${session.user.username}`
   const biodataContent = user.biodata.data as unknown as Partial<BiodataFormValues>
 
   return (
@@ -143,13 +143,13 @@ export default async function DashboardPage() {
             <VisibilityToggle initialIsPublic={user.biodata.isPublic} />
           </Card>
 
-          <Card className="bg-foreground text-background p-12 flex flex-col justify-between group h-full">
+          <Card className="bg-accent/40 border-border-muted p-12 flex flex-col justify-between group h-full hover:bg-accent/60 transition-colors">
             <div>
-              <div className="w-12 h-12 bg-background/10 rounded-none border border-background/5 flex items-center justify-center mb-12">
-                <svg className="w-6 h-6 text-background/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              <div className="w-12 h-12 bg-foreground/5 rounded-none border border-foreground/5 flex items-center justify-center mb-12">
+                <svg className="w-6 h-6 text-foreground/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
               </div>
-              <h3 className="text-6xl font-serif mb-3 leading-none italic tracking-tighter">Soon</h3>
-              <p className="text-background/30 font-mono text-[11px] uppercase tracking-[0.4em] font-black">Analytics</p>
+              <h3 className="text-6xl font-serif mb-3 leading-none italic tracking-tighter text-foreground">Soon</h3>
+              <p className="text-foreground-muted font-mono text-[11px] uppercase tracking-[0.4em] font-black">Analytics</p>
             </div>
           </Card>
         </div>

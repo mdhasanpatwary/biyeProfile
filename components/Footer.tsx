@@ -20,16 +20,16 @@ export function Footer() {
         <div className="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-12">
           <div className="flex flex-col gap-6">
             <span className="font-mono text-[10px] font-black text-foreground uppercase tracking-[0.2em] mb-2">Platform</span>
-            <Link href="/create" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Create Entry</Link>
-            <Link href="/biodata" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">The Directory</Link>
-            <Link href="/pricing" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Premium Tiers</Link>
+            <Link href="/create" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Create Biodata</Link>
+            <Link href="/biodata" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Search Biodatas</Link>
+            <Link href="/pricing" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Pricing</Link>
           </div>
 
           <div className="flex flex-col gap-6">
             <span className="font-mono text-[10px] font-black text-foreground uppercase tracking-[0.2em] mb-2">Institutional</span>
-            <Link href="/dashboard" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Archive Access</Link>
-            <Link href="/about" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Core Mission</Link>
-            <Link href="/contact" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Inquiry</Link>
+            <Link href="/dashboard" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Dashboard</Link>
+            <Link href="/about" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">About Us</Link>
+            <Link href="/contact" className="text-[11px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight">Contact Us</Link>
           </div>
 
           <div className="flex flex-col gap-6">

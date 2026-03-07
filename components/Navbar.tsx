@@ -2,6 +2,7 @@ import Link from "next/link"
 import { auth } from "@/lib/auth"
 import { UserNav } from "@/components/UserNav"
 import { ThemeToggle } from "@/components/ThemeToggle"
+import { Logo } from "@/components/Logo"
 
 export async function Navbar() {
   const session = await auth()
@@ -11,15 +12,7 @@ export async function Navbar() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
         {/* Logo Section */}
         <div className="flex items-center gap-4 sm:gap-12 shrink-0">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 bg-foreground flex items-center justify-center shrink-0">
-              <span className="text-background font-serif text-xl italic mt-0.5">B</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-serif text-base sm:text-lg leading-none tracking-tight text-foreground">BiyeProfile</span>
-              <span className="font-mono text-[7px] sm:text-[8px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-foreground-muted mt-1 hidden min-[400px]:block">Registry Platform</span>
-            </div>
-          </Link>
+          <Logo />
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-10">
@@ -27,13 +20,13 @@ export async function Navbar() {
               href="/biodata"
               className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:text-foreground transition-all"
             >
-              The Directory
+              Search Biodatas
             </Link>
             <Link
               href="/create"
               className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:text-foreground transition-all"
             >
-              Public Entry
+              Create Biodata
             </Link>
           </div>
         </div>
@@ -51,7 +44,7 @@ export async function Navbar() {
                 href="/dashboard"
                 className="font-mono text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-foreground border-b border-foreground whitespace-nowrap"
               >
-                Archive Access
+                Dashboard
               </Link>
               <UserNav username={(session?.user as { username?: string })?.username || session?.user?.name || "user"} />
             </div>

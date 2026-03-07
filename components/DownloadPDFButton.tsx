@@ -41,59 +41,141 @@ export function DownloadPDFButton({
       // A4 dimensions in px at 96 dpi: 794 x 1123
       const A4_WIDTH_PX = 794
 
+      // ── Step 1: Wait for all fonts to be fully loaded in the main document ──
+      await document.fonts.ready
+
       const canvas = await html2canvas(element, {
-        scale: 2.5,              // high resolution
+        scale: 2,                // high resolution — balanced for A4
         useCORS: true,           // allow cross-origin images (Cloudinary)
         allowTaint: true,
         backgroundColor: "#ffffff",
         logging: false,
         windowWidth: A4_WIDTH_PX,
+        onclone: (clonedDoc, clonedEl) => {
+          // ── Step 2: Transfer all loaded FontFace objects into the cloned document ──
+          // html2canvas creates an isolated document — it has no access to the
+          // fonts loaded by the main window. We copy every loaded FontFace across.
+          document.fonts.forEach((fontFace) => {
+            try {
+              clonedDoc.fonts.add(fontFace)
+            } catch {
+              // Ignore fonts that can't be transferred (e.g. already added)
+            }
+          })
+
+          // ── Step 3: Resolve CSS var() font names → real family names ──
+          // html2canvas cannot follow `var(--font-geist-sans)` etc.
+          // We read the resolved names from the main document's computed styles
+          // and inject a scoped <style> that sets font-family to the real names.
+          const mainStyles = getComputedStyle(document.documentElement)
+          const resolveFont = (varName: string, fallback: string) => {
+            const resolved = mainStyles.getPropertyValue(varName).trim()
+            // next/font injects names like "__GeistSans_abc123" — use as-is or fallback
+            return resolved || fallback
+          }
+
+          const sansFont  = resolveFont("--font-geist-sans",       "ui-sans-serif, system-ui, sans-serif")
+          const monoFont  = resolveFont("--font-geist-mono",        "ui-monospace, SFMono-Regular, monospace")
+          const serifFont = resolveFont("--font-instrument-serif",  "ui-serif, Georgia, serif")
+
+          // Force Light Theme for the cloned document
+          clonedDoc.documentElement.setAttribute("data-theme", "light")
+          clonedEl.style.backgroundColor = "#ffffff"
+          clonedEl.style.color = "#111827"
+
+          const style = clonedDoc.createElement("style")
+          style.textContent = `
+            #biodata-content,
+            #biodata-content * {
+              /* Reset browser default font resolution */
+            }
+            #biodata-content .font-sans,
+            #biodata-content {
+              font-family: ${sansFont}, ui-sans-serif, sans-serif !important;
+            }
+            #biodata-content .font-mono,
+            #biodata-content [class*="font-mono"] {
+              font-family: ${monoFont}, ui-monospace, monospace !important;
+            }
+            #biodata-content .font-serif,
+            #biodata-content [class*="font-serif"],
+            #biodata-content h1,
+            #biodata-content h3 {
+              font-family: ${serifFont}, ui-serif, Georgia, serif !important;
+            }
+          `
+          clonedDoc.head.appendChild(style)
+
+          // ── Step 4: Fix oklab/color-mix unsupported CSS color functions ──
+          const unsupported = /oklab|oklch|color-mix/i
+          const colorProps = [
+            "color",
+            "backgroundColor",
+            "borderColor",
+            "borderTopColor",
+            "borderRightColor",
+            "borderBottomColor",
+            "borderLeftColor",
+            "outlineColor",
+            "textDecorationColor",
+            "caretColor",
+            "columnRuleColor",
+          ] as const
+
+          const walk = (el: Element) => {
+            const style = (el as HTMLElement).style
+            if (style) {
+              const computed = clonedDoc.defaultView?.getComputedStyle(el)
+              if (computed) {
+                for (const prop of colorProps) {
+                  const val = computed.getPropertyValue(
+                    prop.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)
+                  )
+                  if (val && unsupported.test(val)) {
+                    style.setProperty(
+                      prop.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`),
+                      prop === "color" ? "inherit" : "transparent"
+                    )
+                  }
+                }
+              }
+            }
+            for (const child of el.children) walk(child)
+          }
+          walk(clonedEl)
+        },
       })
 
       const imgData = canvas.toDataURL("image/jpeg", 0.97)
 
-      // A4 in mm: 210 x 297
+      // We want a single continuous vertical PDF matching the aspect ratio of the canvas.
+      // We fix the width to an A4 equivalent (210mm) for scale,
+      // and calculate the required height based on the canvas aspect ratio.
+      const PAGE_W = 210  // mm
+      const MARGIN = 10   // mm padding on left/right/top/bottom
+      const CONTENT_W = PAGE_W - MARGIN * 2
+
+      const canvasAspect = canvas.height / canvas.width
+      const CONTENT_H = CONTENT_W * canvasAspect  // mm
+      const PAGE_H = CONTENT_H + MARGIN * 2       // mm total height needed
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: "a4",
+        format: [PAGE_W, PAGE_H],
       })
 
-      const PAGE_W = 210  // mm
-      const PAGE_H = 297  // mm
-      const MARGIN  = 10  // mm padding on all sides
-      const CONTENT_W = PAGE_W - MARGIN * 2
-      const CONTENT_H = PAGE_H - MARGIN * 2
-
-      // How many mm tall is the full canvas when scaled to content width?
-      const canvasAspect = canvas.height / canvas.width
-      const totalImgH = CONTENT_W * canvasAspect  // mm
-
-      let pageTop = 0  // position in the canvas (mm) we have rendered up to
-
-      while (pageTop < totalImgH) {
-        if (pageTop > 0) pdf.addPage()
-
-        pdf.addImage(
-          imgData,
-          "JPEG",
-          MARGIN,               // x
-          MARGIN - pageTop,     // y: shifts canvas upward each page
-          CONTENT_W,
-          totalImgH,
-          undefined,
-          "FAST",
-        )
-
-        // Clip to the page — draw a white rectangle to mask content outside content area
-        // Top mask
-        pdf.setFillColor(255, 255, 255)
-        pdf.rect(0, 0, PAGE_W, MARGIN, "F")
-        // Bottom mask
-        pdf.rect(0, MARGIN + CONTENT_H, PAGE_W, MARGIN, "F")
-
-        pageTop += CONTENT_H
-      }
+      // Add the single continuous image
+      pdf.addImage(
+        imgData,
+        "JPEG",
+        MARGIN,  // x
+        MARGIN,  // y
+        CONTENT_W,
+        CONTENT_H,
+        undefined,
+        "FAST",
+      )
 
       const safeFilename = filename.replace(/[^a-z0-9_-]/gi, "_").toLowerCase()
       pdf.save(`${safeFilename}.pdf`)

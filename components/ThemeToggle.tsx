@@ -37,7 +37,7 @@ export function ThemeToggle() {
         </div>
       </div>
       <span className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-foreground hidden sm:block">
-        {theme === 'dark' ? 'Archive' : 'Registry'}
+        {theme === 'dark' ? 'Dark' : 'Light'}
       </span>
     </button>
   )

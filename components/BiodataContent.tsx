@@ -1,6 +1,5 @@
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { getCloudinaryUrl } from "@/lib/cloudinary"
-import { Avatar } from "@/components/ui/avatar"
 
 interface CustomField {
   label: string;
@@ -28,6 +27,64 @@ function hasContent(val: unknown): boolean {
     return Object.values(val as object).some(v => hasContent(v));
   }
   return false;
+}
+
+/** Format a date string like "1994-12-05" → "5 December 1994" */
+function formatDate(val: string | undefined | null, locale: string): string {
+  if (!val) return '';
+  const d = new Date(val);
+  if (isNaN(d.getTime())) return val;
+  return d.toLocaleDateString(locale === 'bn' ? 'bn-BD' : 'en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+/** Ensure a space before trailing unit abbreviations, e.g. "70kg" → "70 kg" */
+function formatUnit(val: string | undefined | null): string {
+  if (!val) return '';
+  return String(val).replace(/(\d)(kg|lbs?|cm|ft|"|')$/i, '$1 $2');
+}
+
+/** Format height beautifully (e.g., 5'6" -> 5′ 6″) */
+function formatHeight(val: string | undefined | null): string {
+  if (!val) return '';
+  const s = String(val);
+  // Match patterns like 5'6", 5' 6", 5'6, 5ft 6in
+  const match = s.match(/(\d+)\s*(?:'|ft|foot|feet)\s*(\d*)\s*(?:"|in|inches)?/i);
+  if (match) {
+    const ft = match[1];
+    const in_ = match[2];
+    if (in_) {
+       return `${ft}′ ${in_}″`;
+    }
+    return `${ft}′`;
+  }
+  return formatUnit(s);
+}
+
+/** Format currency with BDT ৳ and thousands separator */
+function formatIncome(val: string | undefined | null): string {
+  if (!val) return '';
+  const num = parseInt(String(val).replace(/\D/g, ''), 10);
+  if (isNaN(num)) return val;
+  return `৳${num.toLocaleString('en-IN')}`;
+}
+
+/** Format phone number to add sensible spacing e.g., +880 1738 721411 */
+function formatPhone(val: string | undefined | null): string {
+  if (!val) return '';
+  const s = String(val).trim();
+  // +8801738721411 -> +880 1738 721411
+  if (s.startsWith('+880') && s.length === 14) {
+    return `+880 ${s.slice(4, 8)} ${s.slice(8)}`;
+  }
+  // 01738721411 -> 01738 721411
+  if (s.length === 11 && s.startsWith('01')) {
+     return `${s.slice(0, 5)} ${s.slice(5)}`;
+  }
+  return s;
 }
 
 const LABELS: Record<string, Record<string, string>> = {
@@ -62,7 +119,7 @@ const LABELS: Record<string, Record<string, string>> = {
     passingYear: "Year",
     additionalQualifications: "Additional Credits",
     occupation: "Current Role",
-    organization: "Organization",
+    organization: "Company",
     employmentType: "Employment",
     monthlyIncome: "Monthly Income",
     workplace: "Location",
@@ -145,67 +202,106 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   if (!data) return null;
   const lang = data.language || "en";
   const t = LABELS[lang];
+  const locale = lang === 'bn' ? 'bn-BD' : 'en-GB';
+
+  const generatedDate = new Date().toLocaleDateString(locale, {
+    year: 'numeric',
+    month: 'long',
+  });
 
   return (
-    <div id="biodata-content" className="relative bg-background text-foreground font-sans selection:bg-foreground selection:text-background p-8 sm:p-16 min-h-screen overflow-hidden">
-      {/* Texture Layer */}
-      <div className="absolute inset-0 bg-grain pointer-events-none opacity-[0.03] dark:opacity-[0.02]"></div>
+    <div
+      id="biodata-content"
+      className="relative bg-background text-foreground font-sans overflow-hidden"
+      style={{ padding: '48px 56px' }}
+    >
+      {/* Subtle texture */}
+      <div className="absolute inset-0 bg-grain pointer-events-none opacity-[0.025]" />
 
-      <div className="relative z-10 max-w-4xl mx-auto">
+      <div className="relative z-10 max-w-[680px] mx-auto">
 
-        {/* Document Meta */}
-        <div className="flex justify-between items-baseline mb-16 font-mono text-[10px] tracking-[0.35em] text-foreground-muted uppercase">
+        {/* ── Document Meta Bar ── */}
+        <div
+          className="flex justify-between items-baseline mb-10 font-mono uppercase"
+          style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)', borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '10px' }}
+        >
           <span>{t.title}</span>
-          <span>{new Date().toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'short' })}</span>
+          <span>{generatedDate}</span>
         </div>
 
-        {/* ─── Header Block ─── */}
-        <header className="flex flex-col md:flex-row items-center gap-14 mb-24 border-b border-border-muted pb-12">
-          {data.basicInfo?.photoUrl && (
-            <div className="relative group shrink-0">
-              <Avatar
+        {/* ── Header Block ── */}
+        <header className="flex flex-row items-start gap-8 mb-12" style={{ borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '28px' }}>
+          {/* Profile photo — plain <img> so html2canvas can render it */}
+          {data.basicInfo?.photoUrl ? (
+            <div className="shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={getCloudinaryUrl(data.basicInfo.photoUrl, "full")}
                 alt="Profile photo"
-                size="xl"
-                className="w-44 h-44 bg-accent grayscale contrast-[1.1] ring-1 ring-border-muted shadow-sm transition-transform duration-700 group-hover:scale-105"
+                crossOrigin="anonymous"
+                style={{
+                  width: '112px',
+                  height: '112px',
+                  objectFit: 'cover',
+                  border: '1px solid var(--border-muted)',
+                  borderRadius: '2px',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+                  filter: 'grayscale(100%) contrast(1.05)',
+                  display: 'block',
+                }}
               />
-              {/* Corner accent */}
-              <div className="absolute -bottom-3 -right-3 w-6 h-6 border-r-[1.5px] border-b-[1.5px] border-border-muted" />
+            </div>
+          ) : (
+            /* Fallback initials block when no photo uploaded */
+            <div
+              className="shrink-0 flex items-center justify-center font-serif font-bold"
+              style={{
+                width: '112px',
+                height: '112px',
+                background: 'var(--accent)',
+                border: '1px solid var(--border-muted)',
+                borderRadius: '2px',
+                fontSize: '36px',
+                color: 'var(--foreground-muted)',
+              }}
+            >
+              {data.basicInfo?.fullName?.charAt(0)?.toUpperCase() ?? '?'}
             </div>
           )}
 
-          <div className="flex-1 w-full text-left">
-            <p className="font-mono text-[11px] tracking-[0.4em] text-foreground-muted uppercase mb-3">
-              {data.basicInfo?.religion || 'Profile'}
-            </p>
-            <h1 className="text-5xl sm:text-6xl font-serif leading-none tracking-tighter mb-3 text-foreground">
+          <div className="flex-1 text-left pt-1">
+            <h1
+              className="font-serif leading-none tracking-tight mb-2"
+              style={{ fontSize: '38px', color: 'var(--foreground)' }}
+            >
               {data?.basicInfo?.fullName || 'Full Member'}
             </h1>
-            <p className="text-base text-foreground-muted tracking-wide">
+            <p style={{ fontSize: '13px', color: 'var(--foreground-muted)', letterSpacing: '0.02em' }}>
               {data.profession?.occupation || (lang === 'en' ? 'Personal Profile' : 'ব্যক্তিগত তথ্য')}
             </p>
           </div>
         </header>
 
-        {/* ─── Content Sections ─── */}
-        <div className="space-y-24">
+        {/* ── Content Sections ── */}
+        <div className="space-y-10">
 
           {/* Section: Basic Info */}
           {hasContent(data.basicInfo) && (
-            <section className="group">
-              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
-                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+            <section>
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.basic} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
                   {[
-                    { label: t.dob, value: data.basicInfo?.dateOfBirth },
-                    { label: t.age, value: data.basicInfo?.age ? `${data.basicInfo?.age} ${lang === 'en' ? 'Years' : 'বছর'}` : null },
-                    { label: t.height, value: data.basicInfo?.height },
-                    { label: t.weight, value: data.basicInfo?.weight },
-                    { label: t.bloodGroup, value: data.basicInfo?.bloodGroup },
+                    { label: t.dob,           value: formatDate(data.basicInfo?.dateOfBirth as string, lang) },
+                    { label: t.age,           value: data.basicInfo?.age ? `${data.basicInfo.age} ${lang === 'en' ? 'years' : 'বছর'}` : null },
+                    { label: t.height,        value: formatHeight(data.basicInfo?.height as string) },
+                    { label: t.weight,        value: formatUnit(data.basicInfo?.weight as string) },
+                    { label: t.bloodGroup,    value: data.basicInfo?.bloodGroup },
                     { label: t.maritalStatus, value: data.basicInfo?.maritalStatus },
-                    { label: t.nationality, value: data.basicInfo?.nationality },
+                    { label: t.nationality,   value: data.basicInfo?.nationality },
+                    { label: t.religion,      value: data.basicInfo?.religion },
                   ].map((item, i) => hasContent(item.value) && (
                     <Field key={i} label={item.label} value={item.value} />
                   ))}
@@ -217,30 +313,30 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Personal Info */}
           {hasContent(data.personalInfo) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
-                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.personal} />
                 </div>
                 <div className="w-full md:w-2/3">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                  <div className="grid grid-cols-2 gap-x-10 gap-y-5">
                     {[
-                      { label: t.presentAddress, value: data.personalInfo?.presentAddress, full: true, address: true },
-                      { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, full: true, address: true },
-                      { label: t.district, value: data.personalInfo?.district },
-                      { label: t.nativeVillage, value: data.personalInfo?.nativeVillage },
-                      { label: t.complexion, value: data.personalInfo?.complexion },
-                      { label: t.hobby, value: data.personalInfo?.hobby, full: true, italic: true },
+                      { label: t.presentAddress,   value: data.personalInfo?.presentAddress,  full: true,  address: true },
+                      { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, full: true,  address: true },
+                      { label: t.district,         value: data.personalInfo?.district },
+                      { label: t.nativeVillage,    value: data.personalInfo?.nativeVillage },
+                      { label: t.complexion,       value: data.personalInfo?.complexion },
+                      { label: t.hobby,            value: data.personalInfo?.hobby, full: true, italic: true },
                     ].map((item, i) => hasContent(item.value) && (
                       <Field
                         key={i}
                         label={item.label}
                         value={item.value}
-                        className={item.full ? 'sm:col-span-2' : ''}
+                        className={item.full ? 'col-span-2' : ''}
                         valueClassName={
                           item.address
-                            ? 'text-sm font-normal leading-relaxed text-foreground-muted max-w-sm border-l border-border-muted/50 pl-4 py-1'
+                            ? 'text-sm font-normal leading-relaxed text-foreground-muted max-w-sm'
                             : item.italic
-                              ? 'italic font-light text-foreground-muted'
+                              ? 'italic font-light text-foreground-muted leading-relaxed'
                               : ''
                         }
                       />
@@ -254,29 +350,34 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Education */}
           {hasContent(data.education) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
-                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.education} />
                 </div>
-                <div className="w-full md:w-2/3 space-y-8">
+                <div className="w-full md:w-2/3 space-y-5">
                   {data.education?.qualifications?.map((edu: Qualification, idx: number) => {
                     const isLast = idx === (data.education?.qualifications?.length ?? 0) - 1;
                     return (
                       <div
                         key={idx}
-                        className={`group relative ${!isLast ? 'border-b border-border-muted/50 pb-8' : ''}`}
+                        className="relative"
+                        style={!isLast ? { borderBottom: '0.5px solid var(--accent)', paddingBottom: '16px' } : {}}
                       >
-                        <p className="font-mono text-[10px] text-foreground-muted mb-1.5 tracking-[0.2em] uppercase">
-                          {edu.passingYear || '—'}
-                        </p>
-                        <h3 className="text-xl font-serif text-foreground mb-2 leading-snug italic">
+                        <h3 className="font-serif italic mb-1" style={{ fontSize: '16.5px', color: 'var(--foreground)' }}>
+                          <span className="font-mono not-italic uppercase mr-3" style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}>{edu.passingYear || '—'}</span>
                           {edu.degree}
                         </h3>
-                        <p className="text-sm text-foreground-muted font-medium tracking-wide border-l border-border-muted pl-4">
+                        <p
+                          className="font-medium"
+                          style={{ fontSize: '12.5px', color: 'var(--foreground-muted)', paddingLeft: '2px' }}
+                        >
                           {edu.institution}
                         </p>
                         {edu.result && (
-                          <p className="text-xs font-mono text-foreground-muted mt-2 pl-4 tracking-wide">
+                          <p
+                            className="font-mono mt-1"
+                            style={{ fontSize: '10px', color: 'var(--foreground-muted)', paddingLeft: '2px' }}
+                          >
                             Result — {edu.result}
                           </p>
                         )}
@@ -284,11 +385,14 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                     );
                   })}
                   {hasContent(data.education?.additionalQualifications) && (
-                    <div className="bg-accent/40 p-6 border-l-2 border-foreground">
-                      <span className="font-mono text-[9px] font-bold text-foreground-muted uppercase tracking-widest block mb-2">
+                    <div style={{ background: 'var(--accent)', padding: '14px 16px', borderLeft: '2px solid var(--foreground)' }}>
+                      <span
+                        className="font-mono uppercase block mb-1.5"
+                        style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
+                      >
                         {t.additionalQualifications}
                       </span>
-                      <p className="text-sm leading-relaxed text-foreground-muted whitespace-pre-wrap">
+                      <p style={{ fontSize: '12.5px', lineHeight: '1.6', color: 'var(--foreground-muted)', whiteSpace: 'pre-wrap' }}>
                         {data.education?.additionalQualifications}
                       </p>
                     </div>
@@ -301,17 +405,17 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Professional */}
           {hasContent(data.profession) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
-                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.profession} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
                   {[
-                    { label: t.occupation, value: data.profession?.occupation },
-                    { label: t.organization, value: data.profession?.organizationName },
-                    { label: t.employmentType, value: data.profession?.employmentType },
-                    { label: t.monthlyIncome, value: data.profession?.monthlyIncome },
-                    { label: t.workplace, value: data.profession?.workplaceLocation },
+                    { label: t.occupation,      value: data.profession?.occupation },
+                    { label: t.organization,    value: data.profession?.organizationName },
+                    { label: t.employmentType,  value: data.profession?.employmentType },
+                    { label: t.monthlyIncome,   value: formatIncome(data.profession?.monthlyIncome as string) },
+                    { label: t.workplace,       value: data.profession?.workplaceLocation },
                   ].map((item, i) => hasContent(item.value) && (
                     <Field key={i} label={item.label} value={item.value} />
                   ))}
@@ -323,25 +427,25 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Family */}
           {hasContent(data.familyInfo) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
-                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.family} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
                   {[
-                    { label: t.fatherName, value: data.familyInfo?.fatherName },
+                    { label: t.fatherName,       value: data.familyInfo?.fatherName },
                     { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
-                    { label: t.motherName, value: data.familyInfo?.motherName },
+                    { label: t.motherName,       value: data.familyInfo?.motherName },
                     { label: t.motherProfession, value: data.familyInfo?.motherProfession },
-                    { label: t.brothers, value: data.familyInfo?.numberOfBrothers?.toString() },
-                    { label: t.sisters, value: data.familyInfo?.numberOfSisters?.toString() },
-                    { label: t.familyStatus, value: data.familyInfo?.familyStatus, full: true },
+                    { label: t.brothers,         value: data.familyInfo?.numberOfBrothers?.toString() },
+                    { label: t.sisters,          value: data.familyInfo?.numberOfSisters?.toString() },
+                    { label: t.familyStatus,     value: data.familyInfo?.familyStatus, full: true },
                   ].map((item, i) => hasContent(item.value) && item.value !== "NaN" && (
                     <Field
                       key={i}
                       label={item.label}
                       value={item.value}
-                      className={item.full ? 'sm:col-span-2' : ''}
+                      className={item.full ? 'col-span-2' : ''}
                     />
                   ))}
                 </div>
@@ -349,37 +453,40 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
             </section>
           )}
 
-          {/* Section: Marriage Expectations (Themed Contrasting Card) */}
+          {/* Section: Marriage Expectations */}
           {hasContent(data.expectations) && (
             <section>
-              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
-                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.expectations} />
                 </div>
-                <div className="w-full md:w-2/3 bg-foreground dark:bg-accent text-background dark:text-foreground p-8 sm:p-12 relative overflow-hidden">
-                  {/* Texture overlay */}
-                  <div className="absolute inset-0 bg-grain opacity-10 pointer-events-none" />
-                  {/* Fields grid */}
-                  <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-0">
+                <div
+                  className="w-full md:w-2/3 relative overflow-hidden"
+                  style={{ background: 'var(--primary)', padding: '24px 28px', color: 'var(--primary-foreground)' }}
+                >
+                  <div className="grid grid-cols-2 gap-x-10 gap-y-0">
                     {[
-                      { label: t.expectedAge, value: data.expectations?.expectedAgeRange },
-                      { label: t.expectedHeight, value: data.expectations?.expectedHeight },
+                      { label: t.expectedAge,       value: data.expectations?.expectedAgeRange },
+                      { label: t.expectedHeight,    value: data.expectations?.expectedHeight },
                       { label: t.expectedEducation, value: data.expectations?.expectedEducation },
-                      { label: t.expectedProfession, value: data.expectations?.expectedProfession },
+                      { label: t.expectedProfession,value: data.expectations?.expectedProfession },
                     ].map((item, i) => hasContent(item.value) && (
-                      <div key={i} className="flex flex-col gap-1.5 border-b border-background/15 dark:border-foreground/15 py-6">
-                        <span className="font-mono text-[10px] text-background/50 dark:text-foreground/50 uppercase tracking-[0.22em]">
+                      <div key={i} className="flex flex-col gap-1" style={{ borderBottom: '0.5px solid var(--border-muted)', opacity: 0.8, padding: '14px 0' }}>
+                        <span
+                          className="font-mono uppercase"
+                          style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'inherit', opacity: 0.6 }}
+                        >
                           {item.label}
                         </span>
-                        <span className="text-lg font-serif italic leading-snug text-background dark:text-foreground">
+                        <span className="font-serif italic whitespace-pre-wrap" style={{ fontSize: '16px', color: 'inherit', lineHeight: 1.3 }}>
                           {item.value}
                         </span>
                       </div>
                     ))}
                   </div>
                   {hasContent(data.expectations?.additionalExpectations) && (
-                    <div className="relative z-10 border-t border-background/10 dark:border-foreground/10 pt-8 mt-8">
-                      <p className="text-base font-light italic leading-relaxed text-background/85 dark:text-foreground/85">
+                    <div style={{ borderTop: '0.5px solid var(--border-muted)', opacity: 0.8, paddingTop: '16px', marginTop: '8px' }}>
+                      <p className="font-light italic whitespace-pre-wrap" style={{ fontSize: '13px', lineHeight: 1.7, color: 'inherit', opacity: 0.9 }}>
                         &ldquo;{data.expectations?.additionalExpectations}&rdquo;
                       </p>
                     </div>
@@ -392,11 +499,11 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Custom Sections */}
           {hasContent(data.customSections) && (data.customSections as CustomSection[])?.map((section: CustomSection, sIdx: number) => (
             <section key={sIdx}>
-              <div className="flex flex-col md:flex-row border-t border-border-muted pt-8">
-                <div className="w-full md:w-1/3 mb-8 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={section.title} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-8">
+                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
                   {section.fields?.map((field: CustomField, fIdx: number) => hasContent(field.value) && (
                     <Field key={fIdx} label={field.label} value={field.value} />
                   ))}
@@ -407,42 +514,51 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         </div>
 
-        {/* ─── Contact Footer ─── */}
+        {/* ── Contact Footer ── */}
         {hasContent(data.contactInfo) && (
-          <footer className="mt-24 pt-12 border-t-4 border-foreground border-double">
-            <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+          <footer className="mt-12" style={{ borderTop: '1.5px solid var(--foreground)', paddingTop: '24px' }}>
+            <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
               {/* Left: Contact hierarchy */}
-              <div className="space-y-6">
-                {/* Section label */}
-                <p className="font-mono text-[10px] font-bold tracking-[0.35em] uppercase text-foreground-muted">
+              <div className="space-y-4">
+                <p
+                  className="font-mono uppercase"
+                  style={{ fontSize: '8.5px', letterSpacing: '0.18em', color: 'var(--foreground-muted)' }}
+                >
                   {t.contact}
                 </p>
 
-                {/* Primary — Email */}
-                <p className="text-2xl font-serif tracking-tight text-foreground underline decoration-foreground/15 underline-offset-8">
+                <p
+                  className="font-serif tracking-tight"
+                  style={{ fontSize: '20px', color: 'var(--foreground)', textDecoration: 'underline', textDecorationColor: 'var(--border-muted)', textUnderlineOffset: '6px' }}
+                >
                   {data.contactInfo?.emailAddress || 'Not Provided'}
                 </p>
 
-                {/* Secondary — Phone + WhatsApp */}
                 <div className="flex gap-8">
                   {hasContent(data.contactInfo?.contactNumber) && (
                     <div>
-                      <p className="font-mono text-[9px] text-foreground-muted uppercase tracking-widest mb-1.5">
+                      <p
+                        className="font-mono uppercase mb-1"
+                        style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
+                      >
                         {t.contactNumber}
                       </p>
-                      <p className="text-base font-semibold text-foreground">
-                        {data.contactInfo?.contactNumber}
+                      <p className="font-semibold" style={{ fontSize: '13.5px', color: 'var(--foreground)' }}>
+                        {formatPhone(data.contactInfo?.contactNumber as string)}
                       </p>
                     </div>
                   )}
                   {hasContent(data.contactInfo?.whatsAppNumber) && (
                     <div>
-                      <p className="font-mono text-[9px] text-foreground-muted uppercase tracking-widest mb-1.5">
+                      <p
+                        className="font-mono uppercase mb-1"
+                        style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
+                      >
                         {t.whatsApp}
                       </p>
-                      <p className="text-base font-semibold text-foreground">
-                        {data.contactInfo?.whatsAppNumber}
+                      <p className="font-semibold" style={{ fontSize: '13.5px', color: 'var(--foreground)' }}>
+                        {formatPhone(data.contactInfo?.whatsAppNumber as string)}
                       </p>
                     </div>
                   )}
@@ -451,25 +567,39 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
               {/* Right: Guardian */}
               {hasContent(data.contactInfo?.guardianContact) && (
-                <div className="text-left md:text-right bg-accent/40 p-6 border-l-2 md:border-l-0 md:border-r-2 border-foreground/10 rounded-none">
-                  <p className="font-mono text-[9px] text-foreground-muted uppercase tracking-widest mb-1.5">
+                <div style={{ background: 'var(--accent)', padding: '16px 20px', borderLeft: '2px solid var(--border-muted)' }}>
+                  <p
+                    className="font-mono uppercase mb-1.5"
+                    style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
+                  >
                     {t.guardianContact}
                   </p>
-                  <p className="text-sm font-bold text-foreground">
+                  <p className="font-bold" style={{ fontSize: '13px', color: 'var(--foreground)' }}>
                     {data.contactInfo?.guardianContact}
                   </p>
                 </div>
               )}
             </div>
-
-            {/* Footer bar */}
-            <div className="mt-24 pt-6 border-t border-border-muted flex justify-between items-center text-[9px] font-mono text-foreground-muted uppercase tracking-[0.4em]">
-              <span>BiyeProfile 2026</span>
-              <span>·</span>
-              <span>All Rights Reserved</span>
-            </div>
           </footer>
         )}
+
+        {/* ── Platform Footer (always shown) ── */}
+        <div
+          className="flex justify-between items-center font-mono uppercase mt-10"
+          style={{
+            borderTop: '0.5px solid var(--border-muted)',
+            paddingTop: '14px',
+            fontSize: '8px',
+            letterSpacing: '0.18em',
+            color: 'var(--foreground-muted)',
+          }}
+        >
+          <span>Generated by BiyeProfile</span>
+          <span>·</span>
+          <span>biyeprofile.com</span>
+          <span>·</span>
+          <span>Confidential</span>
+        </div>
 
       </div>
     </div>
