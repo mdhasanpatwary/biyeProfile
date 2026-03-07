@@ -14,7 +14,7 @@ export default async function Home() {
 
       <Container className="max-w-[1400px] py-0 px-6 sm:px-6 lg:px-6">
         {/* HERO SECTION: Strict 12-column grid */}
-        <Section className="pt-24 pb-32 md:py-32 grid grid-cols-12 gap-6 items-start">
+        <Section className="pt-12 pb-16 md:py-32 grid grid-cols-12 gap-6 items-start">
           {/* Hero Left: Span 8 */}
           <div className="col-span-12 lg:col-span-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
             <div className="flex items-center gap-4 mb-12">
@@ -22,7 +22,7 @@ export default async function Home() {
               <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground-muted">Official Registry / 2026</span>
             </div>
 
-            <h1 className="font-serif text-[clamp(4rem,10vw,8.5rem)] leading-[0.8] tracking-tighter text-foreground mb-16">
+            <h1 className="font-serif text-[clamp(2.5rem,10vw,8.5rem)] leading-[0.8] tracking-tighter text-foreground mb-12 md:mb-16">
               The Digital <br />
               Standard for <br />
               Marriage.
@@ -72,7 +72,7 @@ export default async function Home() {
         </Section>
 
         {/* HOW IT WORKS SECTION: 12-column grid */}
-        <Section className="py-32 border-t border-border">
+        <Section className="py-16 md:py-32 border-t border-border">
           <div className="grid grid-cols-12 gap-6 mb-24">
             <div className="col-span-12 lg:col-span-4">
               <h2 className="font-serif text-5xl tracking-tighter italic text-foreground">The Process.</h2>
@@ -84,7 +84,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {[
               { step: "01", title: "Document Entry", desc: "Complete our comprehensive, multi-step biodata form with verified sections for personal, family, and professional details." },
               { step: "02", title: "Privacy Control", desc: "Set your visibility to private and generate a secure, unique URL that you can share with selected parties instantly." },
@@ -105,7 +105,7 @@ export default async function Home() {
         </Section>
 
         {/* PRINCIPLES SECTION */}
-        <Section className="py-32 border-y border-border">
+        <Section className="py-16 md:py-32 border-y border-border">
           <div className="grid grid-cols-12 gap-0 overflow-hidden border border-border-muted divide-y md:divide-y-0 md:divide-x divide-border-muted">
             {[
               {
@@ -124,7 +124,7 @@ export default async function Home() {
                 desc: "Engineered to look exactly as intended when converted to physical paper documents."
               }
             ].map((item, i) => (
-              <div key={i} className="col-span-12 md:col-span-4 p-16 space-y-8 group transition-all hover:bg-surface">
+              <div key={i} className="col-span-12 md:col-span-4 p-10 sm:p-14 md:p-16 space-y-8 group transition-all hover:bg-surface">
                 <div className="font-mono text-[10px] font-black text-foreground/30 tracking-[0.4em] mb-1.5 uppercase">Principle / {item.num}</div>
                 <h3 className="text-4xl font-serif text-foreground tracking-tighter leading-none italic group-hover:underline underline-offset-8 decoration-foreground/10">
                   {item.title}
@@ -138,9 +138,9 @@ export default async function Home() {
         </Section>
 
         {/* CTA BANNER */}
-        <Section className="py-48 text-center bg-surface border-b border-border">
+        <Section className="py-16 md:py-48 text-center bg-surface border-b border-border">
           <div className="max-w-3xl mx-auto px-6">
-            <h2 className="text-6xl md:text-8xl font-serif text-foreground leading-[0.9] mb-12 tracking-tighter">
+            <h2 className="text-5xl md:text-8xl font-serif text-foreground leading-[0.9] mb-12 tracking-tighter">
               A commitment to <br />
               <span className="italic">intentional marriage.</span>
             </h2>

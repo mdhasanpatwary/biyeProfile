@@ -66,8 +66,8 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
-    <div className="bg-background py-12 sm:py-24 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
-      <div className="max-w-4xl mx-auto bg-background print:shadow-none p-4 sm:p-16 print:p-0 sm:rounded-none border border-border-muted relative">
+    <div className="bg-background py-8 sm:py-16 md:py-24 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
+      <div className="max-w-4xl mx-auto bg-background print:shadow-none p-6 sm:p-14 print:p-0 sm:rounded-none border border-border-muted relative">
         {isOwner && !user.biodata.isPublic && (
           <div className="absolute top-8 right-8 print:hidden">
             <span className="bg-accent text-foreground-muted text-[10px] font-mono font-black px-4 py-2 rounded-none uppercase tracking-[0.2em] border border-border-muted shadow-sm">
@@ -77,7 +77,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
         )}
         <BiodataContent data={data} />
 
-        <div className="mt-24 pt-12 border-t border-border-muted print:hidden flex justify-center items-center px-4">
+        <div className="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-border-muted print:hidden flex justify-center items-center px-4">
           <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
         </div>
       </div>

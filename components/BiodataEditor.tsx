@@ -35,8 +35,8 @@ export function BiodataEditor({
         </div>
       )}
 
-      <div className={`flex-1 w-full bg-background rounded-none border border-border-muted p-6 sm:p-10 min-h-screen min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-6 pb-8 border-b border-border-muted">
+      <div className={`flex-1 w-full bg-background rounded-none border border-border-muted p-6 sm:p-12 min-h-screen min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 md:gap-6 pb-8 border-b border-border-muted">
           <div>
             <h1 className="text-4xl font-serif text-foreground tracking-tight">
               Edit Your Biodata

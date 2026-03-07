@@ -212,8 +212,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   return (
     <div
       id="biodata-content"
-      className="relative bg-background text-foreground font-sans overflow-hidden"
-      style={{ padding: '48px 56px' }}
+      className="relative bg-background text-foreground font-sans overflow-hidden p-6 sm:p-10 md:p-14"
     >
       {/* Subtle texture */}
       <div className="absolute inset-0 bg-grain pointer-events-none opacity-[0.025]" />
@@ -230,10 +229,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         </div>
 
         {/* ── Header Block ── */}
-        <header className="flex flex-row items-start gap-8 mb-12" style={{ borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '28px' }}>
+        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 mb-12 sm:mb-16" style={{ borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '28px' }}>
           {/* Profile photo — plain <img> so html2canvas can render it */}
           {data.basicInfo?.photoUrl ? (
-            <div className="shrink-0">
+            <div className="shrink-0 flex justify-center w-full sm:w-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={getCloudinaryUrl(data.basicInfo.photoUrl, "full")}
@@ -269,10 +268,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
             </div>
           )}
 
-          <div className="flex-1 text-left pt-1">
+          <div className="flex-1 text-center sm:text-left pt-1">
             <h1
-              className="font-serif leading-none tracking-tight mb-2"
-              style={{ fontSize: '38px', color: 'var(--foreground)' }}
+              className="font-serif leading-none tracking-tight mb-3 sm:mb-2 text-3xl sm:text-[38px]"
+              style={{ color: 'var(--foreground)' }}
             >
               {data?.basicInfo?.fullName || 'Full Member'}
             </h1>
@@ -289,10 +288,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {hasContent(data.basicInfo) && (
             <section>
               <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
+                <div className="w-full md:w-1/3 mb-4 md:mb-0">
                   <SectionTitle label={t.basic} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                   {[
                     { label: t.dob,           value: formatDate(data.basicInfo?.dateOfBirth as string, lang) },
                     { label: t.age,           value: data.basicInfo?.age ? `${data.basicInfo.age} ${lang === 'en' ? 'years' : 'বছর'}` : null },
@@ -314,11 +313,11 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {hasContent(data.personalInfo) && (
             <section>
               <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
+                <div className="w-full md:w-1/3 mb-4 md:mb-0">
                   <SectionTitle label={t.personal} />
                 </div>
                 <div className="w-full md:w-2/3">
-                  <div className="grid grid-cols-2 gap-x-10 gap-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                     {[
                       { label: t.presentAddress,   value: data.personalInfo?.presentAddress,  full: true,  address: true },
                       { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, full: true,  address: true },
@@ -406,10 +405,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {hasContent(data.profession) && (
             <section>
               <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
+                <div className="w-full md:w-1/3 mb-4 md:mb-0">
                   <SectionTitle label={t.profession} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                   {[
                     { label: t.occupation,      value: data.profession?.occupation },
                     { label: t.organization,    value: data.profession?.organizationName },
@@ -428,10 +427,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {hasContent(data.familyInfo) && (
             <section>
               <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
+                <div className="w-full md:w-1/3 mb-4 md:mb-0">
                   <SectionTitle label={t.family} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                   {[
                     { label: t.fatherName,       value: data.familyInfo?.fatherName },
                     { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
@@ -462,31 +461,37 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 </div>
                 <div
                   className="w-full md:w-2/3 relative overflow-hidden"
-                  style={{ background: 'var(--primary)', padding: '24px 28px', color: 'var(--primary-foreground)' }}
+                  style={{
+                    background: 'var(--surface)',
+                    padding: '24px 28px',
+                    color: 'var(--foreground)',
+                    border: '0.5px solid var(--border-muted)',
+                    borderLeft: '2.5px solid var(--foreground)'
+                  }}
                 >
-                  <div className="grid grid-cols-2 gap-x-10 gap-y-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-0">
                     {[
                       { label: t.expectedAge,       value: data.expectations?.expectedAgeRange },
                       { label: t.expectedHeight,    value: data.expectations?.expectedHeight },
                       { label: t.expectedEducation, value: data.expectations?.expectedEducation },
                       { label: t.expectedProfession,value: data.expectations?.expectedProfession },
                     ].map((item, i) => hasContent(item.value) && (
-                      <div key={i} className="flex flex-col gap-1" style={{ borderBottom: '0.5px solid var(--border-muted)', opacity: 0.8, padding: '14px 0' }}>
+                      <div key={i} className="flex flex-col gap-1" style={{ borderBottom: '0.5px solid var(--border-muted)', padding: '14px 0' }}>
                         <span
-                          className="font-mono uppercase"
-                          style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'inherit', opacity: 0.6 }}
+                          className="font-mono uppercase transition-opacity"
+                          style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'var(--foreground-muted)', opacity: 0.8 }}
                         >
                           {item.label}
                         </span>
-                        <span className="font-serif italic whitespace-pre-wrap" style={{ fontSize: '16px', color: 'inherit', lineHeight: 1.3 }}>
+                        <span className="font-serif italic whitespace-pre-wrap" style={{ fontSize: '16px', color: 'var(--foreground)', lineHeight: 1.3 }}>
                           {item.value}
                         </span>
                       </div>
                     ))}
                   </div>
                   {hasContent(data.expectations?.additionalExpectations) && (
-                    <div style={{ borderTop: '0.5px solid var(--border-muted)', opacity: 0.8, paddingTop: '16px', marginTop: '8px' }}>
-                      <p className="font-light italic whitespace-pre-wrap" style={{ fontSize: '13px', lineHeight: 1.7, color: 'inherit', opacity: 0.9 }}>
+                    <div style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px', marginTop: '8px' }}>
+                      <p className="font-light italic whitespace-pre-wrap text-foreground-muted" style={{ fontSize: '13px', lineHeight: 1.7 }}>
                         &ldquo;{data.expectations?.additionalExpectations}&rdquo;
                       </p>
                     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-export function Logo({ className }: { className?: string }) {
+export function Logo({ className, hideTextOnMobile = false }: { className?: string, hideTextOnMobile?: boolean }) {
   return (
     <Link href="/" className={`flex items-center gap-2 group transition-opacity hover:opacity-80 ${className}`}>
       <div className="w-8 h-8 bg-foreground rounded-none flex items-center justify-center border border-border-muted">
@@ -28,7 +28,7 @@ export function Logo({ className }: { className?: string }) {
           <circle cx="13.5" cy="9.5" r="1" fill="currentColor" stroke="none" />
         </svg>
       </div>
-      <span className="text-base sm:text-xl font-black tracking-tighter text-foreground uppercase">
+      <span className={`${hideTextOnMobile ? "hidden lg:inline" : ""} text-base sm:text-xl font-black tracking-tighter text-foreground uppercase`}>
         Biye<span className="text-foreground/30">Profile</span>
       </span>
     </Link>

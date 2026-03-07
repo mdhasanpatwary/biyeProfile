@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   // If no biodata, show the "Create" welcome screen
   if (!user?.biodata) {
     return (
-      <Container className="max-w-4xl mt-24 pb-32">
+      <Container className="max-w-4xl my-24">
         <Card className="overflow-hidden">
           <div className="md:flex">
             <div className="md:w-1/2 p-16 bg-foreground text-background flex flex-col justify-center">
@@ -75,25 +75,25 @@ export default async function DashboardPage() {
   const biodataContent = user.biodata.data as unknown as Partial<BiodataFormValues>
 
   return (
-    <Container className="max-w-5xl py-32 space-y-16 pb-40">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 pb-12 border-b border-border-muted">
+    <Container className="max-w-5xl py-16 md:py-24 space-y-8 md:space-y-16">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-border-muted pb-8 md:pb-12">
         <div>
-          <h1 className="text-6xl font-serif text-foreground mb-3 tracking-tighter">My Dashboard</h1>
-          <p className="text-foreground-muted font-mono text-[11px] uppercase tracking-[0.4em] font-black">Manage your private documentation</p>
+          <h1 className="text-4xl md:text-6xl font-serif text-foreground mb-3 tracking-tighter text-center md:text-left">My Dashboard</h1>
+          <p className="text-foreground-muted font-mono text-[10px] md:text-[11px] uppercase tracking-[0.4em] font-black text-center md:text-left">Manage your private documentation</p>
         </div>
-        <div className="flex gap-4">
-          <Link href={`/biodata/${session.user.username}`}>
-            <Button variant="outline" className="px-8">View Profile</Button>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link href={`/biodata/${session.user.username}`} className="w-full sm:w-auto">
+            <Button variant="outline" className="w-full px-8">View Profile</Button>
           </Link>
-          <Link href="/dashboard/edit">
-            <Button variant="primary" className="px-8 flex items-center gap-2">Edit Biodata</Button>
+          <Link href="/dashboard/edit" className="w-full sm:w-auto">
+            <Button variant="primary" className="w-full px-8 flex items-center justify-center gap-2">Edit Biodata</Button>
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
         {/* Profile Details Card */}
-        <Card className="md:col-span-2 p-12 relative overflow-hidden">
+        <Card className="md:col-span-2 p-6 sm:p-12 relative overflow-hidden">
           <div className="relative z-10 flex flex-col sm:flex-row items-center gap-12">
             <Avatar
               src={biodataContent.basicInfo?.photoUrl ? getCloudinaryUrl(biodataContent.basicInfo.photoUrl, "thumb") : undefined}
@@ -104,7 +104,7 @@ export default async function DashboardPage() {
               }
             />
             <div className="flex-1 text-center sm:text-left">
-              <h2 className="text-4xl font-serif text-foreground mb-3 italic tracking-tight">{biodataContent.basicInfo?.fullName}</h2>
+              <h2 className="text-2xl sm:text-4xl font-serif text-foreground mb-3 italic tracking-tight">{biodataContent.basicInfo?.fullName}</h2>
               <div className="flex flex-wrap justify-center sm:justify-start gap-4 mt-8">
                 {[
                   (() => {
@@ -127,10 +127,10 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <div className="mt-16 p-10 bg-accent/30 border border-border-muted rounded-none flex flex-col sm:flex-row items-center justify-between gap-8">
-            <div className="flex flex-col">
+          <div className="mt-10 md:mt-16 p-6 sm:p-10 bg-accent/30 border border-border-muted rounded-none flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div className="flex flex-col text-center sm:text-left">
               <span className="font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.4em] mb-3">Public Access</span>
-              <span className="text-sm font-bold text-foreground border-b-2 border-border-muted pb-1 font-mono tracking-tight">{publicUrl}</span>
+              <span className="text-xs sm:text-sm font-bold text-foreground border-b-2 border-border-muted pb-1 font-mono tracking-tight break-all">{publicUrl}</span>
             </div>
             <CopyButton text={`https://${publicUrl}`} />
           </div>
@@ -138,18 +138,18 @@ export default async function DashboardPage() {
 
         {/* Visibility & Insights */}
         <div className="flex flex-col gap-12">
-          <Card className="p-10">
+          <Card className="p-8 sm:p-10">
             <span className="font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.4em] block mb-6">Profile Control</span>
             <VisibilityToggle initialIsPublic={user.biodata.isPublic} />
           </Card>
 
-          <Card className="bg-accent/40 border-border-muted p-12 flex flex-col justify-between group h-full hover:bg-accent/60 transition-colors">
+          <Card className="bg-accent/40 border-border-muted p-8 sm:p-12 flex flex-col justify-between group h-full hover:bg-accent/60 transition-colors">
             <div>
-              <div className="w-12 h-12 bg-foreground/5 rounded-none border border-foreground/5 flex items-center justify-center mb-12">
+              <div className="w-12 h-12 bg-foreground/5 rounded-none border border-foreground/5 flex items-center justify-center mb-12 mx-auto md:mx-0">
                 <svg className="w-6 h-6 text-foreground/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
               </div>
-              <h3 className="text-6xl font-serif mb-3 leading-none italic tracking-tighter text-foreground">Soon</h3>
-              <p className="text-foreground-muted font-mono text-[11px] uppercase tracking-[0.4em] font-black">Analytics</p>
+              <h3 className="text-4xl md:text-6xl font-serif mb-3 leading-none italic tracking-tighter text-foreground text-center md:text-left">Soon</h3>
+              <p className="text-foreground-muted font-mono text-[11px] uppercase tracking-[0.4em] font-black text-center md:text-left">Analytics</p>
             </div>
           </Card>
         </div>

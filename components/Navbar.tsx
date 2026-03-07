@@ -12,7 +12,7 @@ export async function Navbar() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
         {/* Logo Section */}
         <div className="flex items-center gap-4 sm:gap-12 shrink-0">
-          <Logo />
+          <Logo hideTextOnMobile />
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-10">
