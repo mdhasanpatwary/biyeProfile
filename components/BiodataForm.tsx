@@ -342,7 +342,7 @@ export function BiodataForm({
   return (
     <div className="relative">
 
-      <div className="flex items-center justify-between gap-3 mb-10 bg-background/90 backdrop-blur-md p-4 border-b border-border sticky top-0 z-50 transition-all duration-300">
+      <div className="flex items-center justify-between gap-4 mb-12 bg-background/90 backdrop-blur-md p-6 border-b border-border sticky top-0 z-50 transition-all duration-300">
         <div className="flex items-start gap-2 flex-1 min-w-0">
           <Button
             type="button"
@@ -378,14 +378,14 @@ export function BiodataForm({
         {/* Step 1: Basic Information */}
         {currentStep === 1 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-10 mb-10">
+            <CardHeader className="border-b border-border-muted pb-12 mb-12">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 01</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Basic Information' : 'প্রাথমিক তথ্য'}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
                 <div className="sm:col-span-2 mb-4">
                   <FormField label="Profile Photo (Optional)">
                     <FileUpload
@@ -449,7 +449,7 @@ export function BiodataForm({
         {/* Step 2: Personal Information */}
         {currentStep === 2 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-10 mb-10">
+            <CardHeader className="border-b border-border-muted pb-12 mb-12">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 02</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Personal Information' : 'ব্যক্তিগত তথ্য'}
@@ -457,7 +457,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <FormField label="Present Address" error={form.formState.errors.personalInfo?.presentAddress?.message}>
                     <Textarea {...form.register("personalInfo.presentAddress")} placeholder="e.g. House 12, Road 4, Banani, Dhaka" rows={3} className="block w-full" />
@@ -508,7 +508,7 @@ export function BiodataForm({
         {/* Step 3: Education Information */}
         {currentStep === 3 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-10 mb-10">
+            <CardHeader className="border-b border-border-muted pb-12 mb-12">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 03</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Education Information' : 'শিক্ষাগত তথ্য'}
@@ -516,9 +516,9 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="space-y-8">
+              <div className="space-y-10">
                 {educationFields.map((field, index) => (
-                  <div key={field.id} className="p-6 rounded-none bg-accent/50 border border-border-muted relative group/edu">
+                  <div key={field.id} className="p-8 md:p-10 rounded-none bg-accent/50 border border-border-muted relative group/edu">
                     {educationFields.length > 1 && (
                       <Button
                         type="button"
@@ -529,7 +529,7 @@ export function BiodataForm({
                       </Button>
                     )}
 
-                    <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
                       <div className="sm:col-span-1">
                         <FormField label="Degree / Level" error={form.formState.errors.education?.qualifications?.[index]?.degree?.message}>
                           <Input
@@ -592,7 +592,7 @@ export function BiodataForm({
                   Add Another Qualification
                 </Button>
 
-                <div className="sm:col-span-2 mt-10 py-6 border-t border-border-muted">
+                <div className="sm:col-span-2 mt-12 py-8 border-t border-border-muted">
                   <FormField label="Additional Educational Details (Optional)">
                     <Textarea {...form.register("education.additionalQualifications")} placeholder="e.g. Won national debate championship" rows={3} className="block w-full" />
                   </FormField>
@@ -606,7 +606,7 @@ export function BiodataForm({
         {/* Step 4: Profession Information */}
         {currentStep === 4 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-10 mb-10">
+            <CardHeader className="border-b border-border-muted pb-12 mb-12">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 04</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Profession Information' : 'পেশাগত তথ্য'}
@@ -614,7 +614,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
                 <FormField label="Occupation / Job Title" error={form.formState.errors.profession?.occupation?.message}>
                   <Input type="text" {...form.register("profession.occupation")} placeholder="e.g. Software Engineer" className="block w-full" />
                 </FormField>
@@ -649,7 +649,7 @@ export function BiodataForm({
         {/* Step 5: Family Information */}
         {currentStep === 5 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-10 mb-10">
+            <CardHeader className="border-b border-border-muted pb-12 mb-12">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 05</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Family Information' : 'পারিবারিক তথ্য'}
@@ -657,7 +657,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
                 <FormField label="Father's Name" error={form.formState.errors.familyInfo?.fatherName?.message}>
                   <Input type="text" {...form.register("familyInfo.fatherName")} placeholder="e.g. Md. Rahman" className="block w-full" />
                 </FormField>
@@ -700,7 +700,7 @@ export function BiodataForm({
         {/* Step 6: Marriage Expectations */}
         {currentStep === 6 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-10 mb-10">
+            <CardHeader className="border-b border-border-muted pb-12 mb-12">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 06</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Marriage Expectations' : 'বিয়ে সংক্রান্ত প্রত্যাশা'}
@@ -708,7 +708,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
                 <FormField label="Expected Age Range (Optional)">
                   <Input type="text" {...form.register("expectations.expectedAgeRange")} placeholder="e.g. 22-26" className="block w-full" />
                 </FormField>
@@ -746,7 +746,7 @@ export function BiodataForm({
         {/* Step 7: Contact Information */}
         {currentStep === 7 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-10 mb-10">
+            <CardHeader className="border-b border-border-muted pb-12 mb-12">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 07</p>
               <CardTitle className="text-5xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Contact Information' : 'যোগাযোগের তথ্য'}
@@ -754,7 +754,7 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 gap-y-10 gap-x-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
                 <FormField label="Contact Number" error={form.formState.errors.contactInfo?.contactNumber?.message}>
                   <Input type="text" {...form.register("contactInfo.contactNumber")} placeholder="e.g. 01712345678" className="block w-full" />
                 </FormField>
@@ -780,7 +780,7 @@ export function BiodataForm({
         {/* Step 8: Custom Sections */}
         {currentStep === 8 && (
           <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <CardHeader className="flex flex-row justify-between items-center mb-10 pb-10 border-b border-border-muted space-y-0">
+            <CardHeader className="flex flex-row justify-between items-center mb-12 pb-12 border-b border-border-muted space-y-0">
               <div>
                 <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 08</p>
                 <CardTitle className="text-5xl font-serif text-foreground italic">
@@ -800,9 +800,9 @@ export function BiodataForm({
             </CardHeader>
 
             <CardContent>
-              <div className="space-y-10">
+              <div className="space-y-12">
                 {customSectionsFields.map((section, sectionIdx) => (
-                  <div key={section.id} className="p-10 bg-background rounded-none border border-border-muted relative group transition-all overflow-hidden"
+                  <div key={section.id} className="p-8 md:p-12 bg-background rounded-none border border-border-muted relative group transition-all overflow-hidden"
                   >
                     <div className="absolute top-0 left-0 w-1.5 h-full bg-accent group-hover:bg-foreground transition-colors"></div>
                     <Button
@@ -828,7 +828,7 @@ export function BiodataForm({
                     <div className="space-y-6">
                       <p className="font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.4em] mb-4">Entries</p>
                       {form.watch(`customSections.${sectionIdx}.fields`)?.map((_, fieldIdx) => (
-                        <div key={fieldIdx} className="flex gap-10 items-end group/field pb-4 border-b border-border-muted/50">
+                        <div key={fieldIdx} className="flex gap-8 md:gap-12 items-end group/field pb-6 border-b border-border-muted/50">
                           <div className="flex-1">
                             <FormField label="Label">
                               <Input type="text" {...form.register(`customSections.${sectionIdx}.fields.${fieldIdx}.label`)} placeholder="e.g. Prayer" className="block w-full" />
@@ -884,7 +884,7 @@ export function BiodataForm({
         )}
 
         {/* Footer Navigation (Mobile) - Polished Floating bar */}
-        <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-2xl border-t border-border-muted p-4 lg:hidden flex items-center justify-between gap-3 z-[100] shadow-xl">
+        <div className="fixed bottom-0 mb-0 left-0 right-0 bg-background/95 backdrop-blur-2xl border-t border-border-muted p-4 lg:hidden flex items-center justify-between gap-3 z-[100] shadow-xl">
           <div className="flex items-center gap-3 flex-1">
             <Button
               type="button"
@@ -893,10 +893,10 @@ export function BiodataForm({
               variant="outline"
               className="w-12 h-12 bg-background text-foreground rounded-none border-border-muted flex items-center justify-center shrink-0 active:scale-90 transition-all"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+              <svg className="min-w-3.5 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
             </Button>
 
-            <div className="flex-1 bg-accent p-1 rounded-none border border-border-muted flex items-center h-12 overflow-hidden">
+            <div className="flex-1 min-w-[140px] bg-accent p-1 rounded-none border border-border-muted flex items-center h-12 overflow-hidden">
               <button
                 type="button"
                 onClick={() => onViewChange?.("edit")}

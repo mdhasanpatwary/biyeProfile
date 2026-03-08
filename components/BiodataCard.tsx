@@ -21,7 +21,7 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
             href={`/biodata/${username}`}
             className="group block border-b border-border-muted animate-in fade-in slide-in-from-bottom-4 duration-500 hover:bg-accent/50 transition-all font-sans"
         >
-            <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 py-8 sm:py-10 px-4 sm:px-0">
+            <div className="flex flex-col sm:flex-row items-center gap-8 md:gap-12 py-10 md:py-12 px-6 sm:px-0">
 
                 {/* Thumbnail */}
                 <Avatar
@@ -33,18 +33,18 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
                 />
 
                 {/* Info Grid */}
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 items-center w-full text-center sm:text-left">
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 items-center w-full text-center sm:text-left">
                     <div className="md:col-span-2">
                         <p className="text-[10px] font-mono font-black text-foreground/20 uppercase tracking-[0.4em] mb-2">Identification</p>
                         <h3 className="text-2xl sm:text-3xl font-serif text-foreground leading-tight italic tracking-tight">
                             {name}
                         </h3>
-                        <p className="text-[11px] font-mono font-bold text-foreground-muted uppercase tracking-widest mt-1">
+                        <p className="text-[11px] font-mono font-bold text-foreground-muted uppercase tracking-widest mt-2">
                             {occupation}
                         </p>
 
                         {/* Mobile Metrics Row */}
-                        <div className="flex items-center justify-center sm:justify-start gap-4 mt-3 md:hidden">
+                        <div className="flex items-center justify-center sm:justify-start gap-4 mt-4 md:hidden">
                             <span className="text-[9px] font-black text-foreground uppercase tracking-widest border border-border-muted px-2 py-0.5">{religion}</span>
                             <span className="text-[9px] font-mono text-foreground-muted uppercase tracking-widest">{age} Yrs</span>
                         </div>

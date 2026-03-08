@@ -45,7 +45,7 @@ export function SetupForm() {
   }
 
   return (
-    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+    <form className="mt-10 space-y-8" onSubmit={handleSubmit}>
       <div>
         <Label htmlFor="username" className="sr-only">Username</Label>
         <div className="relative rounded-none shadow-sm">

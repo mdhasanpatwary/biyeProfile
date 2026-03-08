@@ -34,13 +34,13 @@ export default async function BrowseBiodataPage(props: {
     return (
         <div className="min-h-screen bg-background">
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-10">
+            <main className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12 md:py-16">
 
                 {/* Intro */}
-                <header className="mb-10 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <header className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
                     <div className="max-w-xl text-center md:text-left">
-                        <div className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-foreground-muted mb-6">Directory / 01</div>
-                        <h1 className="text-5xl md:text-8xl font-serif text-foreground tracking-tight leading-none mb-6">
+                        <div className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-foreground-muted mb-8">Directory / 01</div>
+                        <h1 className="text-5xl md:text-8xl font-serif text-foreground tracking-tight leading-none mb-8">
                             Explore <br /> Profiles
                         </h1>
                         <p className="text-foreground-muted font-medium text-lg leading-relaxed max-w-md">
@@ -74,7 +74,7 @@ export default async function BrowseBiodataPage(props: {
                 </header>
 
                 {/* Results Info */}
-                <div className="mb-10 md:mb-10 flex items-center gap-4">
+                <div className="mb-12 md:mb-16 flex items-center gap-6">
                     <div className="h-[1px] flex-1 bg-border-muted" />
                     <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-foreground-muted/50">
                         {biodata.length} Results
@@ -94,8 +94,8 @@ export default async function BrowseBiodataPage(props: {
                         ))}
                     </div>
                 ) : (
-                    <div className="py-10 text-center border-2 border-dashed border-border-muted rounded-none">
-                        <h3 className="text-2xl font-serif text-foreground mb-4">No matched results</h3>
+                    <div className="py-12 md:py-16 text-center border-2 border-dashed border-border-muted rounded-none">
+                        <h3 className="text-2xl font-serif text-foreground mb-6">No matched results</h3>
                         <Link href="/biodata" className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted border-b border-border-muted pb-1 hover:text-foreground hover:border-foreground transition-all">Clear Filters</Link>
                     </div>
                 )}

@@ -12,24 +12,24 @@ export default async function Home() {
       {/* Texture Overlay */}
       <div className="fixed inset-0 bg-grain pointer-events-none opacity-[0.03] z-50"></div>
 
-      <Container className="max-w-[1400px] py-0 px-6 sm:px-6 lg:px-6">
+      <Container className="max-w-[1400px] px-6">
         {/* HERO SECTION: Strict 12-column grid */}
-        <Section className="pt-10 pb-10 md:py-10 grid grid-cols-12 gap-6 items-start">
+        <Section className="pt-12 pb-12 md:pt-16 md:pb-20 grid grid-cols-12 gap-8 items-start">
           {/* Hero Left: Span 8 */}
           <div className="col-span-12 lg:col-span-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <div className="flex items-center gap-4 mb-10">
+            <div className="flex items-center gap-4 mb-8">
               <span className="w-12 h-[1px] bg-foreground"></span>
               <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground-muted">Official Registry / 2026</span>
             </div>
 
-            <h1 className="font-serif text-[clamp(2.5rem,10vw,8.5rem)] leading-[0.8] tracking-tighter text-foreground mb-10 md:mb-10">
+            <h1 className="font-serif text-[clamp(2.5rem,10vw,8.5rem)] leading-[0.8] tracking-tighter text-foreground mb-8">
               The Digital <br />
               Standard for <br />
               Marriage.
             </h1>
 
             <div className="max-w-md">
-              <p className="text-xl text-foreground-muted leading-relaxed font-medium mb-10 uppercase tracking-tight">
+              <p className="text-xl text-foreground-muted leading-relaxed font-medium mb-8 uppercase tracking-tight">
                 Premium digital marriage biodata builder. clear, secure, and engineered for intentional representation.
               </p>
 
@@ -49,21 +49,21 @@ export default async function Home() {
           </div>
 
           {/* Hero Right: Span 4 */}
-          <div className="hidden lg:col-span-4 lg:block pt-10 animate-in fade-in slide-in-from-right-8 duration-1000 delay-300">
-            <div className="border-l-2 border-foreground pl-10 space-y-10">
+          <div className="hidden lg:col-span-4 lg:block pt-16 animate-in fade-in slide-in-from-right-8 duration-1000 delay-300">
+            <div className="border-l-2 border-foreground pl-12 space-y-12">
               <div>
-                <span className="block font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.25em] mb-4">Core Integrity</span>
+                <span className="block font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.25em] mb-3">Core Integrity</span>
                 <p className="text-sm font-medium leading-[1.8] text-foreground">
                   Our system architecture prioritizes legibility and privacy above all. Every document is generated using a precise typographic grid designed for institutional clarity.
                 </p>
               </div>
               <div>
-                <span className="block font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.25em] mb-4">Encryption</span>
+                <span className="block font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.25em] mb-3">Encryption</span>
                 <p className="text-sm font-medium leading-[1.8] text-foreground">
                   Sensitive data is encrypted at rest. Control exactly who views your profile with private shareable URLs.
                 </p>
               </div>
-              <div className="pt-10">
+              <div className="pt-12">
                 <div className="text-6xl font-serif leading-none italic mb-2 tracking-tighter text-foreground">03</div>
                 <span className="font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.2em]">Core Principles Of Design</span>
               </div>
@@ -72,8 +72,8 @@ export default async function Home() {
         </Section>
 
         {/* HOW IT WORKS SECTION: 12-column grid */}
-        <Section className="py-10 md:py-10 border-t border-border">
-          <div className="grid grid-cols-12 gap-6 mb-10">
+        <Section className="border-t border-border">
+          <div className="grid grid-cols-12 gap-8 mb-12">
             <div className="col-span-12 lg:col-span-4">
               <h2 className="font-serif text-5xl tracking-tighter italic text-foreground">The Process.</h2>
             </div>
@@ -84,19 +84,19 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
               { step: "01", title: "Document Entry", desc: "Complete our comprehensive, multi-step biodata form with verified sections for personal, family, and professional details." },
               { step: "02", title: "Privacy Control", desc: "Set your visibility to private and generate a secure, unique URL that you can share with selected parties instantly." },
               { step: "03", title: "Final Delivery", desc: "Download a professionally formatted, print-optimized PDF of your biodata, ready for physical distribution if required." }
             ].map((item, i) => (
-              <div key={i} className="group border-t border-border-muted pt-10 relative overflow-hidden">
+              <div key={i} className="group border-t border-border-muted pt-8 relative overflow-hidden">
                 <div className="text-8xl font-serif text-foreground/5 absolute -top-4 -left-4 group-hover:text-foreground/10 transition-colors">
                   {item.step}
                 </div>
                 <div className="relative z-10">
-                  <span className="block font-mono text-[10px] font-black text-foreground/20 uppercase tracking-[0.4em] mb-6">Step {item.step}</span>
-                  <h3 className="text-3xl font-serif text-foreground mb-6 tracking-tight italic">{item.title}</h3>
+                  <span className="block font-mono text-[10px] font-black text-foreground/20 uppercase tracking-[0.4em] mb-4">Step {item.step}</span>
+                  <h3 className="text-3xl font-serif text-foreground mb-4 tracking-tight italic">{item.title}</h3>
                   <p className="text-foreground-muted text-sm leading-[1.8] font-medium max-w-xs">{item.desc}</p>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default async function Home() {
         </Section>
 
         {/* PRINCIPLES SECTION */}
-        <Section className="py-10 md:py-10 border-y border-border">
+        <Section className="border-y border-border px-0">
           <div className="grid grid-cols-12 gap-0 overflow-hidden border border-border-muted divide-y md:divide-y-0 md:divide-x divide-border-muted">
             {[
               {
@@ -124,7 +124,7 @@ export default async function Home() {
                 desc: "Engineered to look exactly as intended when converted to physical paper documents."
               }
             ].map((item, i) => (
-              <div key={i} className="col-span-12 md:col-span-4 p-10 sm:p-10 md:p-10 space-y-8 group transition-all hover:bg-surface">
+              <div key={i} className="col-span-12 md:col-span-4 p-8 sm:p-10 space-y-6 group transition-all hover:bg-surface">
                 <div className="font-mono text-[10px] font-black text-foreground/30 tracking-[0.4em] mb-2 uppercase">Principle / {item.num}</div>
                 <h3 className="text-4xl font-serif text-foreground tracking-tighter leading-none italic group-hover:underline underline-offset-8 decoration-foreground/10">
                   {item.title}
@@ -138,9 +138,9 @@ export default async function Home() {
         </Section>
 
         {/* CTA BANNER */}
-        <Section className="py-10 md:py-10 text-center bg-surface border-b border-border">
+        <Section className="text-center bg-surface border-b border-border">
           <div className="max-w-3xl mx-auto px-6">
-            <h2 className="text-5xl md:text-8xl font-serif text-foreground leading-[0.9] mb-10 tracking-tighter">
+            <h2 className="text-5xl md:text-8xl font-serif text-foreground leading-[0.9] mb-8 tracking-tighter">
               A commitment to <br />
               <span className="italic">intentional marriage.</span>
             </h2>

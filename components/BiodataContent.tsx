@@ -213,7 +213,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   return (
     <div
       id="biodata-content"
-      className="relative bg-background text-foreground font-sans overflow-hidden p-6 sm:p-8 md:p-10"
+      className="relative bg-background text-foreground font-sans overflow-hidden p-8 md:p-12"
     >
       {/* Subtle texture */}
       <div className="absolute inset-0 bg-grain pointer-events-none opacity-[0.025]" />
@@ -222,15 +222,15 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         {/* ── Document Meta Bar ── */}
         <div
-          className="flex justify-between items-baseline mb-8 font-mono uppercase"
-          style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)', borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '10px' }}
+          className="flex justify-between items-baseline mb-10 font-mono uppercase"
+          style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)', borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '12px' }}
         >
           <span>{t.title}</span>
           <span>{generatedDate}</span>
         </div>
 
         {/* ── Header Block ── */}
-        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 mb-10" style={{ borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '32px' }}>
+        <header className="flex flex-col sm:flex-row items-center sm:items-start gap-8 mb-12" style={{ borderBottom: '0.5px solid var(--border-muted)', paddingBottom: '40px' }}>
           {/* Profile photo — plain <img> so html2canvas can render it */}
           {data.basicInfo?.photoUrl ? (
             <div className="shrink-0 flex justify-center w-full sm:w-auto">
@@ -283,16 +283,16 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
         </header>
 
         {/* ── Content Sections ── */}
-        <div className="space-y-8">
+        <div className="space-y-12">
 
           {/* Section: Basic Info */}
           {hasContent(data.basicInfo) && (
             <section>
-              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-4 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.basic} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
                   {[
                     { label: t.dob, value: formatDate(data.basicInfo?.dateOfBirth as string, lang) },
                     { label: t.age, value: data.basicInfo?.age ? `${data.basicInfo.age} ${lang === 'en' ? 'years' : 'বছর'}` : null },
@@ -314,12 +314,12 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Personal Info */}
           {hasContent(data.personalInfo) && (
             <section>
-              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-4 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.personal} />
                 </div>
                 <div className="w-full md:w-2/3">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
                     {[
                       { label: t.presentAddress, value: data.personalInfo?.presentAddress, full: true, address: true },
                       { label: t.permanentAddress, value: data.personalInfo?.permanentAddress, full: true, address: true },
@@ -352,18 +352,18 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Education */}
           {hasContent(data.education) && (
             <section>
-              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px' }}>
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.education} />
                 </div>
-                <div className="w-full md:w-2/3 space-y-5">
+                <div className="w-full md:w-2/3 space-y-6">
                   {data.education?.qualifications?.map((edu: Qualification, idx: number) => {
                     const isLast = idx === (data.education?.qualifications?.length ?? 0) - 1;
                     return (
                       <div
                         key={idx}
                         className="relative"
-                        style={!isLast ? { borderBottom: '0.5px solid var(--accent)', paddingBottom: '16px' } : {}}
+                        style={!isLast ? { borderBottom: '0.5px solid var(--accent)', paddingBottom: '24px' } : {}}
                       >
                         <h3 className="font-serif italic mb-1" style={{ fontSize: '16.5px', color: 'var(--foreground)' }}>
                           <span className="font-mono not-italic uppercase mr-3" style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}>{edu.passingYear || '—'}</span>
@@ -384,10 +384,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                           </p>
                         )}
                         {edu.extraFields && edu.extraFields.length > 0 && (
-                          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                             {edu.extraFields.map((field, i) => hasContent(field.value) && (
                               <div key={`edu_extra_${idx}_${i}`} className="text-sm">
-                                <span className="font-mono text-[9px] uppercase tracking-widest text-foreground-muted block mb-0.5">{field.label}</span>
+                                <span className="font-mono text-[9px] uppercase tracking-widest text-foreground-muted block mb-1">{field.label}</span>
                                 <span className="text-foreground">{field.value}</span>
                               </div>
                             ))}
@@ -397,7 +397,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                     );
                   })}
                   {hasContent(data.education?.additionalQualifications) && (
-                    <div style={{ background: 'var(--accent)', padding: '16px', borderLeft: '2px solid var(--foreground)' }}>
+                    <div style={{ background: 'var(--accent)', padding: '24px', borderLeft: '2px solid var(--foreground)' }}>
                       <span
                         className="font-mono uppercase block mb-1.5"
                         style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
@@ -417,11 +417,11 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Professional */}
           {hasContent(data.profession) && (
             <section>
-              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-4 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.profession} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
                   {[
                     { label: t.occupation, value: data.profession?.occupation },
                     { label: t.organization, value: data.profession?.organizationName },
@@ -440,11 +440,11 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Family */}
           {hasContent(data.familyInfo) && (
             <section>
-              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-4 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px' }}>
+                <div className="w-full md:w-1/3 mb-6 md:mb-0">
                   <SectionTitle label={t.family} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
                   {[
                     { label: t.fatherName, value: data.familyInfo?.fatherName },
                     { label: t.fatherProfession, value: data.familyInfo?.fatherProfession },
@@ -470,21 +470,21 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Marriage Expectations */}
           {hasContent(data.expectations) && (
             <section>
-              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px' }}>
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={t.expectations} />
                 </div>
                 <div
                   className="w-full md:w-2/3 relative overflow-hidden"
                   style={{
                     background: 'var(--surface)',
-                    padding: '24px 32px',
+                    padding: '32px 40px',
                     color: 'var(--foreground)',
                     border: '0.5px solid var(--border-muted)',
                     borderLeft: '2.5px solid var(--foreground)'
                   }}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-0">
                     {[
                       { label: t.expectedAge, value: data.expectations?.expectedAgeRange },
                       { label: t.expectedHeight, value: data.expectations?.expectedHeight },
@@ -492,7 +492,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                       { label: t.expectedProfession, value: data.expectations?.expectedProfession },
                       ...((data.expectations?.extraFields || []).map(f => ({ label: f.label, value: f.value })))
                     ].map((item, i) => hasContent(item.value) && (
-                      <div key={i} className="flex flex-col gap-1" style={{ borderBottom: '0.5px solid var(--border-muted)', padding: '16px 0' }}>
+                      <div key={i} className="flex flex-col gap-1.5" style={{ borderBottom: '0.5px solid var(--border-muted)', padding: '24px 0' }}>
                         <span
                           className="font-mono uppercase transition-opacity"
                           style={{ fontSize: '8.5px', letterSpacing: '0.15em', color: 'var(--foreground-muted)', opacity: 0.8 }}
@@ -506,7 +506,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                     ))}
                   </div>
                   {hasContent(data.expectations?.additionalExpectations) && (
-                    <div style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px', marginTop: '8px' }}>
+                    <div style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px', marginTop: '12px' }}>
                       <p className="font-light italic whitespace-pre-wrap text-foreground-muted" style={{ fontSize: '13px', lineHeight: 1.7 }}>
                         &ldquo;{data.expectations?.additionalExpectations}&rdquo;
                       </p>
@@ -520,11 +520,11 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           {/* Section: Custom Sections */}
           {hasContent(data.customSections) && (data.customSections as CustomSection[])?.map((section: CustomSection, sIdx: number) => (
             <section key={sIdx}>
-              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '16px' }}>
-                <div className="w-full md:w-1/3 mb-6 md:mb-0">
+              <div className="flex flex-col md:flex-row" style={{ borderTop: '0.5px solid var(--border-muted)', paddingTop: '24px' }}>
+                <div className="w-full md:w-1/3 mb-8 md:mb-0">
                   <SectionTitle label={section.title} />
                 </div>
-                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-10 gap-y-5">
+                <div className="w-full md:w-2/3 grid grid-cols-2 gap-x-12 gap-y-6">
                   {section.fields?.map((field: CustomField, fIdx: number) => hasContent(field.value) && (
                     <Field key={fIdx} label={field.label} value={field.value} />
                   ))}
@@ -537,7 +537,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         {/* ── Contact Footer ── */}
         {hasContent(data.contactInfo) && (
-          <footer className="mt-10" style={{ borderTop: '1.5px solid var(--foreground)', paddingTop: '32px' }}>
+          <footer className="mt-12" style={{ borderTop: '1.5px solid var(--foreground)', paddingTop: '40px' }}>
             <div className="flex flex-col md:flex-row justify-between items-start gap-8">
 
               {/* Left: Contact hierarchy */}
@@ -551,12 +551,12 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
                 <p
                   className="font-serif tracking-tight"
-                  style={{ fontSize: '20px', color: 'var(--foreground)', textDecoration: 'underline', textDecorationColor: 'var(--border-muted)', textUnderlineOffset: '6px' }}
+                  style={{ fontSize: '20px', color: 'var(--foreground)', textDecoration: 'underline', textDecorationColor: 'var(--border-muted)', textUnderlineOffset: '8px' }}
                 >
                   {data.contactInfo?.emailAddress || 'Not Provided'}
                 </p>
 
-                <div className="flex gap-8">
+                <div className="flex gap-12">
                   {hasContent(data.contactInfo?.contactNumber) && (
                     <div>
                       <p
@@ -589,7 +589,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
               {/* Right: Guardian and Extra Fields */}
               <div className="flex flex-col gap-6 w-full md:w-auto md:min-w-[200px]">
                 {hasContent(data.contactInfo?.guardianContact) && (
-                  <div style={{ background: 'var(--accent)', padding: '16px 20px', borderLeft: '2px solid var(--border-muted)' }}>
+                  <div style={{ background: 'var(--accent)', padding: '24px 32px', borderLeft: '2px solid var(--border-muted)' }}>
                     <p
                       className="font-mono uppercase mb-1.5"
                       style={{ fontSize: '8px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
@@ -626,10 +626,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
 
         {/* ── Platform Footer (always shown) ── */}
         <div
-          className="flex justify-between items-center font-mono uppercase mt-10"
+          className="flex justify-between items-center font-mono uppercase mt-12"
           style={{
             borderTop: '0.5px solid var(--border-muted)',
-            paddingTop: '14px',
+            paddingTop: '16px',
             fontSize: '8px',
             letterSpacing: '0.18em',
             color: 'var(--foreground-muted)',
