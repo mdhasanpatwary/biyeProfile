@@ -66,10 +66,10 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   const data = user.biodata.data as unknown as BiodataFormValues
 
   return (
-    <div className="bg-background py-10 md:py-16 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
-      <div className="max-w-4xl mx-auto bg-background print:shadow-none p-8 md:p-12 print:p-0 sm:rounded-none border border-border-muted relative">
+    <div className="bg-background py-12 md:py-16 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
+      <div className="max-w-4xl mx-auto bg-background print:shadow-none p-6 print:p-0 sm:rounded-none border border-border-muted relative">
         {isOwner && !user.biodata.isPublic && (
-          <div className="absolute top-8 right-8 print:hidden">
+          <div className="print:hidden flex justify-end">
             <span className="bg-accent text-foreground-muted text-[10px] font-mono font-black px-4 py-2 rounded-none uppercase tracking-[0.2em] border border-border-muted shadow-sm">
               Archive Mode / Owner
             </span>
@@ -77,18 +77,15 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
         )}
         <BiodataContent data={data} />
 
-        <div className="mt-12 md:mt-12 pt-10 md:pt-12 border-t border-border-muted print:hidden flex justify-center items-center px-4">
+        <div className="mt-8 md:mt-12 pt-6 border-t border-border-muted print:hidden flex justify-center items-center px-4">
           <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
         </div>
       </div>
 
       {/* Floating Sticky Download Bar for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-background/80 backdrop-blur-xl border-t border-border-muted sm:hidden flex justify-center z-50 print:hidden transition-all duration-300">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-xl border-t border-border-muted sm:hidden flex justify-center z-50 print:hidden transition-all duration-300">
         <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
       </div>
-
-      {/* Spacer for mobile to prevent content being hidden by sticky bar */}
-      <div className="h-24 sm:hidden print:hidden" />
     </div>
   )
 }

@@ -29,7 +29,7 @@ export function Logo({ className, hideTextOnMobile = false }: { className?: stri
         </svg>
       </div>
       <span className={`${hideTextOnMobile ? "hidden lg:inline" : ""} text-base sm:text-xl font-black tracking-tighter text-foreground uppercase`}>
-        Biye<span className="text-foreground/30">Profile</span>
+        Biye<span className="text-foreground/60">Profile</span>
       </span>
     </Link>
   );

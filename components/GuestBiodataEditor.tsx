@@ -7,6 +7,7 @@ import { BiodataPreview } from "./BiodataPreview"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { Button } from "@/components/ui/button"
 import { DownloadPDFButton } from "@/components/DownloadPDFButton"
+import { LanguageSwitcher } from "./LanguageSwitcher"
 
 const STORAGE_KEY = "guest_biodata_data"
 
@@ -124,22 +125,11 @@ export function GuestBiodataEditor() {
 
           <div className="flex items-center gap-4">
             {/* Language Toggle */}
-            <div className="flex items-center bg-accent p-1 rounded-none border border-border-muted h-[42px]">
-              <Button
-                variant="ghost"
-                onClick={() => setLanguage("en")}
-                className={`px-4 h-full rounded-none tracking-wider transition-all ${language === 'en' ? 'bg-primary text-primary-foreground shadow-sm hover:bg-primary hover:text-primary-foreground' : 'text-foreground/30 hover:text-foreground hover:bg-transparent'}`}
-              >
-                Eng
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => setLanguage("bn")}
-                className={`px-4 h-full rounded-none tracking-wider transition-all ${language === 'bn' ? 'bg-primary text-primary-foreground shadow-sm hover:bg-primary hover:text-primary-foreground' : 'text-foreground/30 hover:text-foreground hover:bg-transparent'}`}
-              >
-                বাংলা
-              </Button>
-            </div>
+            <LanguageSwitcher
+              language={language}
+              setLanguage={setLanguage}
+              className="h-[42px]"
+            />
 
             {/* Download Button */}
             <DownloadPDFButton
@@ -184,7 +174,7 @@ export function GuestBiodataEditor() {
           </div>
 
           {/* Preview Panel */}
-          <div className={`lg:w-[420px] w-full lg:sticky lg:top-8 order-first lg:order-last min-w-0 ${mobileView === "edit" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-right-4 duration-500'}`}>
+          <div className={`lg:w-[420px] w-full order-first lg:order-last min-w-0 ${mobileView === "edit" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-right-4 duration-500'}`}>
             <BiodataPreview data={formData} />
           </div>
         </div>

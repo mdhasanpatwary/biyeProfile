@@ -40,8 +40,8 @@ export default async function BrowseBiodataPage(props: {
                 <header className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
                     <div className="max-w-xl text-center md:text-left">
                         <div className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-foreground-muted mb-8">Directory / 01</div>
-                        <h1 className="text-5xl md:text-8xl font-serif text-foreground tracking-tight leading-none mb-8">
-                            Explore <br /> Profiles
+                        <h1 className="text-5xl font-serif text-foreground tracking-tight leading-none mb-8">
+                            Explore Profiles
                         </h1>
                         <p className="text-foreground-muted font-medium text-lg leading-relaxed max-w-md">
                             A curated list of public marriage biodata entries. Refined, secure, and ready for your connection.

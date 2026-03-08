@@ -14,7 +14,7 @@ import { FormField } from "@/components/ui/form-field"
 import { StepWizard } from "@/components/ui/step-wizard"
 import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
-
+import { useRouter } from "next/navigation"
 
 const HEIGHT_OPTIONS = Array.from({ length: 20 }, (_, i) => {
   const inches = 58 + i; // 4'10" is 58 inches
@@ -44,7 +44,7 @@ export function CustomFieldsFormBlock({
   });
 
   return (
-    <div className="sm:col-span-2 space-y-4 mt-10 pt-10 border-t border-border-muted border-dashed">
+    <div className="sm:col-span-2 space-y-4 pt-6 border-t border-border-muted border-dashed">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h4 className="font-serif text-lg text-foreground italic">Additional Information</h4>
@@ -114,6 +114,7 @@ export function BiodataForm({
   onViewChange?: (view: "edit" | "preview") => void,
   isGuest?: boolean,
 }) {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [lastSavedData, setLastSavedData] = useState<Partial<BiodataFormValues>>(initialData)
 
@@ -323,7 +324,8 @@ export function BiodataForm({
           }
         }
       }
-      window.location.href = "/dashboard";
+      router.push("/dashboard");
+      router.refresh();
     } else {
       toast.error("Please fill in all required fields correctly.");
     }
@@ -342,7 +344,7 @@ export function BiodataForm({
   return (
     <div className="relative">
 
-      <div className="flex items-center justify-between gap-4 mb-12 bg-background/90 backdrop-blur-md p-6 border-b border-border sticky top-0 z-50 transition-all duration-300">
+      <div className="flex items-center justify-between gap-4 bg-background/90 backdrop-blur-md p-6 sticky top-0 z-50 transition-all duration-300">
         <div className="flex items-start gap-2 flex-1 min-w-0">
           <Button
             type="button"
@@ -378,9 +380,9 @@ export function BiodataForm({
         {/* Step 1: Basic Information */}
         {currentStep === 1 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-12">
+            <CardHeader className="border-b border-border-muted mb-6">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 01</p>
-              <CardTitle className="text-5xl font-serif text-foreground italic">
+              <CardTitle className="text-3xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Basic Information' : 'প্রাথমিক তথ্য'}
               </CardTitle>
             </CardHeader>
@@ -404,7 +406,7 @@ export function BiodataForm({
                 </FormField>
 
                 <FormField label="Age (Auto Calculated)">
-                  <Input type="number" readOnly {...form.register("basicInfo.age")} placeholder="e.g. 28" className="block w-full rounded-none border-border-muted bg-accent shadow-sm md:text-sm p-4 border text-foreground/40 cursor-not-allowed outline-none font-medium placeholder:text-foreground/30" />
+                  <Input type="number" readOnly {...form.register("basicInfo.age")} placeholder="e.g. 28" className="block w-full rounded-none border-border-muted bg-accent shadow-sm md:text-sm p-4 border text-foreground/70 cursor-not-allowed outline-none font-medium placeholder:text-foreground/50" />
                 </FormField>
 
                 <FormField label="Height" error={form.formState.errors.basicInfo?.height?.message}>
@@ -449,9 +451,9 @@ export function BiodataForm({
         {/* Step 2: Personal Information */}
         {currentStep === 2 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-12">
+            <CardHeader className="border-b border-border-muted mb-6">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 02</p>
-              <CardTitle className="text-5xl font-serif text-foreground italic">
+              <CardTitle className="text-3xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Personal Information' : 'ব্যক্তিগত তথ্য'}
               </CardTitle>
             </CardHeader>
@@ -508,9 +510,9 @@ export function BiodataForm({
         {/* Step 3: Education Information */}
         {currentStep === 3 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-12">
+            <CardHeader className="border-b border-border-muted mb-6">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 03</p>
-              <CardTitle className="text-5xl font-serif text-foreground italic">
+              <CardTitle className="text-3xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Education Information' : 'শিক্ষাগত তথ্য'}
               </CardTitle>
             </CardHeader>
@@ -525,7 +527,7 @@ export function BiodataForm({
                         onClick={() => removeEducation(index)}
                         className="absolute -top-3 -right-3 w-8 h-8 bg-background text-foreground-muted rounded-none shadow-md border border-border-muted flex items-center justify-center opacity-0 group-hover/edu:opacity-100 transition-all hover:bg-accent z-10"
                       >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        <svg className="w-4 min-w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                       </Button>
                     )}
 
@@ -606,9 +608,9 @@ export function BiodataForm({
         {/* Step 4: Profession Information */}
         {currentStep === 4 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-12">
+            <CardHeader className="border-b border-border-muted mb-6">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 04</p>
-              <CardTitle className="text-5xl font-serif text-foreground italic">
+              <CardTitle className="text-3xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Profession Information' : 'পেশাগত তথ্য'}
               </CardTitle>
             </CardHeader>
@@ -649,9 +651,9 @@ export function BiodataForm({
         {/* Step 5: Family Information */}
         {currentStep === 5 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-12">
+            <CardHeader className="border-b border-border-muted mb-6">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 05</p>
-              <CardTitle className="text-5xl font-serif text-foreground italic">
+              <CardTitle className="text-3xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Family Information' : 'পারিবারিক তথ্য'}
               </CardTitle>
             </CardHeader>
@@ -700,9 +702,9 @@ export function BiodataForm({
         {/* Step 6: Marriage Expectations */}
         {currentStep === 6 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-12">
+            <CardHeader className="border-b border-border-muted mb-6">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 06</p>
-              <CardTitle className="text-5xl font-serif text-foreground italic">
+              <CardTitle className="text-3xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Marriage Expectations' : 'বিয়ে সংক্রান্ত প্রত্যাশা'}
               </CardTitle>
             </CardHeader>
@@ -746,9 +748,9 @@ export function BiodataForm({
         {/* Step 7: Contact Information */}
         {currentStep === 7 && (
           <Card className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <CardHeader className="border-b border-border-muted pb-12 mb-12">
+            <CardHeader className="border-b border-border-muted mb-6">
               <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 07</p>
-              <CardTitle className="text-5xl font-serif text-foreground italic">
+              <CardTitle className="text-3xl font-serif text-foreground italic">
                 {lang === 'en' ? 'Contact Information' : 'যোগাযোগের তথ্য'}
               </CardTitle>
             </CardHeader>
@@ -780,10 +782,10 @@ export function BiodataForm({
         {/* Step 8: Custom Sections */}
         {currentStep === 8 && (
           <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <CardHeader className="flex flex-row justify-between items-center mb-12 pb-12 border-b border-border-muted space-y-0">
+            <CardHeader className="flex flex-row justify-between items-center mb-6 border-b border-border-muted space-y-0">
               <div>
                 <p className="font-mono text-[11px] text-foreground-muted uppercase tracking-[0.4em] mb-4">Chapter / 08</p>
-                <CardTitle className="text-5xl font-serif text-foreground italic">
+                <CardTitle className="text-3xl font-serif text-foreground italic">
                   Custom Sections
                 </CardTitle>
                 <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-widest mt-4 px-0">Describe your heritage and lifestyle in detail</p>
@@ -900,14 +902,14 @@ export function BiodataForm({
               <button
                 type="button"
                 onClick={() => onViewChange?.("edit")}
-                className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "edit" ? 'bg-foreground text-background shadow-sm' : 'text-foreground-muted/30'}`}
+                className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "edit" ? 'bg-foreground text-background shadow-sm' : 'text-foreground/60 hover:text-foreground'}`}
               >
                 Edit
               </button>
               <button
                 type="button"
                 onClick={() => onViewChange?.("preview")}
-                className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "preview" ? 'bg-foreground text-background shadow-sm' : 'text-foreground-muted/30'}`}
+                className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "preview" ? 'bg-foreground text-background shadow-sm' : 'text-foreground/60 hover:text-foreground'}`}
               >
                 Preview
               </button>
@@ -942,7 +944,7 @@ export function BiodataForm({
         </div>
 
         {/* Footer Navigation (Desktop) - Premium styled buttons */}
-        <div className="hidden lg:flex justify-between items-center py-10 border-t border-border-muted">
+        <div className="hidden lg:flex justify-between items-center pt-10 border-t border-border-muted">
           {currentStep > 1 ? (
             <Button
               type="button"

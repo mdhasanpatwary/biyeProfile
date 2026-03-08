@@ -14,22 +14,22 @@ export default async function Home() {
 
       <Container className="max-w-[1400px] px-6">
         {/* HERO SECTION: Strict 12-column grid */}
-        <Section className="pt-12 pb-12 md:pt-16 md:pb-20 grid grid-cols-12 gap-8 items-start">
+        <Section className="pt-16 pb-16 md:pt-20 md:pb-24 grid grid-cols-12 gap-8 md:gap-12 items-start">
           {/* Hero Left: Span 8 */}
           <div className="col-span-12 lg:col-span-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4 mb-10">
               <span className="w-12 h-[1px] bg-foreground"></span>
               <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground-muted">Official Registry / 2026</span>
             </div>
 
-            <h1 className="font-serif text-[clamp(2.5rem,10vw,8.5rem)] leading-[0.8] tracking-tighter text-foreground mb-8">
+            <h1 className="font-serif text-[clamp(2.5rem,10vw,8.5rem)] leading-[0.8] tracking-tighter text-foreground mb-10">
               The Digital <br />
               Standard for <br />
               Marriage.
             </h1>
 
             <div className="max-w-md">
-              <p className="text-xl text-foreground-muted leading-relaxed font-medium mb-8 uppercase tracking-tight">
+              <p className="text-xl text-foreground-muted leading-relaxed font-medium mb-12 uppercase tracking-tight">
                 Premium digital marriage biodata builder. clear, secure, and engineered for intentional representation.
               </p>
 
@@ -71,9 +71,8 @@ export default async function Home() {
           </div>
         </Section>
 
-        {/* HOW IT WORKS SECTION: 12-column grid */}
         <Section className="border-t border-border">
-          <div className="grid grid-cols-12 gap-8 mb-12">
+          <div className="grid grid-cols-12 gap-8 md:gap-12 mb-16">
             <div className="col-span-12 lg:col-span-4">
               <h2 className="font-serif text-5xl tracking-tighter italic text-foreground">The Process.</h2>
             </div>
@@ -124,8 +123,8 @@ export default async function Home() {
                 desc: "Engineered to look exactly as intended when converted to physical paper documents."
               }
             ].map((item, i) => (
-              <div key={i} className="col-span-12 md:col-span-4 p-8 sm:p-10 space-y-6 group transition-all hover:bg-surface">
-                <div className="font-mono text-[10px] font-black text-foreground/30 tracking-[0.4em] mb-2 uppercase">Principle / {item.num}</div>
+              <div key={i} className="col-span-12 md:col-span-4 p-10 sm:p-12 space-y-8 group transition-all hover:bg-surface">
+                <div className="font-mono text-[10px] font-black text-foreground/30 tracking-[0.4em] mb-4 uppercase">Principle / {item.num}</div>
                 <h3 className="text-4xl font-serif text-foreground tracking-tighter leading-none italic group-hover:underline underline-offset-8 decoration-foreground/10">
                   {item.title}
                 </h3>
@@ -138,9 +137,9 @@ export default async function Home() {
         </Section>
 
         {/* CTA BANNER */}
-        <Section className="text-center bg-surface border-b border-border">
+        <Section className="text-center bg-surface border-b border-border py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-6">
-            <h2 className="text-5xl md:text-8xl font-serif text-foreground leading-[0.9] mb-8 tracking-tighter">
+            <h2 className="text-5xl md:text-8xl font-serif text-foreground leading-[0.9] mb-12 tracking-tighter">
               A commitment to <br />
               <span className="italic">intentional marriage.</span>
             </h2>

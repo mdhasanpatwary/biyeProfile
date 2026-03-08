@@ -6,7 +6,7 @@ const Section = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
     return (
       <section
         ref={ref}
-        className={cn("py-8 md:py-16", className)}
+        className={cn("py-12 md:py-16", className)}
         {...props}
       />
     )

@@ -33,7 +33,7 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
                 />
 
                 {/* Info Grid */}
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 items-center w-full text-center sm:text-left">
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-12 items-center w-full text-center sm:text-left">
                     <div className="md:col-span-2">
                         <p className="text-[10px] font-mono font-black text-foreground/20 uppercase tracking-[0.4em] mb-2">Identification</p>
                         <h3 className="text-2xl sm:text-3xl font-serif text-foreground leading-tight italic tracking-tight">

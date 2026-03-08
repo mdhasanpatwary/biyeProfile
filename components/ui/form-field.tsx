@@ -20,7 +20,7 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(({
   ...props
 }, ref) => {
   return (
-    <div ref={ref} className={cn("flex flex-col gap-3", className)} {...props}>
+    <div ref={ref} className={cn("flex flex-col gap-4", className)} {...props}>
       {label && (
         <Label className={cn("text-xs font-bold uppercase tracking-widest text-foreground", error && "text-destructive")}>
           {label} {required && <span className="text-destructive">*</span>}
@@ -28,12 +28,12 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(({
       )}
       {children}
       {description && !error && (
-        <p className="text-[11px] text-foreground-muted font-medium mt-1 leading-relaxed">
+        <p className="text-[12px] text-foreground-muted font-medium mt-1 leading-relaxed">
           {description}
         </p>
       )}
       {error && (
-        <p className="text-[11px] text-destructive font-medium mt-1 leading-relaxed">
+        <p className="text-[12px] text-destructive font-medium mt-1 leading-relaxed">
           {error}
         </p>
       )}

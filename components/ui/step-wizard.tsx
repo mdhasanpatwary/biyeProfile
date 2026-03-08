@@ -63,7 +63,7 @@ const StepWizard = React.forwardRef<HTMLDivElement, StepWizardProps>(({
     <div
       ref={scrollRef}
       className={cn(
-        "w-full mb-10 overflow-x-auto pb-4 scrollbar-hide hide-scrollbar relative select-none",
+        "w-full overflow-x-auto scrollbar-hide hide-scrollbar relative select-none",
         isDragging ? "cursor-grabbing" : "cursor-grab",
         className
       )}

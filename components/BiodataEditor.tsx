@@ -5,6 +5,7 @@ import { BiodataForm } from "./BiodataForm"
 import { BiodataPreview } from "./BiodataPreview"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { Button } from "@/components/ui/button"
+import { LanguageSwitcher } from "./LanguageSwitcher"
 
 export function BiodataEditor({
   initialData,
@@ -35,30 +36,19 @@ export function BiodataEditor({
         </div>
       )}
 
-      <div className={`flex-1 w-full bg-background rounded-none border border-border-muted p-8 md:p-12 min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6 md:gap-8 pb-10 border-b border-border-muted">
+      <div className={`flex-1 w-full bg-background rounded-none border border-border-muted p-6 md:p-8 min-w-0 ${mobileView === "preview" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-left-4 duration-500'}`}>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 md:gap-8 pb-10 border-b border-border-muted">
           <div>
             <h1 className="text-4xl font-serif text-foreground tracking-tight">
               Edit Your Biodata
             </h1>
             <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] mt-3">Document Management</p>
           </div>
-          <div className="flex items-center bg-accent p-1 rounded-none border border-border-muted h-[42px]">
-            <Button
-              variant="ghost"
-              onClick={() => setLanguage("en")}
-              className={`px-4 h-full rounded-none tracking-wider transition-all ${language === 'en' ? 'bg-foreground text-background shadow-sm hover:bg-foreground hover:text-background' : 'text-foreground-muted hover:text-foreground hover:bg-transparent'}`}
-            >
-              Eng
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => setLanguage("bn")}
-              className={`px-4 h-full rounded-none tracking-wider transition-all ${language === 'bn' ? 'bg-foreground text-background shadow-sm hover:bg-foreground hover:text-background' : 'text-foreground-muted hover:text-foreground hover:bg-transparent'}`}
-            >
-              বাংলা
-            </Button>
-          </div>
+          <LanguageSwitcher
+            language={language}
+            setLanguage={setLanguage}
+            className="h-[42px]"
+          />
         </div>
 
         <BiodataForm
@@ -70,7 +60,7 @@ export function BiodataEditor({
         />
       </div>
 
-      <div className={`lg:w-[420px] w-full lg:sticky lg:top-8 order-first lg:order-last min-w-0 ${mobileView === "edit" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-right-4 duration-500'}`}>
+      <div className={`lg:w-[420px] w-full order-first lg:order-last min-w-0 ${mobileView === "edit" ? 'hidden lg:block' : 'block animate-in fade-in slide-in-from-right-4 duration-500'}`}>
         <BiodataPreview data={formData} />
       </div>
     </div>

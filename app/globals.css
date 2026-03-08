@@ -26,28 +26,32 @@
   --background: #ffffff;
   --surface: #f9f9f9;
   --foreground: #111111;
-  --foreground-muted: #666666;
+  --foreground-muted: #555555; /* Increased contrast from #666666 */
   --primary: #111111;
   --primary-foreground: #ffffff;
   --border: #111111;
-  --border-muted: #eaeaea;
+  --border-muted: #dddddd; /* Darker border for better visibility */
   --accent: #f5f5f5;
   --selection-bg: #111111;
   --selection-text: #ffffff;
+  --destructive: #cc0000;
+  --success: #008800;
 }
 
 [data-theme='dark'] {
   --background: #0f0f0f;
   --surface: #161616;
   --foreground: #eaeaea;
-  --foreground-muted: #888888;
+  --foreground-muted: #a0a0a0; /* Increased contrast from #888888 */
   --primary: #eaeaea;
   --primary-foreground: #111111;
   --border: #eaeaea;
-  --border-muted: #2a2a2a;
+  --border-muted: #333333; /* Slightly brighter for visibility */
   --accent: #1e1e1e;
   --selection-bg: #eaeaea;
   --selection-text: #111111;
+  --destructive: #ff4444;
+  --success: #4ade80;
 }
 
 @theme inline {
@@ -60,6 +64,8 @@
   --color-border: var(--border);
   --color-border-muted: var(--border-muted);
   --color-accent: var(--accent);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular;
@@ -136,13 +142,18 @@ body {
 /* Date Input Icon Standardization */
 input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.8; /* Increased from 0.6 */
   transition: opacity 0.2s ease;
   padding-left: 0.5rem;
+  filter: var(--calendar-filter);
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
+:root {
+  --calendar-filter: none;
+}
+
+[data-theme='dark'] {
+  --calendar-filter: invert(1);
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

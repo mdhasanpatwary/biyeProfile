@@ -6,7 +6,7 @@ const Container = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
     return (
       <div
         ref={ref}
-        className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}
+        className={cn("mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-10", className)}
         {...props}
       />
     )

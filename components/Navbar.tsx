@@ -18,13 +18,13 @@ export async function Navbar() {
           <div className="hidden lg:flex items-center gap-12">
             <Link
               href="/biodata"
-              className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:text-foreground transition-all"
+              className="font-mono text-[11px] md:text-[12px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:text-foreground transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
             >
               Search Biodatas
             </Link>
             <Link
               href="/create"
-              className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:text-foreground transition-all"
+              className="font-mono text-[11px] md:text-[12px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:text-foreground transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
             >
               Create Biodata
             </Link>
@@ -42,7 +42,7 @@ export async function Navbar() {
             <div className="flex items-center gap-6 md:gap-8">
               <Link
                 href="/dashboard"
-                className="font-mono text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-foreground border-b border-foreground whitespace-nowrap"
+                className="font-mono text-[11px] md:text-[12px] font-black uppercase tracking-[0.2em] text-foreground border-b border-foreground whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
               >
                 Dashboard
               </Link>
@@ -52,7 +52,7 @@ export async function Navbar() {
             <div className="flex items-center gap-6 md:gap-12">
               <Link
                 href="/api/auth/signin"
-                className="font-mono text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-foreground border border-foreground px-3 sm:px-6 py-2 sm:py-3 hover:bg-foreground hover:text-background transition-all whitespace-nowrap"
+                className="font-mono text-[11px] md:text-[12px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-foreground border border-foreground px-3 sm:px-6 py-2 sm:py-3 hover:bg-foreground hover:text-background transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
               >
                 Sign In
               </Link>

@@ -8,13 +8,13 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary: "bg-foreground text-background border border-foreground hover:bg-background hover:text-foreground",
   secondary: "bg-accent text-foreground border border-accent hover:bg-border-muted",
   outline: "border border-border-muted bg-background text-foreground hover:bg-accent hover:border-foreground-muted",
-  ghost: "text-foreground-muted hover:text-foreground hover:bg-accent",
+  ghost: "text-foreground hover:bg-accent", /* Changed from text-foreground-muted for better contrast */
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
-  default: "h-12 px-8",
-  sm: "h-9 px-4 text-[10px]",
-  lg: "h-14 px-10 text-[12px]",
+  default: "h-12 px-8 text-[13px]", /* Increased from 11px */
+  sm: "h-9 px-4 text-[11px]", /* Increased from 10px */
+  lg: "h-14 px-10 text-[14px]", /* Increased from 12px */
   icon: "h-10 w-10",
 }
 
@@ -29,7 +29,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-none text-[11px] font-mono font-black uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+          "inline-flex items-center justify-center rounded-none font-mono font-black uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 active:scale-[0.98]", /* Increased disabled opacity for readability */
           variantClasses[variant],
           sizeClasses[size],
           className,
