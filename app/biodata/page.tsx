@@ -1,15 +1,17 @@
 import { prisma } from "@/lib/prisma"
 import { BiodataCard } from "@/components/BiodataCard"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
+import { SearchInput } from "@/components/SearchInput"
 import Link from "next/link"
 
 export const dynamic = "force-dynamic"
 
 export default async function BrowseBiodataPage(props: {
-    searchParams: Promise<{ religion?: string; district?: string }>
+    searchParams: Promise<{ religion?: string; district?: string; q?: string }>
 }) {
     const searchParams = await props.searchParams
     const religion = searchParams.religion
+    const q = searchParams.q
 
     // Fetch only public profiles
     const biodata = await prisma.biodata.findMany({
@@ -21,6 +23,28 @@ export default async function BrowseBiodataPage(props: {
                     equals: religion
                 }
             } : {}),
+            ...(q ? {
+                OR: [
+                    {
+                        data: {
+                            path: ['basicInfo', 'fullName'],
+                            string_contains: q,
+                        }
+                    },
+                    {
+                        data: {
+                            path: ['profession', 'occupation'],
+                            string_contains: q,
+                        }
+                    },
+                    {
+                        data: {
+                            path: ['personalInfo', 'district'],
+                            string_contains: q,
+                        }
+                    }
+                ]
+            } : {})
         },
         include: {
             user: { select: { username: true } }
@@ -38,49 +62,54 @@ export default async function BrowseBiodataPage(props: {
 
                 {/* Intro */}
                 <header className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
-                    <div className="max-w-xl text-center md:text-left">
+                    <div className="md:max-w-xl text-center md:text-left">
                         <div className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-foreground-muted mb-8">Directory / 01</div>
                         <h1 className="text-5xl font-serif text-foreground tracking-tight leading-none mb-8">
                             Explore Profiles
                         </h1>
-                        <p className="text-foreground-muted font-medium text-lg leading-relaxed max-w-md">
+                        <p className="text-foreground-muted font-medium text-lg leading-relaxed md:max-w-md">
                             A curated list of public marriage biodata entries. Refined, secure, and ready for your connection.
                         </p>
                     </div>
 
-                    {/* Minimal Filter */}
-                    <div className="flex flex-col gap-4">
-                        <span className="text-[10px] font-mono font-black uppercase tracking-[0.2em] text-foreground-muted mb-2 text-center md:text-left">Filter by Religion</span>
-                        <div className="w-full overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-                            <div className="flex flex-nowrap md:flex-wrap gap-2 pb-2 md:pb-0">
-                                <Link
-                                    href="/biodata"
-                                    className={`shrink-0 px-4 py-2 text-[10px] font-mono font-black uppercase tracking-widest border transition-all ${!religion ? 'bg-foreground text-background border-foreground' : 'bg-transparent text-foreground-muted border-border-muted hover:border-foreground-muted'}`}
-                                >
-                                    All
-                                </Link>
-                                {religions.map((r) => (
+                    {/* Minimal Filter & Search */}
+                    <div className="flex flex-col gap-6 md:min-w-[320px]">
+                        <div className="flex flex-col gap-4">
+                            <span className="text-[10px] font-mono font-black uppercase tracking-[0.2em] text-foreground-muted text-center md:text-left">Filter by Religion</span>
+                            <div className="w-full overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+                                <div className="flex flex-nowrap justify-center md:justify-start md:flex-wrap gap-2 pb-2 md:pb-0">
                                     <Link
-                                        key={r}
-                                        href={`/biodata?religion=${r}`}
-                                        className={`shrink-0 px-4 py-2 text-[10px] font-mono font-black uppercase tracking-widest border transition-all ${religion === r ? 'bg-foreground text-background border-foreground' : 'bg-transparent text-foreground-muted border-border-muted hover:border-foreground-muted'}`}
+                                        href={`/biodata${q ? `?q=${encodeURIComponent(q)}` : ''}`}
+                                        className={`shrink-0 px-4 py-2 text-[10px] font-mono font-black uppercase tracking-widest border transition-all ${!religion ? 'bg-foreground text-background border-foreground' : 'bg-transparent text-foreground-muted border-border-muted hover:border-foreground-muted'}`}
                                     >
-                                        {r}
+                                        All
                                     </Link>
-                                ))}
+                                    {religions.map((r) => (
+                                        <Link
+                                            key={r}
+                                            href={`/biodata?religion=${r}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                                            className={`shrink-0 px-4 py-2 text-[10px] font-mono font-black uppercase tracking-widest border transition-all ${religion === r ? 'bg-foreground text-background border-foreground' : 'bg-transparent text-foreground-muted border-border-muted hover:border-foreground-muted'}`}
+                                        >
+                                            {r}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Search Input & Results Count */}
+                        <div className="w-full flex flex-col gap-3">
+                            <SearchInput initialQuery={q || ""} />
+                            <div className="text-right">
+                                <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-foreground-muted">
+                                    {biodata.length} Results
+                                </span>
                             </div>
                         </div>
                     </div>
                 </header>
 
-                {/* Results Info */}
-                <div className="mb-12 md:mb-16 flex items-center gap-6">
-                    <div className="h-[1px] flex-1 bg-border-muted" />
-                    <span className="text-[10px] font-mono font-black uppercase tracking-[0.3em] text-foreground-muted/50">
-                        {biodata.length} Results
-                    </span>
-                    <div className="h-[1px] flex-1 bg-border-muted" />
-                </div>
+                <div className="mb-8 md:mb-12" />
 
                 {/* The List (Editorial Style) */}
                 {biodata.length > 0 ? (

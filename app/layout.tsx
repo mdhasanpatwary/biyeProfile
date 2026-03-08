@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="max-w-full overflow-x-hidden scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased max-w-full overflow-x-hidden flex flex-col min-h-screen bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased max-w-full overflow-x-hidden flex flex-col min-h-screen bg-background text-foreground pb-16`}
       >
         <ThemeProvider
           attribute="data-theme"

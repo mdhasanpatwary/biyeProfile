@@ -191,7 +191,7 @@ export function GuestBiodataEditor() {
         </div>
 
         {/* Sign In CTA Card (bottom) */}
-        <div className="mt-10 bg-background border border-border rounded-none p-10 flex flex-col sm:flex-row items-center justify-between gap-8 print:hidden">
+        <div className="mt-10 bg-background border border-border-muted/50 rounded-none p-10 flex flex-col sm:flex-row items-center justify-between gap-8 print:hidden">
           <div>
             <h3 className="text-3xl font-serif text-foreground mb-2">Preserve your context.</h3>
             <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-widest">Sign in to save permanently & get a shareable link.</p>

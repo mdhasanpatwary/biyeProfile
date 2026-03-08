@@ -104,7 +104,7 @@ export default async function Home() {
         </Section>
 
         {/* PRINCIPLES SECTION */}
-        <Section className="border-y border-border px-0">
+        <Section className="border-y border-border-muted/50 px-0">
           <div className="grid grid-cols-12 gap-0 overflow-hidden border border-border-muted divide-y md:divide-y-0 md:divide-x divide-border-muted">
             {[
               {
@@ -137,7 +137,7 @@ export default async function Home() {
         </Section>
 
         {/* CTA BANNER */}
-        <Section className="text-center bg-surface border-b border-border py-16 md:py-24">
+        <Section className="text-center bg-surface border-b border-border-muted/50 py-16 md:py-24 mb-16">
           <div className="max-w-3xl mx-auto px-6">
             <h2 className="text-5xl md:text-8xl font-serif text-foreground leading-[0.9] mb-12 tracking-tighter">
               A commitment to <br />
