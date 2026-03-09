@@ -45,7 +45,7 @@ export default function SignInPage() {
         </div>
 
         <div className="mt-10 md:mt-12 pt-8 md:pt-10 border-t border-border-muted w-full text-center">
-          <p className="text-[9px] text-foreground-muted font-mono uppercase tracking-widest leading-relaxed">
+          <p className="text-[10px] text-foreground-muted font-mono uppercase tracking-widest leading-relaxed">
             By accessing the Registry, you agree to our <br /> Terms and Privacy Policy.
           </p>
         </div>

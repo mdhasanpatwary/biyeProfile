@@ -37,11 +37,11 @@ Based on the [Detailed Audit Report](file:///Users/patwary/.gemini/antigravity/b
 ## 🟢 Low Priority
 
 ### UX / UI
-- [ ] Enhance "No matched results" empty state with recommendations.
-- [ ] Standardize typography scales and border styles.
+- [x] Enhance "No matched results" empty state with recommendations.
+- [x] Standardize typography scales and border styles.
 
 ### Product & Features
 - [ ] Implement a "Profile Strength" meter.
-- [ ] Add social sharing (OG images) for public profiles.
+- [x] Add social sharing (OG images) for public profiles.
 - [ ] Add photo cropping tool before upload.
 - [ ] Provide multiple PDF themes for users.

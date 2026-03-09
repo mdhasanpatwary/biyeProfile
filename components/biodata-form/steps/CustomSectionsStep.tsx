@@ -63,7 +63,7 @@ export function CustomSectionsStep({ form }: CustomSectionsStepProps) {
               </div>
 
               <div className="space-y-6">
-                <p className="font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.4em] mb-4">Entries</p>
+                <p className="font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.4em] mb-4">Entries</p>
                 {form.watch(`customSections.${sectionIdx}.fields`)?.map((_, fieldIdx) => (
                   <div key={fieldIdx} className="flex gap-8 md:gap-12 items-end group/field pb-6 border-b border-border-muted/50">
                     <div className="flex-1">

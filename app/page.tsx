@@ -28,7 +28,7 @@ export default async function Home() {
             </h1>
 
             <div className="max-w-[540px]">
-              <p className="text-[15px] sm:text-base text-foreground-muted leading-[1.6] font-medium mb-10 tracking-tight">
+              <p className="text-sm text-foreground-muted leading-[1.6] font-medium mb-10 tracking-tight">
                 Create, manage, and securely share your marriage biodata online with a professional digital profile and downloadable PDF.
               </p>
 
@@ -51,20 +51,20 @@ export default async function Home() {
           <div className="hidden lg:col-span-4 lg:block pt-16 animate-in fade-in slide-in-from-right-8 duration-1000 delay-300">
             <div className="border-l-[1.5px] border-border-muted pl-12 space-y-10">
               <div>
-                <span className="block font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.25em] mb-4">01 / Privacy</span>
-                <p className="text-[17px] font-serif italic leading-tight text-foreground">
+                <span className="block font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.2em] mb-4">01 / Privacy</span>
+                <p className="text-lg font-serif italic leading-tight text-foreground">
                   Private shareable biodata links
                 </p>
               </div>
               <div>
-                <span className="block font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.25em] mb-4">02 / Security</span>
-                <p className="text-[17px] font-serif italic leading-tight text-foreground">
+                <span className="block font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.2em] mb-4">02 / Security</span>
+                <p className="text-lg font-serif italic leading-tight text-foreground">
                   Secure encrypted data storage
                 </p>
               </div>
               <div>
-                <span className="block font-mono text-[9px] font-black text-foreground-muted uppercase tracking-[0.25em] mb-4">03 / Export</span>
-                <p className="text-[17px] font-serif italic leading-tight text-foreground">
+                <span className="block font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.2em] mb-4">03 / Export</span>
+                <p className="text-lg font-serif italic leading-tight text-foreground">
                   Professional PDF biodata export
                 </p>
               </div>
@@ -112,14 +112,14 @@ export default async function Home() {
               <div key={i} className="group p-10 md:p-12 border-b md:border-b-0 border-r-0 md:border-r border-border hover:bg-surface transition-all duration-500">
                 <div className="flex justify-between items-start mb-12">
                   <span className="font-mono text-xs font-black text-foreground">{item.step}</span>
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-foreground/30 px-3 py-1 border border-border/10 rounded-none bg-foreground/5 group-hover:bg-foreground/10 transition-colors">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-foreground/30 px-3 py-1 border border-border/10 rounded-none bg-foreground/5 group-hover:bg-foreground/10 transition-colors">
                     {item.tag}
                   </span>
                 </div>
                 <h3 className="text-4xl font-serif text-foreground mb-6 tracking-tight italic group-hover:underline underline-offset-8 decoration-foreground/20">
                   {item.title}
                 </h3>
-                <p className="text-foreground-muted font-medium leading-[1.8] text-[15px] max-w-xs opacity-70 group-hover:opacity-100 transition-opacity">
+                <p className="text-foreground-muted font-medium leading-[1.8] text-sm max-w-xs opacity-70 group-hover:opacity-100 transition-opacity">
                   {item.desc}
                 </p>
               </div>
@@ -165,7 +165,7 @@ export default async function Home() {
                   }
                 ].map((item, i) => (
                   <div key={i} className="space-y-4">
-                    <h4 className="font-mono text-[10px] uppercase tracking-[0.25em] text-success/80">0{i+1} / Verified</h4>
+                    <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-success/80">0{i+1} / Verified</h4>
                     <h3 className="text-2xl font-serif italic text-background">{item.title}</h3>
                     <p className="text-background/50 text-sm leading-relaxed font-medium">
                       {item.desc}

@@ -276,7 +276,7 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestActiv
                      b.reports.map((report) => (
                        <div key={report.id} className="flex flex-col">
                          <span className="text-xs font-semibold">{report.reporter.email}</span>
-                         <span className="text-[9px] font-mono text-foreground-muted uppercase tracking-tighter">
+                         <span className="text-[10px] font-mono text-foreground-muted uppercase tracking-tighter">
                            {new Date(report.createdAt).toLocaleDateString()}
                          </span>
                        </div>
@@ -358,7 +358,7 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestActiv
               { header: "Timestamp", key: "createdAt", render: (g) => (
                 <div className="flex flex-col">
                   <span className="text-xs">{new Date(g.createdAt).toLocaleDateString()}</span>
-                  <span className="text-[9px] font-mono text-foreground-muted">{new Date(g.createdAt).toLocaleTimeString()}</span>
+                  <span className="text-[10px] font-mono text-foreground-muted">{new Date(g.createdAt).toLocaleTimeString()}</span>
                 </div>
               )},
             ]}

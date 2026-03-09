@@ -26,17 +26,17 @@ export function ThemeToggle() {
       <div className="flex items-center justify-center w-4 h-4 relative" aria-hidden="true">
         {/* Sun Icon (Visible in Light Mode) */}
         <div className={`absolute inset-0 transition-all duration-500 transform ${theme === 'dark' ? 'scale-0 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'}`}>
-          <div className="w-full h-full border-[1.5px] border-foreground rounded-full" />
+          <div className="w-full h-full border-2 border-foreground rounded-full" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-4 bg-foreground" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-[1px] bg-foreground" />
         </div>
         {/* Moon Icon (Visible in Dark Mode) */}
         <div className={`absolute inset-0 transition-all duration-500 transform ${theme === 'dark' ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-90 opacity-0'}`}>
-          <div className="w-full h-full border-[1.5px] border-foreground rounded-full bg-foreground" />
+          <div className="w-full h-full border-2 border-foreground rounded-full bg-foreground" />
           <div className="absolute top-[-2px] right-[-2px] w-3 h-3 bg-background rounded-full" />
         </div>
       </div>
-      <span className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-foreground hidden sm:block">
+      <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground hidden sm:block">
         {theme === 'dark' ? 'Dark' : 'Light'}
       </span>
     </button>

@@ -45,8 +45,8 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
 
                         {/* Mobile Metrics Row */}
                         <div className="flex items-center justify-center sm:justify-start gap-4 mt-4 md:hidden">
-                            <span className="text-[9px] font-black text-foreground uppercase tracking-widest border border-border-muted px-2 py-0.5">{religion}</span>
-                            <span className="text-[9px] font-mono text-foreground-muted uppercase tracking-widest">{age} Yrs</span>
+                            <span className="text-[10px] font-black text-foreground uppercase tracking-widest border border-border-muted px-2 py-0.5">{religion}</span>
+                            <span className="text-[10px] font-mono text-foreground-muted uppercase tracking-widest">{age} Yrs</span>
                         </div>
                     </div>
 

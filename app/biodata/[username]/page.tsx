@@ -27,11 +27,26 @@ export async function generateMetadata(props: { params: Promise<{ username: stri
 
   const data = user.biodata.data as unknown as BiodataFormValues
   const name = data?.basicInfo?.fullName || user.username
+  const religion = data?.basicInfo?.religion
+  const occupation = data?.profession?.occupation
+  const descParts = [religion, occupation].filter(Boolean).join(" · ")
 
   return {
     title: `${name}'s Marriage Biodata | BiyeProfile`,
-    description: `View ${name}'s complete marriage biodata on BiyeProfile.`,
-    robots: { index: true, follow: true }
+    description: `View ${name}'s complete marriage biodata on BiyeProfile.${descParts ? ` ${descParts}.` : ""}`,
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: "profile",
+      title: `${name} — Marriage Biodata`,
+      description: `View ${name}'s complete marriage biodata on BiyeProfile.${descParts ? ` ${descParts}.` : ""}`,
+      url: `https://biyeprofile.com/biodata/${username}`,
+      siteName: "BiyeProfile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${name} — Marriage Biodata`,
+      description: `View ${name}'s complete marriage biodata on BiyeProfile.${descParts ? ` ${descParts}.` : ""}`,
+    },
   }
 }
 

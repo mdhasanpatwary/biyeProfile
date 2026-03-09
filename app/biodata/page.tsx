@@ -127,9 +127,65 @@ export default async function BrowseBiodataPage(props: {
                         ))}
                     </div>
                 ) : (
-                    <div className="py-12 md:py-16 text-center border-2 border-dashed border-border-muted rounded-none">
-                        <h3 className="text-2xl font-serif text-foreground mb-6">No matched results</h3>
-                        <Link href="/biodata" className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted border-b border-border-muted pb-1 hover:text-foreground hover:border-foreground transition-all">Clear Filters</Link>
+                    <div className="py-20 md:py-28 text-center border-t border-border-muted">
+
+                        {/* Icon */}
+                        <div className="w-16 h-16 border border-border-muted flex items-center justify-center mx-auto mb-10">
+                            <svg className="w-6 h-6 text-foreground-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+
+                        {/* Heading */}
+                        <p className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground-muted mb-4">
+                            No Results
+                        </p>
+                        <h3 className="text-3xl md:text-4xl font-serif italic text-foreground mb-4 tracking-tight">
+                            {q ? <>Nothing found for &ldquo;{q}&rdquo;</> : <>No profiles match<br />these filters.</>}
+                        </h3>
+                        <p className="text-sm text-foreground-muted font-medium max-w-xs mx-auto leading-relaxed mb-12">
+                            {q
+                                ? "Try a different name, district, or occupation. You can also remove the religion filter below."
+                                : "This religion filter currently has no public profiles. Try browsing all profiles instead."
+                            }
+                        </p>
+
+                        {/* Actions */}
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                            <Link
+                                href="/biodata"
+                                className="px-8 py-3 bg-foreground text-background font-mono text-[10px] font-black uppercase tracking-[0.2em] hover:bg-foreground/90 transition-all active:scale-95"
+                            >
+                                Browse All Profiles
+                            </Link>
+                            {(q && religion) && (
+                                <Link
+                                    href={`/biodata?religion=${religion}`}
+                                    className="px-8 py-3 border border-border-muted font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:border-foreground hover:text-foreground transition-all active:scale-95"
+                                >
+                                    Clear Search
+                                </Link>
+                            )}
+                        </div>
+
+                        {/* Suggestion: Try other religions */}
+                        <div className="border-t border-border-muted/50 pt-10 max-w-sm mx-auto">
+                            <p className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted mb-6">
+                                Try browsing by
+                            </p>
+                            <div className="flex flex-wrap justify-center gap-2">
+                                {religions.filter(r => r !== religion).map((r) => (
+                                    <Link
+                                        key={r}
+                                        href={`/biodata?religion=${r}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                                        className="px-4 py-2 text-[10px] font-mono font-black uppercase tracking-widest border border-border-muted text-foreground-muted hover:border-foreground hover:text-foreground transition-all"
+                                    >
+                                        {r}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
                     </div>
                 )}
 
