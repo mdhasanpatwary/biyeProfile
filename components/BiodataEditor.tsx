@@ -1,14 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { BiodataForm } from "./BiodataForm"
 import { BiodataPreview } from "./BiodataPreview"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { Button } from "@/components/ui/button"
 import { LanguageSwitcher } from "./LanguageSwitcher"
+import Link from "next/link"
 
 export function BiodataEditor({
   initialData,
+  username,
 }: {
   initialData: Partial<BiodataFormValues>
   username: string
@@ -17,6 +19,10 @@ export function BiodataEditor({
   const [formData, setFormData] = useState(initialData)
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit")
   const [language, setLanguage] = useState<"en" | "bn">((initialData.language as "en" | "bn") || "en")
+
+  const handleDataChange = useCallback((data: BiodataFormValues) => {
+    setFormData(data)
+  }, [])
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start relative pb-12 lg:pb-0 w-full max-w-full overflow-hidden">
@@ -44,19 +50,31 @@ export function BiodataEditor({
             </h1>
             <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] mt-3">Document Management</p>
           </div>
-          <LanguageSwitcher
-            language={language}
-            setLanguage={setLanguage}
-            className="h-[42px]"
-          />
+
+          <div className="flex items-center gap-4">
+            <Link href={`/biodata/${username}`}>
+              <Button variant="outline" className="flex items-center gap-2 group text-[10px] h-[42px]">
+                <svg className="w-4 h-4 text-foreground-muted group-hover:text-foreground transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span className="hidden sm:inline-block">View Biodata</span>
+              </Button>
+            </Link>
+            <LanguageSwitcher
+              language={language}
+              setLanguage={setLanguage}
+              className="h-[42px]"
+            />
+          </div>
         </div>
 
         <BiodataForm
           initialData={initialData}
-          onDataChange={(data) => setFormData(data)}
+          onDataChange={handleDataChange}
           language={language}
           mobileView={mobileView}
-          onViewChange={(view) => setMobileView(view)}
+          onViewChange={setMobileView}
         />
       </div>
 

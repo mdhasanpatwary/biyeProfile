@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { Prisma } from "@prisma/client"
 
 interface AdminUser {
   id: string
@@ -44,20 +45,35 @@ interface AdminBiodata {
   reports?: AdminReport[]
 }
 
+interface AdminGuestActivity {
+  id: string
+  sessionId: string
+  type: string
+  path: string
+  metadata: Prisma.JsonValue
+  createdAt: Date
+  session: {
+    userAgent: string | null
+    lastActive: Date
+  }
+}
+
 interface AdminDashboardClientProps {
   initialStats: {
     totalUsers: number
     totalBiodatas: number
     publicBiodatas: number
     privateBiodatas: number
+    guestSessionsCount: number
   }
   users: AdminUser[]
   biodatas: AdminBiodata[]
+  guestActivities: AdminGuestActivity[]
 }
 
-type TabType = "overview" | "users" | "biodatas" | "reports"
+type TabType = "overview" | "users" | "biodatas" | "reports" | "guests"
 
-export function AdminDashboardClient({ initialStats, users, biodatas }: AdminDashboardClientProps) {
+export function AdminDashboardClient({ initialStats, users, biodatas, guestActivities }: AdminDashboardClientProps) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<TabType>("overview")
   const [isActionPending, setIsActionPending] = useState(false)
@@ -125,7 +141,7 @@ export function AdminDashboardClient({ initialStats, users, biodatas }: AdminDas
 
       <Tabs className="bg-transparent border-none p-0 mb-12">
         <TabsList className="bg-transparent border-b border-border-muted w-full justify-start h-auto p-0 space-x-8">
-          {(["overview", "users", "biodatas", "reports"] as TabType[]).map((tab) => (
+          {(["overview", "users", "biodatas", "reports", "guests"] as TabType[]).map((tab) => (
             <TabsTrigger
               key={tab}
               active={activeTab === tab}
@@ -147,6 +163,7 @@ export function AdminDashboardClient({ initialStats, users, biodatas }: AdminDas
               { label: "Total Biodatas", value: initialStats.totalBiodatas },
               { label: "Public Profiles", value: initialStats.publicBiodatas, color: "text-green-600" },
               { label: "Private Profiles", value: initialStats.privateBiodatas },
+              { label: "Guest Sessions", value: initialStats.guestSessionsCount, color: "text-blue-500" },
             ]}
           />
 
@@ -315,6 +332,37 @@ export function AdminDashboardClient({ initialStats, users, biodatas }: AdminDas
                )},
              ]}
            />
+        </TabsContent>
+
+        <TabsContent active={activeTab === "guests"}>
+          <AdminTableux
+            title="Recent Guest Activity"
+            data={guestActivities}
+            columns={[
+              { header: "Path / URL", key: "path", render: (g) => (
+                <div className="flex flex-col">
+                  <span className="font-semibold text-xs">{g.path}</span>
+                  <span className="text-[10px] font-mono text-foreground-muted">{g.type}</span>
+                </div>
+              )},
+              { header: "Session ID", key: "sessionId", render: (g) => (
+                <span className="text-[10px] font-mono text-foreground-muted uppercase tracking-widest">{g.sessionId.substring(0, 8)}...</span>
+              )},
+              { header: "Device / Info", key: "session", render: (g) => (
+                <div className="flex flex-col max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+                   <span className="text-[10px] font-mono text-foreground-muted leading-tight" title={g.session.userAgent || ""}>
+                     {g.session.userAgent || "Unknown Device"}
+                   </span>
+                </div>
+              )},
+              { header: "Timestamp", key: "createdAt", render: (g) => (
+                <div className="flex flex-col">
+                  <span className="text-xs">{new Date(g.createdAt).toLocaleDateString()}</span>
+                  <span className="text-[9px] font-mono text-foreground-muted">{new Date(g.createdAt).toLocaleTimeString()}</span>
+                </div>
+              )},
+            ]}
+          />
         </TabsContent>
       </div>
     </div>

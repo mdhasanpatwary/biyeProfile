@@ -10,11 +10,24 @@ export default async function AdminPage() {
     redirect("/")
   }
 
-  const [totalUsers, totalBiodatas, publicBiodatas, privateBiodatas] = await Promise.all([
+  const [totalUsers, totalBiodatas, publicBiodatas, privateBiodatas, guestSessionsCount, recentGuestActivities] = await Promise.all([
     prisma.user.count(),
     prisma.biodata.count(),
     prisma.biodata.count({ where: { isPublic: true } }),
     prisma.biodata.count({ where: { isPublic: false } }),
+    prisma.guestSession.count(),
+    prisma.guestActivity.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      include: {
+        session: {
+          select: {
+            userAgent: true,
+            lastActive: true,
+          }
+        }
+      }
+    })
   ])
 
   const [users, biodatas] = await Promise.all([
@@ -64,10 +77,12 @@ export default async function AdminPage() {
         totalUsers,
         totalBiodatas,
         publicBiodatas,
-        privateBiodatas
+        privateBiodatas,
+        guestSessionsCount
       }}
       users={users}
       biodatas={biodatas}
+      guestActivities={recentGuestActivities}
     />
   )
 }

@@ -44,3 +44,26 @@ model Report {
   @@index([reporterId])
   @@index([biodataId])
 }
+
+model GuestSession {
+  id         String          @id @default(uuid())
+  sessionId  String          @unique
+  userAgent  String?
+  ipHash     String?
+  lastActive DateTime        @default(now())
+  createdAt  DateTime        @default(now())
+  activities GuestActivity[]
+}
+
+model GuestActivity {
+  id        String       @id @default(uuid())
+  sessionId String
+  type      String
+  path      String
+  metadata  Json?
+  createdAt DateTime     @default(now())
+  session   GuestSession @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+

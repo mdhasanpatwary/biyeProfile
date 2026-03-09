@@ -1,13 +1,14 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { biodataSchema, type BiodataFormValues } from "@/lib/validations/biodata"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { StepWizard } from "@/components/ui/step-wizard"
 import { DownloadPDFButton } from "@/components/DownloadPDFButton"
+import { SavingIndicator, type SaveStatus } from "@/components/SavingIndicator"
 import { useRouter } from "next/navigation"
 
 import { BasicInfoStep } from "./biodata-form/steps/BasicInfoStep"
@@ -36,7 +37,8 @@ export function BiodataForm({
 }) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
-  const [lastSavedData, setLastSavedData] = useState<Partial<BiodataFormValues>>(initialData)
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle")
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   const steps = [
     { title: "Basic", icon: "👤" },
@@ -132,8 +134,54 @@ export function BiodataForm({
     }
   })
 
+  // Static reference for initial/last saved data comparison if needed,
+  // but for pure debounced autosave we can just ship the whole object.
+  const performSave = useCallback(async (data: BiodataFormValues) => {
+    if (isGuest) return
+
+    setSaveStatus("saving")
+    try {
+      const res = await fetch("/api/biodata", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data })
+      })
+      if (res.ok) {
+        setSaveStatus("saved")
+        // Reset saved status to idle after a while
+        setTimeout(() => setSaveStatus("idle"), 3000)
+      } else {
+        setSaveStatus("error")
+      }
+    } catch (error) {
+      console.error("Autosave failed:", error)
+      setSaveStatus("error")
+    }
+  }, [isGuest])
+
+  // Enhanced Autosave logic with debounce
+  const watchedValues = useWatch({ control: form.control })
+  useEffect(() => {
+    if (watchedValues) {
+      onDataChange?.(watchedValues as BiodataFormValues)
+
+      if (isGuest) return
+
+      // Clear existing timer
+      if (timerRef.current) clearTimeout(timerRef.current)
+
+      // Start new timer
+      timerRef.current = setTimeout(() => {
+        performSave(watchedValues as BiodataFormValues)
+      }, 1000)
+    }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [watchedValues, onDataChange, isGuest, performSave])
+
   // Age calculation
-  const dob = form.watch("basicInfo.dateOfBirth");
+  const dob = useWatch({ control: form.control, name: "basicInfo.dateOfBirth" });
   useEffect(() => {
     if (dob) {
       const birthDate = new Date(dob);
@@ -147,49 +195,12 @@ export function BiodataForm({
     }
   }, [dob, form]);
 
-  // Sync data changes
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/incompatible-library
-    const subscription = form.watch((value) => {
-      onDataChange?.(value as BiodataFormValues)
-    })
-    return () => subscription.unsubscribe()
-  }, [form, onDataChange])
-
   const handleNextStep = async () => {
     const currentStepKey = stepKeys[currentStep - 1];
     const isStepValid = await form.trigger(currentStepKey);
 
     if (isStepValid) {
-      if (!isGuest) {
-        const currentData = form.getValues();
-        // Check if data actually changed for this specific step by stringifying the chunk
-        // If it's the "customSections" step, check the whole array.
-        const currentChunk = currentStepKey ? currentData[currentStepKey as keyof BiodataFormValues] : null;
-        const lastSavedChunk = currentStepKey ? lastSavedData[currentStepKey as keyof BiodataFormValues] : null;
-
-        const hasChanged = JSON.stringify(currentChunk) !== JSON.stringify(lastSavedChunk);
-
-        if (hasChanged) {
-          try {
-            const res = await fetch("/api/biodata", {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ data: currentData })
-            });
-            if (res.ok) {
-              setLastSavedData(currentData);
-            } else {
-              toast.error("Failed to save step");
-              return;
-            }
-          } catch (error) {
-            console.error("Save failed:", error);
-            toast.error("Failed to save step");
-            return;
-          }
-        }
-      }
+      // Data is autosaved, so we just move to the next step
       setCurrentStep(prev => prev + 1);
     } else {
       toast.error("Please fill in all required fields correctly.");
@@ -206,28 +217,8 @@ export function BiodataForm({
 
     if (isStepValid) {
       if (!isGuest) {
-        const currentData = form.getValues();
-        // Always save the full form on explicit finish — do not use the
-        // diff-check here. Without this, edits made on earlier steps would be
-        // silently skipped if the last step was untouched (its chunk would
-        // compare equal to lastSavedData even though other steps changed).
-        try {
-          const res = await fetch("/api/biodata", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ data: currentData })
-          });
-          if (res.ok) {
-            toast.success("Biodata saved successfully", { duration: 1500 });
-          } else {
-            toast.error("Failed to save biodata");
-            return;
-          }
-        } catch (error) {
-          console.error("Save failed:", error);
-          toast.error("Failed to save biodata");
-          return;
-        }
+        // One final force save to be absolutely sure
+        await performSave(form.getValues())
       }
       router.push("/dashboard");
       router.refresh();
@@ -244,40 +235,48 @@ export function BiodataForm({
   }, [externalLanguage, form]);
 
 
-  const lang = form.watch("language");
+  const lang = useWatch({ control: form.control, name: "language" });
 
   return (
     <div className="relative">
 
-      <div className="flex items-center justify-between gap-4 bg-background/90 backdrop-blur-md p-6 sticky top-0 z-50 transition-all duration-300">
-        <div className="flex items-start gap-2 flex-1 min-w-0">
-          <Button
-            type="button"
-            disabled={currentStep === 1}
-            onClick={handlePrevStep}
-            variant="outline"
-            size="icon"
-            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group mt-1"
-          >
-            <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
-          </Button>
+      <div className="bg-background/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300 border-b border-border-muted/30">
+        {!isGuest && (
+          <div className="flex justify-center -mb-2 pt-2 h-8">
+            <SavingIndicator status={saveStatus} className="border-none bg-transparent min-w-fit shadow-none" />
+          </div>
+        )}
 
-          <StepWizard
-            steps={steps.map(s => ({ id: s.title, label: s.title }))}
-            currentStep={currentStep}
-            className="flex-1 mb-0 pb-0"
-          />
+        <div className="flex items-center justify-between gap-4 p-4 md:p-6 pt-2 md:pt-4">
+          <div className="flex items-start gap-2 flex-1 min-w-0">
+            <Button
+              type="button"
+              disabled={currentStep === 1}
+              onClick={handlePrevStep}
+              variant="outline"
+              size="icon"
+              className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group mt-1"
+            >
+              <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+            </Button>
 
-          <Button
-            type="button"
-            disabled={currentStep === steps.length}
-            onClick={handleNextStep}
-            variant="outline"
-            size="icon"
-            className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group relative z-10 mt-1"
-          >
-            <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
-          </Button>
+            <StepWizard
+              steps={steps.map(s => ({ id: s.title, label: s.title }))}
+              currentStep={currentStep}
+              className="flex-1 mb-0 pb-0"
+            />
+
+            <Button
+              type="button"
+              disabled={currentStep === steps.length}
+              onClick={handleNextStep}
+              variant="outline"
+              size="icon"
+              className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group relative z-10 mt-1"
+            >
+              <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+            </Button>
+          </div>
         </div>
       </div>
 

@@ -6,7 +6,7 @@ Based on the [Detailed Audit Report](file:///Users/patwary/.gemini/antigravity/b
 
 ### Code & Architecture
 - [x] Refactor `BiodataForm.tsx` into smaller, modular components (e.g., `Step1Basic.tsx`).
-- [ ] Implement robust debounced autosave on every field change (via `form.watch`).
+- [x] Implement robust debounced autosave on every field change (via `form.watch`). Note: Show a single “saving indicator” instead of toast
 - [x] Optimize database queries for JSON fields in `app/biodata/page.tsx` (indexing).
 
 ### Product & Features

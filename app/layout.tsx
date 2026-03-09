@@ -27,6 +27,9 @@ export const metadata: Metadata = {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { GuestTracker } from "@/components/GuestTracker";
+
+import { Providers } from "@/components/Providers";
 
 export default function RootLayout({
   children,
@@ -38,30 +41,33 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased max-w-full overflow-x-hidden flex flex-col min-h-screen bg-background text-foreground pb-16`}
       >
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Navbar />
-          <main className="flex-1 bg-background">
-            {children}
-          </main>
-          <Footer />
-          <Toaster position="top-center" toastOptions={{
-            style: {
-              background: 'var(--foreground)',
-              color: 'var(--background)',
-              border: '1px solid var(--border-muted)',
-              borderRadius: '0',
-              fontFamily: 'var(--font-geist-mono)',
-              fontSize: '11px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em'
-            }
-          }} />
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider
+            attribute="data-theme"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <GuestTracker />
+            <Navbar />
+            <main className="flex-1 bg-background">
+              {children}
+            </main>
+            <Footer />
+            <Toaster position="top-center" toastOptions={{
+              style: {
+                background: 'var(--foreground)',
+                color: 'var(--background)',
+                border: '1px solid var(--border-muted)',
+                borderRadius: '0',
+                fontFamily: 'var(--font-geist-mono)',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em'
+              }
+            }} />
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
