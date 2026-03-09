@@ -8,8 +8,8 @@ export function Footer() {
         {/* Brand Column */}
         <div className="md:col-span-4 flex flex-col items-start gap-8">
           <Logo />
-          <p className="font-mono text-[11px] md:text-[12px] font-black text-foreground-muted uppercase tracking-[0.4em] leading-relaxed max-w-[280px]">
-            The definitive platform for marriage biodata documentation.
+          <p className="text-[12px] font-medium text-foreground-muted leading-relaxed max-w-[280px]">
+            Create, manage, and securely share your marriage biodata online with a professional digital profile and downloadable PDF.
           </p>
           <div className="mt-12 text-[11px] font-mono text-foreground/50 uppercase tracking-widest">
             Established 2026. <br /> All Rights Reserved.

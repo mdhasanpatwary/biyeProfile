@@ -299,29 +299,26 @@ export function BiodataForm({
     if (isStepValid) {
       if (!isGuest) {
         const currentData = form.getValues();
-        const currentChunk = currentStepKey ? currentData[currentStepKey as keyof BiodataFormValues] : null;
-        const lastSavedChunk = currentStepKey ? lastSavedData[currentStepKey as keyof BiodataFormValues] : null;
-
-        const hasChanged = JSON.stringify(currentChunk) !== JSON.stringify(lastSavedChunk);
-
-        if (hasChanged) {
-          try {
-            const res = await fetch("/api/biodata", {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ data: currentData })
-            });
-            if (res.ok) {
-              toast.success("Biodata saved successfully", { duration: 1500 });
-            } else {
-              toast.error("Failed to save biodata");
-              return;
-            }
-          } catch (error) {
-            console.error("Save failed:", error);
+        // Always save the full form on explicit finish — do not use the
+        // diff-check here. Without this, edits made on earlier steps would be
+        // silently skipped if the last step was untouched (its chunk would
+        // compare equal to lastSavedData even though other steps changed).
+        try {
+          const res = await fetch("/api/biodata", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: currentData })
+          });
+          if (res.ok) {
+            toast.success("Biodata saved successfully", { duration: 1500 });
+          } else {
             toast.error("Failed to save biodata");
             return;
           }
+        } catch (error) {
+          console.error("Save failed:", error);
+          toast.error("Failed to save biodata");
+          return;
         }
       }
       router.push("/dashboard");
@@ -893,7 +890,7 @@ export function BiodataForm({
               disabled={currentStep === 1}
               onClick={handlePrevStep}
               variant="outline"
-              className="w-12 h-12 bg-background text-foreground rounded-none border-border-muted flex items-center justify-center shrink-0 active:scale-90 transition-all"
+              className="w-12 h-12 bg-background text-foreground rounded-none border-border-muted flex items-center justify-center shrink-0 active:scale-90 transition-all gap-2"
             >
               <svg className="min-w-3.5 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
             </Button>
@@ -922,22 +919,24 @@ export function BiodataForm({
                 type="button"
                 variant="primary"
                 onClick={handleNextStep}
-                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] font-black uppercase tracking-widest"
+                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2"
               >
                 Next
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
               </Button>
             ) : isGuest ? (
               <DownloadPDFButton
                 filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
-                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all outline-none"
+                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all outline-none flex items-center justify-center gap-2"
               />
             ) : (
               <Button
                 type="button"
                 onClick={handleFinish}
-                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest"
+                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest gap-2"
               >
-                Finish
+                Save & Finish
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
               </Button>
             )}
           </div>
@@ -974,11 +973,12 @@ export function BiodataForm({
           ) : (
             <Button
               type="button"
+              variant="primary"
               onClick={handleFinish}
-              className="px-10 py-4 bg-foreground text-background font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-none hover:bg-foreground/90 transition-all active:scale-95 flex items-center gap-3"
+              className="flex items-center gap-3 group"
             >
-              Finish Documentation
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+              Save & Finish
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
             </Button>
           )}
         </div>

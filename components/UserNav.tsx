@@ -34,8 +34,21 @@ export function UserNav({ username }: { username: string }) {
       </div>
       <DropdownMenuItem
         onClick={() => signOut({ callbackUrl: "/" })}
-        className="text-foreground hover:bg-foreground hover:text-background font-mono text-[11px] font-bold uppercase tracking-[0.15em] mx-1 mb-1 justify-center border border-transparent transition-all"
+        className="text-foreground hover:bg-foreground hover:text-background font-mono text-[11px] font-bold uppercase tracking-[0.15em] mx-1 mb-1 justify-center border border-transparent transition-all flex items-center gap-2"
       >
+        <svg
+          className="w-4 min-w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
         Sign Out
       </DropdownMenuItem>
     </DropdownMenu>

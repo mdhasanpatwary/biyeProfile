@@ -214,6 +214,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
     <div
       id="biodata-content"
       className="relative bg-background text-foreground font-sans overflow-hidden p-0 md:p-12"
+      style={{ wordBreak: 'break-word', overflowWrap: 'anywhere', lineHeight: 1.6 }}
     >
       {/* Subtle texture */}
       <div className="absolute inset-0 bg-grain pointer-events-none opacity-[0.025]" />
@@ -240,8 +241,8 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                 alt="Profile photo"
                 crossOrigin="anonymous"
                 style={{
-                  width: '112px',
-                  height: '112px',
+                  width: '145px',
+                  height: '145px',
                   objectFit: 'cover',
                   border: '1px solid var(--border-muted)',
                   borderRadius: '2px',
@@ -256,12 +257,12 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
             <div
               className="shrink-0 flex items-center justify-center font-serif font-bold"
               style={{
-                width: '112px',
-                height: '112px',
+                width: '145px',
+                height: '145px',
                 background: 'var(--accent)',
                 border: '1px solid var(--border-muted)',
                 borderRadius: '2px',
-                fontSize: '36px',
+                fontSize: '40px',
                 color: 'var(--foreground-muted)',
               }}
             >
@@ -269,14 +270,14 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
             </div>
           )}
 
-          <div className="flex-1 text-center sm:text-left pt-1">
+          <div className="flex-1 text-center sm:text-left" style={{ paddingTop: '6px' }}>
             <h1
               className="font-serif leading-none tracking-tight mb-3 sm:mb-2 text-3xl sm:text-[38px]"
-              style={{ color: 'var(--foreground)' }}
+              style={{ color: 'var(--foreground)', fontWeight: 700 }}
             >
               {data?.basicInfo?.fullName || 'Full Member'}
             </h1>
-            <p style={{ fontSize: '13px', color: 'var(--foreground-muted)', letterSpacing: '0.02em' }}>
+            <p style={{ fontSize: '13px', color: 'var(--foreground-muted)', letterSpacing: '0.02em', lineHeight: 1.5 }}>
               {data.profession?.occupation || (lang === 'en' ? 'Personal Profile' : 'ব্যক্তিগত তথ্য')}
             </p>
           </div>
@@ -336,9 +337,9 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                         className={item.full ? 'col-span-2' : ''}
                         valueClassName={
                           item.address
-                            ? 'text-sm font-normal leading-relaxed text-foreground-muted max-w-sm'
+                            ? 'text-sm font-normal text-foreground-muted max-w-sm'
                             : item.italic
-                              ? 'italic font-light text-foreground-muted leading-relaxed'
+                              ? 'italic font-light text-foreground-muted'
                               : ''
                         }
                       />
@@ -365,13 +366,21 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
                         className="relative"
                         style={!isLast ? { borderBottom: '0.5px solid var(--accent)', paddingBottom: '24px' } : {}}
                       >
-                        <h3 className="font-serif italic mb-1" style={{ fontSize: '16.5px', color: 'var(--foreground)' }}>
-                          <span className="font-mono not-italic uppercase mr-3" style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}>{edu.passingYear || '—'}</span>
-                          {edu.degree}
+                        <h3
+                          className="font-serif italic mb-1"
+                          style={{ fontSize: '16.5px', color: 'var(--foreground)', display: 'flex', alignItems: 'baseline', gap: '10px', flexWrap: 'wrap' }}
+                        >
+                          <span
+                            className="font-mono not-italic uppercase shrink-0"
+                            style={{ fontSize: '9px', letterSpacing: '0.15em', color: 'var(--foreground-muted)' }}
+                          >
+                            {edu.passingYear || '—'}
+                          </span>
+                          <span style={{ wordBreak: 'break-word' }}>{edu.degree}</span>
                         </h3>
                         <p
                           className="font-medium"
-                          style={{ fontSize: '12.5px', color: 'var(--foreground-muted)', paddingLeft: '2px' }}
+                          style={{ fontSize: '12.5px', color: 'var(--foreground-muted)', paddingLeft: '2px', wordBreak: 'break-word' }}
                         >
                           {edu.institution}
                         </p>
@@ -630,9 +639,10 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
           style={{
             borderTop: '0.5px solid var(--border-muted)',
             paddingTop: '16px',
-            fontSize: '8px',
-            letterSpacing: '0.18em',
+            fontSize: '9px',
+            letterSpacing: '0.16em',
             color: 'var(--foreground-muted)',
+            opacity: 0.75,
           }}
         >
           <span>Generated by BiyeProfile</span>

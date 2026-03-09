@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 interface DownloadPDFButtonProps {
   /** ID of the DOM element to capture. Defaults to "biodata-content" */
@@ -193,7 +194,7 @@ export function DownloadPDFButton({
       onClick={handleDownload}
       disabled={loading}
       className={
-        className ?? "w-full sm:w-auto"
+        cn("w-full sm:w-auto flex items-center justify-center gap-2", className)
       }
     >
       {loading ? (

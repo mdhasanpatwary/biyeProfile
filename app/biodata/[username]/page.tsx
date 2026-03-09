@@ -5,6 +5,8 @@ import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 import { BiodataContent } from "@/components/BiodataContent"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { auth } from "@/lib/auth"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export async function generateMetadata(props: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const { username } = await props.params
@@ -68,23 +70,42 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
   return (
     <div className="bg-background py-12 md:py-16 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
       <div className="max-w-4xl mx-auto bg-background print:shadow-none p-6 print:p-0 sm:rounded-none border border-border-muted relative">
-        {isOwner && !user.biodata.isPublic && (
-          <div className="print:hidden flex justify-end">
-            <span className="bg-accent text-foreground-muted text-[10px] font-mono font-black px-4 py-2 rounded-none uppercase tracking-[0.2em] border border-border-muted shadow-sm">
-              Archive Mode / Owner
-            </span>
+        {isOwner && (
+          <div className="print:hidden flex flex-wrap items-center justify-between gap-4 mb-8">
+            <Link href="/dashboard/edit">
+              <Button variant="outline" size="sm" className="gap-2 font-black">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit Biodata
+              </Button>
+            </Link>
+            {!user.biodata.isPublic && (
+              <span className="bg-accent text-foreground-muted text-[10px] font-mono font-black px-4 py-2 rounded-none uppercase tracking-[0.2em] border border-border-muted shadow-sm">
+                Archive Mode / Owner
+              </span>
+            )}
           </div>
         )}
         <BiodataContent data={data} />
 
-        <div className="mt-8 md:mt-12 pt-6 border-t border-border-muted print:hidden flex justify-center items-center px-4">
+        <div className="mt-8 md:mt-12 pt-6 border-t border-border-muted print:hidden flex flex-wrap justify-center items-center gap-4 px-4">
           <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
         </div>
       </div>
 
       {/* Floating Sticky Download Bar for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-xl border-t border-border-muted sm:hidden flex justify-center z-50 print:hidden transition-all duration-300">
-        <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-xl border-t border-border-muted sm:hidden flex items-center justify-center gap-3 z-50 print:hidden transition-all duration-300">
+        {isOwner && (
+          <Link href="/dashboard/edit" className="flex-1">
+            <Button variant="outline" size="lg" className="w-full gap-2">
+              Edit
+            </Button>
+          </Link>
+        )}
+        <div className={isOwner ? "flex-1" : "w-full flex justify-center"}>
+          <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
+        </div>
       </div>
     </div>
   )
