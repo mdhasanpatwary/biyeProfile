@@ -23,7 +23,7 @@ export function ThemeToggle() {
       className="flex items-center gap-3 h-10 px-3 border border-border-muted hover:border-foreground transition-all duration-300 group"
       aria-label="Toggle theme"
     >
-      <div className="flex items-center justify-center w-4 h-4 relative">
+      <div className="flex items-center justify-center w-4 h-4 relative" aria-hidden="true">
         {/* Sun Icon (Visible in Light Mode) */}
         <div className={`absolute inset-0 transition-all duration-500 transform ${theme === 'dark' ? 'scale-0 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'}`}>
           <div className="w-full h-full border-[1.5px] border-foreground rounded-full" />

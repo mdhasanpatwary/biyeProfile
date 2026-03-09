@@ -10,11 +10,11 @@ Based on the [Detailed Audit Report](file:///Users/patwary/.gemini/antigravity/b
 - [x] Optimize database queries for JSON fields in `app/biodata/page.tsx` (indexing).
 
 ### Product & Features
-- [ ] Implement the `app/api/report` endpoint and front-end "Report Profile" button.
+- [x] Implement the `app/api/report` endpoint and front-end "Report Profile" button.
 - [x] Develop an Admin Dashboard at `/admin` to manage users and biodatas.
 
 ### UX / UI
-- [ ] Audit and add ARIA labels/roles across core components for accessibility.
+- [x] Audit and add ARIA labels/roles across core components for accessibility.
 
 ---
 

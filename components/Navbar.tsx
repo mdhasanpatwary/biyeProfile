@@ -23,7 +23,7 @@ export async function Navbar() {
             aria-label="Search Biodatas"
           >
             <div className="flex items-center justify-center w-4 h-4 relative">
-              <svg className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg aria-hidden="true" className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -38,7 +38,7 @@ export async function Navbar() {
             aria-label="Create Biodata"
           >
             <div className="flex items-center justify-center w-4 h-4 relative">
-              <svg className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg aria-hidden="true" className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
               </svg>
             </div>
@@ -54,7 +54,7 @@ export async function Navbar() {
               aria-label="Dashboard"
             >
               <div className="flex items-center justify-center w-4 h-4 relative">
-                <svg className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg aria-hidden="true" className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z" />
                 </svg>
               </div>
