@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { CreateBiodataButton } from "@/components/CreateBiodataButton"
 import { CopyButton } from "@/components/CopyButton"
 import { VisibilityToggle } from "@/components/VisibilityToggle"
+import { ProfileStrengthMeter } from "@/components/ProfileStrengthMeter"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { getCloudinaryUrl } from "@/lib/cloudinary"
 import { Container } from "@/components/ui/container"
@@ -143,15 +144,7 @@ export default async function DashboardPage() {
             <VisibilityToggle initialIsPublic={user.biodata.isPublic} />
           </Card>
 
-          <Card className="bg-accent/40 border-border-muted p-6 flex flex-col justify-between group h-full hover:bg-accent/60 transition-colors">
-            <div>
-              <div className="w-12 h-12 bg-foreground/5 rounded-none border border-foreground/5 flex items-center justify-center mb-12 mx-auto md:mx-0">
-                <svg className="w-6 h-6 text-foreground/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-              </div>
-              <h3 className="text-4xl md:text-6xl font-serif mb-4 leading-none italic tracking-tighter text-foreground text-center md:text-left">Soon</h3>
-              <p className="text-foreground-muted font-mono text-[11px] uppercase tracking-[0.4em] font-black text-center md:text-left">Analytics</p>
-            </div>
-          </Card>
+          <ProfileStrengthMeter data={biodataContent} />
         </div>
       </div>
     </Container>
