@@ -116,7 +116,7 @@ export default async function EditBiodataPage() {
   const migratedData = migrateBiodataData(biodataData as unknown as Record<string, unknown>)
 
   return (
-    <div className="pt-12 pb-32 md:py-16">
+    <div className="py-12 md:py-16">
       <BiodataEditor
         initialData={migratedData}
         username={user.username!}

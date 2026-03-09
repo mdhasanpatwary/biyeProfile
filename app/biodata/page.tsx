@@ -66,7 +66,7 @@ export default async function BrowseBiodataPage(props: {
             <main className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12 md:py-16">
 
                 {/* Intro */}
-                <header className="mb-20 md:mb-28 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
+                <header className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
                     <div className="md:max-w-xl text-center md:text-left">
                         <div className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-foreground-muted mb-8">Directory / 01</div>
                         <h1 className="text-5xl font-serif text-foreground tracking-tight leading-none mb-8">
@@ -119,7 +119,7 @@ export default async function BrowseBiodataPage(props: {
 
                 {/* The List (Editorial Style) */}
                 {biodata.length > 0 ? (
-                    <div className="flex flex-col border-t border-border-muted">
+                    <div className="flex flex-col border-t border-border-muted pb-8 md:pb-12">
                         {biodata.map((item) => (
                             <BiodataCard
                                 key={item.id}
@@ -129,7 +129,7 @@ export default async function BrowseBiodataPage(props: {
                         ))}
                     </div>
                 ) : (
-                    <div className="py-20 md:py-28 text-center border-t border-border-muted">
+                    <div className="pt-16 md:pt-24 pb-8 md:pb-12 text-center border-t border-border-muted">
 
                         {/* Icon */}
                         <div className="w-16 h-16 border border-border-muted flex items-center justify-center mx-auto mb-10">

@@ -258,7 +258,7 @@ export function BiodataForm({
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-0 sm:pt-2 sm:pb-4">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:pt-2 sm:pb-4">
           {/* Prev button — always visible */}
           <Button
             type="button"
@@ -352,7 +352,7 @@ export function BiodataForm({
                 type="button"
                 variant="primary"
                 onClick={handleNextStep}
-                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center justify-center"
+                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] sm:text-[12px] font-black uppercase tracking-widest flex items-center justify-center"
               >
                 Next
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
@@ -367,7 +367,7 @@ export function BiodataForm({
               <Button
                 type="button"
                 onClick={handleFinish}
-                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest"
+                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] sm:text-[12px] font-black uppercase tracking-widest"
               >
                 Save & Finish
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
@@ -383,7 +383,7 @@ export function BiodataForm({
               type="button"
               onClick={handlePrevStep}
               variant="outline"
-              className="flex items-center group"
+              className="flex items-center group text-[10px] sm:text-[12px]"
             >
               <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               Back
@@ -393,7 +393,7 @@ export function BiodataForm({
               type="button"
               variant="ghost"
               disabled
-              className="invisible flex items-center"
+              className="invisible flex items-center text-[10px] sm:text-[12px]"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               <span>Back</span>
@@ -404,7 +404,7 @@ export function BiodataForm({
               type="button"
               variant="primary"
               onClick={handleNextStep}
-              className="flex items-center group"
+              className="flex items-center group text-[10px] sm:text-[12px]"
             >
               Next Step
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -420,7 +420,7 @@ export function BiodataForm({
               type="button"
               variant="primary"
               onClick={handleFinish}
-              className="flex items-center group"
+              className="flex items-center group text-[10px] sm:text-[12px]"
             >
               Save & Finish
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>

@@ -239,7 +239,7 @@ export function DownloadPDFButton({
       onClick={handleDownload}
       disabled={loading || disabled}
       className={
-        cn("w-full sm:w-auto flex items-center justify-center transition-colors", className)
+        cn("w-full text-[10px] sm:text-[12px] sm:w-auto flex items-center justify-center transition-colors", className)
       }
     >
       {loading ? (

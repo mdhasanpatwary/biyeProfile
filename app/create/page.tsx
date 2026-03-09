@@ -16,7 +16,7 @@ export default async function CreatePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <GuestBiodataEditor />
     </div>
   )

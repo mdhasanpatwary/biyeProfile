@@ -81,18 +81,18 @@ export function GuestBiodataEditor() {
     <div className="w-full">
       {/* Sign In Banner */}
       {showSignInBanner && (
-        <div className="bg-primary text-primary-foreground px-6 py-4 flex items-center justify-between gap-4 print:hidden">
+        <div className="bg-accent text-foreground px-6 py-4 flex items-center justify-between gap-4 print:hidden">
           <div className="flex items-center gap-4">
-            <div className="w-5 h-5 rounded-none bg-primary-foreground/20 flex items-center justify-center shrink-0">
-              <svg className="w-3 h-3 text-primary-foreground/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="w-5 h-5 rounded-none bg-foreground/10 flex items-center justify-center shrink-0">
+              <svg className="w-3 h-3 text-foreground-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <p className="text-[10px] uppercase tracking-widest font-mono">
-              <span className="opacity-60">Guest Mode</span> — Data is saved locally.{" "}
+              <span className="font-black">Guest Mode</span> — Data is saved locally.{" "}
               <Link
                 href="/api/auth/signin"
-                className="underline underline-offset-4 text-primary-foreground hover:opacity-80 transition-all"
+                className="underline underline-offset-4 font-bold text-foreground hover:text-foreground-muted transition-all"
               >
                 Sign in to save permanently →
               </Link>
@@ -102,7 +102,7 @@ export function GuestBiodataEditor() {
             variant="ghost"
             size="icon"
             onClick={() => setShowSignInBanner(false)}
-            className="shrink-0 opacity-40 hover:opacity-100 transition-all ml-2 hover:bg-transparent"
+            className="shrink-0 text-foreground-muted hover:text-foreground transition-all ml-2 hover:bg-foreground/5 h-8 w-8 rounded-none"
             aria-label="Dismiss banner"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,7 +154,7 @@ export function GuestBiodataEditor() {
               <Button
                 variant="outline"
                 onClick={() => setMobileView("edit")}
-                className="px-6 py-4 shadow-2xl flex items-center active:scale-95 transition-all outline-none"
+                className="px-6 py-4 text-[10px] sm:text-[12px] shadow-2xl flex items-center active:scale-95 transition-all outline-none"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -195,7 +195,7 @@ export function GuestBiodataEditor() {
         </div>
 
         {/* Sign In CTA Card (bottom) */}
-        <div className="mt-10 bg-background border border-border-muted/50 rounded-none p-10 flex flex-col sm:flex-row items-center justify-between gap-8 print:hidden">
+        <div className="my-10 bg-background border border-border-muted/50 rounded-none p-10 flex flex-col sm:flex-row items-center justify-between gap-8 print:hidden">
           <div>
             <h3 className="text-3xl font-serif text-foreground mb-2">Preserve your context.</h3>
             <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-widest">Sign in to save permanently & get a shareable link.</p>

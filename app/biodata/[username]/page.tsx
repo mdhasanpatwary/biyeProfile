@@ -130,7 +130,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-xl border-t border-border-muted sm:hidden flex items-center justify-center gap-3 z-50 print:hidden transition-all duration-300">
         {isOwner && (
           <Link href="/dashboard/edit" className="flex-1">
-            <Button variant="outline" size="lg" className="w-full">
+            <Button variant="outline" size="lg" className="w-full text-[10px] sm:text-[12px]">
               Edit
             </Button>
           </Link>
