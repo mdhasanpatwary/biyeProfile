@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
 import { BiodataCard } from "@/components/BiodataCard"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { SearchInput } from "@/components/SearchInput"
@@ -13,45 +14,48 @@ export default async function BrowseBiodataPage(props: {
     const religion = searchParams.religion
     const q = searchParams.q
 
-    // Fetch only public profiles
-    const biodata = await prisma.biodata.findMany({
-        where: {
-            isPublic: true,
-            ...(religion ? {
-                data: {
-                    path: ['basicInfo', 'religion'],
-                    equals: religion
-                }
-            } : {}),
-            ...(q ? {
-                OR: [
-                    {
-                        data: {
-                            path: ['basicInfo', 'fullName'],
-                            string_contains: q,
-                        }
-                    },
-                    {
-                        data: {
-                            path: ['profession', 'occupation'],
-                            string_contains: q,
-                        }
-                    },
-                    {
-                        data: {
-                            path: ['personalInfo', 'district'],
-                            string_contains: q,
-                        }
+    // Fetch profiles with case-insensitive search if query exists
+    let biodata;
+
+    if (q) {
+        // Use raw query for case-insensitive JSON search in Postgres
+        const results = await prisma.$queryRaw`
+            SELECT b."id"
+            FROM "Biodata" b
+            WHERE b."isPublic" = true
+            ${religion ? Prisma.sql`AND b."data"->'basicInfo'->>'religion' = ${religion}` : Prisma.sql``}
+            AND (
+                b."data"->'basicInfo'->>'fullName' ILIKE ${`%${q}%`}
+                OR b."data"->'profession'->>'occupation' ILIKE ${`%${q}%`}
+                OR b."data"->'personalInfo'->>'district' ILIKE ${`%${q}%`}
+            )
+            ORDER BY b."createdAt" DESC
+            LIMIT 48
+        ` as { id: string }[];
+
+        const ids = results.map(r => r.id);
+
+        biodata = await prisma.biodata.findMany({
+            where: { id: { in: ids } },
+            include: { user: { select: { username: true } } },
+            orderBy: { createdAt: 'desc' }
+        });
+    } else {
+        biodata = await prisma.biodata.findMany({
+            where: {
+                isPublic: true,
+                ...(religion ? {
+                    data: {
+                        path: ['basicInfo', 'religion'],
+                        equals: religion
                     }
-                ]
-            } : {})
-        },
-        include: {
-            user: { select: { username: true } }
-        },
-        orderBy: { createdAt: 'desc' },
-        take: 48
-    })
+                } : {}),
+            },
+            include: { user: { select: { username: true } } },
+            orderBy: { createdAt: 'desc' },
+            take: 48
+        });
+    }
 
     const religions = ["Muslim", "Hindu", "Christian", "Buddhist"]
 
