@@ -70,6 +70,29 @@ export function DownloadPDFButton({
           clonedEl.style.visibility = "visible";
           clonedEl.style.opacity = "1";
 
+          // Unhide all ancestors in the cloned document. 
+          // Since windowWidth is forced to A4_WIDTH_PX (794), responsive classes like 'lg:block hidden' 
+          // will default to 'hidden'. We must strip 'hidden' from ancestors to prevent 0x0 canvas errors.
+          let parent = clonedEl.parentElement;
+          while (parent && parent !== clonedDoc.body) {
+            parent.classList.remove("hidden", "sm:hidden", "md:hidden", "lg:hidden", "xl:hidden", "2xl:hidden", "print:hidden");
+
+            // Override layout-breaking styles (like BiodataPreview's transform: scale, or flex layouts)
+            // ensuring the element renders at 1:1 scale at the full width of A4_WIDTH_PX.
+            parent.style.setProperty("display", "block", "important");
+            parent.style.setProperty("transform", "none", "important");
+            parent.style.setProperty("width", "auto", "important");
+            parent.style.setProperty("max-width", "none", "important");
+            parent.style.setProperty("height", "auto", "important");
+            parent.style.setProperty("max-height", "none", "important");
+            parent.style.setProperty("margin", "0", "important");
+            parent.style.setProperty("padding", "0", "important");
+            parent.style.setProperty("position", "static", "important");
+            parent.style.setProperty("overflow", "visible", "important");
+
+            parent = parent.parentElement;
+          }
+
           // ── Step 2: Transfer all loaded FontFace objects into the cloned document ──
           document.fonts.forEach((fontFace) => {
             try {
@@ -86,9 +109,9 @@ export function DownloadPDFButton({
             return resolved || fallback
           }
 
-          const sansFont  = resolveFont("--font-geist-sans",       "ui-sans-serif, system-ui, sans-serif")
-          const monoFont  = resolveFont("--font-geist-mono",        "ui-monospace, SFMono-Regular, monospace")
-          const serifFont = resolveFont("--font-instrument-serif",  "ui-serif, Georgia, serif")
+          const sansFont = resolveFont("--font-geist-sans", "ui-sans-serif, system-ui, sans-serif")
+          const monoFont = resolveFont("--font-geist-mono", "ui-monospace, SFMono-Regular, monospace")
+          const serifFont = resolveFont("--font-instrument-serif", "ui-serif, Georgia, serif")
 
           // Force Light Theme for the cloned document
           clonedDoc.documentElement.setAttribute("data-theme", "light")
