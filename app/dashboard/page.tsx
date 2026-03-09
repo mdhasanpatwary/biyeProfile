@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
+import { headers } from "next/headers"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { CreateBiodataButton } from "@/components/CreateBiodataButton"
@@ -72,7 +73,9 @@ export default async function DashboardPage() {
   }
 
   // If biodata exists, show the summary dashboard
-  const publicUrl = `biyeprofile.com/biodata/${session.user.username}`
+  const headersList = await headers()
+  const host = headersList.get("host") || "biye-profile.vercel.app"
+  const publicUrl = `${host}/biodata/${session.user.username}`
   const biodataContent = user.biodata.data as unknown as Partial<BiodataFormValues>
 
   return (

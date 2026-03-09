@@ -32,22 +32,22 @@ export async function Navbar() {
             </span>
           </Link>
 
-          <Link
-            href="/create"
-            className="flex items-center gap-2 h-11 min-w-[44px] px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
-            aria-label="Create Biodata"
-          >
-            <div className="flex items-center justify-center w-4 h-4 relative">
-              <svg aria-hidden="true" className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-              </svg>
-            </div>
-            <span className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-foreground hidden lg:block">
-              Create
-            </span>
-          </Link>
-
-          {session?.user && (
+          {!session?.user ? (
+            <Link
+              href="/create"
+              className="flex items-center gap-2 h-11 min-w-[44px] px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
+              aria-label="Create Biodata"
+            >
+              <div className="flex items-center justify-center w-4 h-4 relative">
+                <svg aria-hidden="true" className="w-4 h-4 text-foreground transition-transform group-hover:scale-110 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
+              <span className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-foreground hidden lg:block">
+                Create
+              </span>
+            </Link>
+          ) : (
             <Link
               href="/dashboard"
               className="flex items-center gap-2 h-11 min-w-[44px] px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
