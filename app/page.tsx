@@ -35,7 +35,7 @@ export default async function Home() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href={session?.user ? "/dashboard" : "/create"}>
                   <Button variant="primary" size="lg" className="w-full sm:w-auto px-10 transition-all">
-                    Create Biodata
+                    {session?.user ? "Go to Dashboard" : "Create Biodata"}
                   </Button>
                 </Link>
                 <Link href="/biodata">
@@ -140,7 +140,7 @@ export default async function Home() {
                   Secure by <br />
                   <span className="italic">Design.</span>
                 </h2>
-                <p className="text-background/60 text-lg font-medium leading-relaxed max-w-md">
+                <p className="text-background/75 text-lg font-medium leading-relaxed max-w-md">
                   We treat your personal data with the gravity it deserves. Our infrastructure is built on principles of isolation and encryption.
                 </p>
               </div>
@@ -167,7 +167,7 @@ export default async function Home() {
                   <div key={i} className="space-y-4">
                     <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-success/80">0{i+1} / Verified</h4>
                     <h3 className="text-2xl font-serif italic text-background">{item.title}</h3>
-                    <p className="text-background/50 text-sm leading-relaxed font-medium">
+                    <p className="text-background/75 text-sm leading-relaxed font-medium">
                       {item.desc}
                     </p>
                   </div>

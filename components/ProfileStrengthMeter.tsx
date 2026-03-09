@@ -90,17 +90,17 @@ function computeStrength(data: Partial<BiodataFormValues>): { sections: Section[
   return { sections, total, max }
 }
 
-function getLabel(pct: number): { text: string; color: string } {
-  if (pct >= 90) return { text: "Excellent", color: "#16a34a" }
-  if (pct >= 70) return { text: "Good", color: "#2563eb" }
-  if (pct >= 50) return { text: "Fair", color: "#d97706" }
-  return { text: "Incomplete", color: "#dc2626" }
+function getLabel(pct: number): { text: string; colorClass: string; barColor: string } {
+  if (pct >= 90) return { text: "Excellent", colorClass: "text-success",          barColor: "bg-success" }
+  if (pct >= 70) return { text: "Good",      colorClass: "text-foreground",       barColor: "bg-foreground" }
+  if (pct >= 50) return { text: "Fair",      colorClass: "text-foreground-muted", barColor: "bg-foreground-muted" }
+  return           { text: "Incomplete",     colorClass: "text-destructive",       barColor: "bg-destructive" }
 }
 
 export function ProfileStrengthMeter({ data }: { data: Partial<BiodataFormValues> }) {
   const { sections, total, max } = computeStrength(data)
   const pct = Math.round((total / max) * 100)
-  const { text: label, color } = getLabel(pct)
+  const { text: label, colorClass, barColor } = getLabel(pct)
 
   return (
     <div className="p-6 border border-border-muted bg-background flex flex-col gap-6">
@@ -119,14 +119,11 @@ export function ProfileStrengthMeter({ data }: { data: Partial<BiodataFormValues
 
       {/* Score + Label */}
       <div className="flex items-end gap-3">
-        <span className="text-5xl font-serif tracking-tight" style={{ color }}>
+        <span className={`text-5xl font-serif tracking-tight ${colorClass}`}>
           {pct}
           <span className="text-2xl">%</span>
         </span>
-        <span
-          className="font-mono text-[10px] font-black uppercase tracking-widest mb-2"
-          style={{ color }}
-        >
+        <span className={`font-mono text-[10px] font-black uppercase tracking-widest mb-2 ${colorClass}`}>
           {label}
         </span>
       </div>
@@ -134,8 +131,8 @@ export function ProfileStrengthMeter({ data }: { data: Partial<BiodataFormValues
       {/* Progress bar */}
       <div className="w-full h-1.5 bg-border-muted/40 overflow-hidden">
         <div
-          className="h-full transition-all duration-700 ease-out"
-          style={{ width: `${pct}%`, background: color }}
+          className={`h-full transition-all duration-700 ease-out ${barColor}`}
+          style={{ width: `${pct}%` }}
         />
       </div>
 
@@ -147,10 +144,7 @@ export function ProfileStrengthMeter({ data }: { data: Partial<BiodataFormValues
           return (
             <div key={s.label} className="flex items-center gap-3">
               {/* Dot indicator */}
-              <div
-                className="w-1.5 h-1.5 shrink-0"
-                style={{ background: complete ? "#16a34a" : sPct > 0 ? "#d97706" : "#e5e7eb" }}
-              />
+              <div className={`w-1.5 h-1.5 shrink-0 ${complete ? "bg-success" : sPct > 0 ? "bg-foreground-muted" : "bg-border-muted"}`} />
               <div className="flex-1 flex items-center justify-between gap-2 min-w-0">
                 <span className="font-mono text-[10px] text-foreground-muted truncate">
                   {s.label}

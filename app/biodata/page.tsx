@@ -4,6 +4,7 @@ import { BiodataCard } from "@/components/BiodataCard"
 import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { SearchInput } from "@/components/SearchInput"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export const dynamic = "force-dynamic"
 
@@ -65,7 +66,7 @@ export default async function BrowseBiodataPage(props: {
             <main className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12 md:py-16">
 
                 {/* Intro */}
-                <header className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
+                <header className="mb-20 md:mb-28 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-12">
                     <div className="md:max-w-xl text-center md:text-left">
                         <div className="text-[10px] font-mono font-black uppercase tracking-[0.4em] text-foreground-muted mb-8">Directory / 01</div>
                         <h1 className="text-5xl font-serif text-foreground tracking-tight leading-none mb-8">
@@ -84,6 +85,7 @@ export default async function BrowseBiodataPage(props: {
                                 <div className="flex flex-nowrap justify-center md:justify-start md:flex-wrap gap-2 pb-2 md:pb-0">
                                     <Link
                                         href={`/biodata${q ? `?q=${encodeURIComponent(q)}` : ''}`}
+                                        aria-current={!religion ? "true" : undefined}
                                         className={`shrink-0 px-4 py-2 text-[10px] font-mono font-black uppercase tracking-widest border transition-all ${!religion ? 'bg-foreground text-background border-foreground' : 'bg-transparent text-foreground-muted border-border-muted hover:border-foreground-muted'}`}
                                     >
                                         All
@@ -92,6 +94,7 @@ export default async function BrowseBiodataPage(props: {
                                         <Link
                                             key={r}
                                             href={`/biodata?religion=${r}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                                            aria-current={religion === r ? "true" : undefined}
                                             className={`shrink-0 px-4 py-2 text-[10px] font-mono font-black uppercase tracking-widest border transition-all ${religion === r ? 'bg-foreground text-background border-foreground' : 'bg-transparent text-foreground-muted border-border-muted hover:border-foreground-muted'}`}
                                         >
                                             {r}
@@ -113,7 +116,6 @@ export default async function BrowseBiodataPage(props: {
                     </div>
                 </header>
 
-                <div className="mb-8 md:mb-12" />
 
                 {/* The List (Editorial Style) */}
                 {biodata.length > 0 ? (
@@ -152,18 +154,16 @@ export default async function BrowseBiodataPage(props: {
 
                         {/* Actions */}
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                            <Link
-                                href="/biodata"
-                                className="px-8 py-3 bg-foreground text-background font-mono text-[10px] font-black uppercase tracking-[0.2em] hover:bg-foreground/90 transition-all active:scale-95"
-                            >
-                                Browse All Profiles
+                            <Link href="/biodata">
+                                <Button variant="primary" className="px-8">
+                                    Browse All Profiles
+                                </Button>
                             </Link>
                             {(q && religion) && (
-                                <Link
-                                    href={`/biodata?religion=${religion}`}
-                                    className="px-8 py-3 border border-border-muted font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground-muted hover:border-foreground hover:text-foreground transition-all active:scale-95"
-                                >
-                                    Clear Search
+                                <Link href={`/biodata?religion=${religion}`}>
+                                    <Button variant="outline" className="px-8">
+                                        Clear Search
+                                    </Button>
                                 </Link>
                             )}
                         </div>

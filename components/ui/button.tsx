@@ -15,7 +15,7 @@ const sizeClasses: Record<ButtonSize, string> = {
   default: "h-12 px-8 text-[13px]", /* Increased from 11px */
   sm: "h-9 px-4 text-[11px]", /* Increased from 10px */
   lg: "h-14 px-10 text-[14px]", /* Increased from 12px */
-  icon: "h-10 w-10",
+  icon: "h-11 w-11",
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

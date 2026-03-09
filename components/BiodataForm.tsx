@@ -330,6 +330,7 @@ export function BiodataForm({
               <button
                 type="button"
                 onClick={() => onViewChange?.("edit")}
+                aria-pressed={mobileView === "edit"}
                 className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "edit" ? 'bg-foreground text-background shadow-sm' : 'text-foreground/60 hover:text-foreground'}`}
               >
                 Edit
@@ -337,6 +338,7 @@ export function BiodataForm({
               <button
                 type="button"
                 onClick={() => onViewChange?.("preview")}
+                aria-pressed={mobileView === "preview"}
                 className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "preview" ? 'bg-foreground text-background shadow-sm' : 'text-foreground/60 hover:text-foreground'}`}
               >
                 Preview
@@ -386,7 +388,17 @@ export function BiodataForm({
               <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               Back
             </Button>
-          ) : <div />}
+          ) : (
+            <Button
+              type="button"
+              variant="ghost"
+              disabled
+              className="invisible flex items-center"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              <span>Back</span>
+            </Button>
+          )}
           {currentStep < 9 ? (
             <Button
               type="button"

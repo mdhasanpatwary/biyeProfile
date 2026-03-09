@@ -49,6 +49,10 @@ export function VisibilityToggle({ initialIsPublic }: { initialIsPublic: boolean
         <button
           onClick={handleToggle}
           disabled={isUpdating}
+          role="switch"
+          aria-checked={isPublic}
+          aria-busy={isUpdating}
+          aria-label={isPublic ? "Profile is public — click to make private" : "Profile is private — click to make public"}
           className={`group relative inline-flex h-8 w-14 shrink-0 cursor-pointer rounded-none border-4 border-transparent transition-all duration-300 ease-in-out focus:outline-none ${
             isPublic ? 'bg-foreground shadow-[0_0_15px_rgba(var(--primary),0.2)]' : 'bg-accent'
           } ${isUpdating ? 'opacity-40 grayscale cursor-wait' : 'active:scale-95'}`}

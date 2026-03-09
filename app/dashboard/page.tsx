@@ -139,10 +139,10 @@ export default async function DashboardPage() {
 
         {/* Visibility & Insights */}
         <div className="flex flex-col gap-6">
-          <Card className="p-6">
-            <span className="font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.4em] block mb-8">Profile Control</span>
+          <div>
+            <span className="font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.4em] block mb-4 px-6 pt-6">Profile Control</span>
             <VisibilityToggle initialIsPublic={user.biodata.isPublic} />
-          </Card>
+          </div>
 
           <ProfileStrengthMeter data={biodataContent} />
         </div>

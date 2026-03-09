@@ -19,7 +19,7 @@ export async function Navbar() {
         <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
           <Link
             href="/biodata"
-            className="flex items-center gap-2 h-10 px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
+            className="flex items-center gap-2 h-11 min-w-[44px] px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
             aria-label="All Biodatas"
           >
             <div className="flex items-center justify-center w-4 h-4 relative">
@@ -34,7 +34,7 @@ export async function Navbar() {
 
           <Link
             href="/create"
-            className="flex items-center gap-2 h-10 px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
+            className="flex items-center gap-2 h-11 min-w-[44px] px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
             aria-label="Create Biodata"
           >
             <div className="flex items-center justify-center w-4 h-4 relative">
@@ -50,7 +50,7 @@ export async function Navbar() {
           {session?.user && (
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 h-10 px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
+              className="flex items-center gap-2 h-11 min-w-[44px] px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 shrink-0"
               aria-label="Dashboard"
             >
               <div className="flex items-center justify-center w-4 h-4 relative">
@@ -77,7 +77,7 @@ export async function Navbar() {
           ) : (
             <Link
               href="/api/auth/signin"
-              className="font-mono text-[11px] md:text-[12px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-foreground border border-foreground px-3 sm:px-6 h-10 flex items-center justify-center hover:bg-foreground hover:text-background transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 ml-1 shrink-0"
+              className="font-mono text-[11px] md:text-[12px] font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-foreground border border-foreground px-3 sm:px-6 h-11 min-w-[44px] flex items-center justify-center hover:bg-foreground hover:text-background transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4 ml-1 shrink-0"
             >
               Sign In
             </Link>

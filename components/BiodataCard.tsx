@@ -10,10 +10,10 @@ interface BiodataCardProps {
 
 export function BiodataCard({ username, data }: BiodataCardProps) {
     const { basicInfo, personalInfo, profession } = data
-    const age = basicInfo?.age || "N/A"
-    const religion = basicInfo?.religion || "N/A"
-    const district = personalInfo?.district || "N/A"
-    const occupation = profession?.occupation || "N/A"
+    const age = basicInfo?.age || "—"
+    const religion = basicInfo?.religion || "—"
+    const district = personalInfo?.district || "—"
+    const occupation = profession?.occupation || "—"
     const name = basicInfo?.fullName || "Member"
 
     return (
@@ -35,7 +35,7 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
                 {/* Info Grid */}
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-12 items-center w-full text-center sm:text-left">
                     <div className="md:col-span-2">
-                        <p className="text-[10px] font-mono font-black text-foreground/20 uppercase tracking-[0.4em] mb-2">Identification</p>
+                        <p className="text-[10px] font-mono font-black text-foreground-muted uppercase tracking-[0.4em] mb-2">Identification</p>
                         <h3 className="text-2xl sm:text-3xl font-serif text-foreground leading-tight italic tracking-tight">
                             {name}
                         </h3>
@@ -51,7 +51,7 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
                     </div>
 
                     <div className="hidden md:block">
-                        <p className="text-[10px] font-mono font-black text-foreground/20 uppercase tracking-[0.4em] mb-2">Metrics</p>
+                        <p className="text-[10px] font-mono font-black text-foreground-muted uppercase tracking-[0.4em] mb-2">Metrics</p>
                         <div className="flex flex-col gap-1">
                             <span className="text-[11px] font-black text-foreground uppercase tracking-widest">{religion}</span>
                             <span className="text-[11px] font-mono text-foreground-muted uppercase tracking-widest">{age} Yrs</span>
@@ -59,7 +59,7 @@ export function BiodataCard({ username, data }: BiodataCardProps) {
                     </div>
 
                     <div className="hidden md:block">
-                        <p className="text-[10px] font-mono font-black text-foreground/20 uppercase tracking-[0.4em] mb-2">Origin</p>
+                        <p className="text-[10px] font-mono font-black text-foreground-muted uppercase tracking-[0.4em] mb-2">Origin</p>
                         <span className="text-[11px] font-black text-foreground uppercase tracking-widest line-clamp-1">{district}</span>
                     </div>
                 </div>

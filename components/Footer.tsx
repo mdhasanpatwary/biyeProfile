@@ -17,33 +17,22 @@ export function Footer() {
         </div>
 
         {/* Navigation Grid */}
-        <div className="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12">
+        <div className="md:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-12">
           <div className="flex flex-col gap-6">
             <span className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Platform</span>
             <Link href="/create" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Create Biodata</Link>
             <Link href="/biodata" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Search Biodatas</Link>
-            <Link href="/pricing" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Pricing</Link>
           </div>
 
           <div className="flex flex-col gap-6">
             <span className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Institutional</span>
             <Link href="/dashboard" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Dashboard</Link>
-            <Link href="/about" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">About Us</Link>
-            <Link href="/contact" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Contact Us</Link>
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <span className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Registry</span>
-            <Link href="#" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Private Links</Link>
-            <Link href="#" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">PDF Export</Link>
-            <Link href="#" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Verification</Link>
           </div>
 
           <div className="flex flex-col gap-6">
             <span className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Legal</span>
-            <Link href="#" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Privacy Policy</Link>
-            <Link href="#" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Terms of Use</Link>
-            <Link href="#" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Security</Link>
+            <span className="text-[12px] font-bold text-foreground/30 uppercase tracking-tight cursor-not-allowed select-none" title="Coming soon">Privacy Policy</span>
+            <span className="text-[12px] font-bold text-foreground/30 uppercase tracking-tight cursor-not-allowed select-none" title="Coming soon">Terms of Use</span>
           </div>
         </div>
       </div>
