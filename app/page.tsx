@@ -35,12 +35,12 @@ export default async function Home() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href={session?.user ? "/dashboard" : "/create"}>
                   <Button variant="primary" size="lg" className="w-full sm:w-auto px-10 transition-all">
-                    {session?.user ? "Go to Dashboard" : "Create Biodata"}
+                    {session?.user ? "Dashboard" : "Create Biodata"}
                   </Button>
                 </Link>
                 <Link href="/biodata">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto px-10 transition-all">
-                    See Example Biodata
+                    Biodata
                   </Button>
                 </Link>
               </div>
@@ -128,7 +128,7 @@ export default async function Home() {
         </Section>
 
         {/* SECURITY SECTION */}
-        <Section className="border-t border-border bg-foreground text-background py-24 md:py-32 -mx-6 sm:-mx-8 lg:-mx-10 px-6 sm:px-8 lg:px-10">
+        <Section className="border-t border-x border-border bg-foreground text-background py-24 md:py-32 -mx-6 sm:-mx-8 lg:-mx-10 px-6 sm:px-8 lg:px-10">
           <div className="max-w-[1400px] mx-auto">
             <div className="grid grid-cols-12 gap-8 md:gap-12 items-center">
               <div className="col-span-12 lg:col-span-5 mb-12 lg:mb-0">
@@ -165,7 +165,7 @@ export default async function Home() {
                   }
                 ].map((item, i) => (
                   <div key={i} className="space-y-4">
-                    <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-success/80">0{i+1} / Verified</h4>
+                    <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-success/80">0{i + 1} / Verified</h4>
                     <h3 className="text-2xl font-serif italic text-background">{item.title}</h3>
                     <p className="text-background/75 text-sm leading-relaxed font-medium">
                       {item.desc}
@@ -178,8 +178,8 @@ export default async function Home() {
         </Section>
 
         {/* PRINCIPLES SECTION */}
-        <Section className="border-b border-border px-0">
-          <div className="grid grid-cols-12 gap-0 overflow-hidden divide-y md:divide-y-0 md:divide-x divide-border">
+        <Section className="px-0">
+          <div className="grid grid-cols-12 gap-0 overflow-hidden divide-y md:divide-y-0 md:divide-x divide-border border border-border border-t-0">
             {[
               {
                 num: "01",
