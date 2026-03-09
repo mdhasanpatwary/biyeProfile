@@ -258,36 +258,47 @@ export function BiodataForm({
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-4 p-4 md:p-6 pt-2 md:pt-4">
-          <div className="flex items-start gap-2 flex-1 min-w-0">
-            <Button
-              type="button"
-              disabled={currentStep === 1}
-              onClick={handlePrevStep}
-              variant="outline"
-              size="icon"
-              className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group mt-1"
-            >
-              <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
-            </Button>
+        <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-0 sm:pt-2 sm:pb-4">
+          {/* Prev button — always visible */}
+          <Button
+            type="button"
+            disabled={currentStep === 1}
+            onClick={handlePrevStep}
+            variant="outline"
+            size="icon"
+            className="shrink-0 w-8 h-8 hover:border-foreground group sm:mt-1"
+          >
+            <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+          </Button>
 
-            <StepWizard
-              steps={steps.map(s => ({ id: s.title, label: s.title }))}
-              currentStep={currentStep}
-              className="flex-1 mb-0 pb-0"
-            />
-
-            <Button
-              type="button"
-              disabled={currentStep === steps.length}
-              onClick={handleNextStep}
-              variant="outline"
-              size="icon"
-              className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 hover:border-foreground group relative z-10 mt-1"
-            >
-              <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
-            </Button>
+          {/* MOBILE: compact step pill */}
+          <div className="flex-1 flex flex-col items-center sm:hidden">
+            <span className="font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.3em]">
+              {String(currentStep).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
+            </span>
+            <span className="font-mono text-[11px] font-black text-foreground uppercase tracking-widest mt-0.5">
+              {steps[currentStep - 1].title}
+            </span>
           </div>
+
+          {/* DESKTOP: full scrollable StepWizard */}
+          <StepWizard
+            steps={steps.map(s => ({ id: s.title, label: s.title }))}
+            currentStep={currentStep}
+            className="hidden sm:flex flex-1 mb-0 pb-0"
+          />
+
+          {/* Next button — always visible */}
+          <Button
+            type="button"
+            disabled={currentStep === steps.length}
+            onClick={handleNextStep}
+            variant="outline"
+            size="icon"
+            className="shrink-0 w-8 h-8 hover:border-foreground group relative z-10 sm:mt-1"
+          >
+            <svg className="min-w-3.5 w-3.5 h-3.5 group-enabled:group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+          </Button>
         </div>
       </div>
 

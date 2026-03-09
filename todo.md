@@ -25,7 +25,7 @@ Based on the [Detailed Audit Report](file:///Users/patwary/.gemini/antigravity/b
 - [x] Add "How it Works" and "Security" sections to the landing page.
 
 ### UX / UI
-- [ ] Improve mobile responsiveness of the `BiodataForm` sticky header.
+- [x] Improve mobile responsiveness of the `BiodataForm` sticky header.
 - [x] Standardize button icon-spacing (`gap-2`) across the project.
 - [x] Implement skeleton loaders for `BiodataCard` in the browse page.
 
@@ -43,5 +43,4 @@ Based on the [Detailed Audit Report](file:///Users/patwary/.gemini/antigravity/b
 ### Product & Features
 - [x] Implement a "Profile Strength" meter.
 - [x] Add social sharing (OG images) for public profiles.
-- [ ] Add photo cropping tool before upload.
 - [ ] Provide multiple PDF themes for users.
