@@ -21,13 +21,13 @@ Based on the [Detailed Audit Report](file:///Users/patwary/.gemini/antigravity/b
 ## 🟡 Medium Priority
 
 ### Product & Features
-- [ ] Add a "Review & Submit" step to the biodata creation flow.
-- [ ] Add "How it Works" and "Security" sections to the landing page.
+- [x] Add a "Review & Submit" step to the biodata creation flow.
+- [x] Add "How it Works" and "Security" sections to the landing page.
 
 ### UX / UI
 - [ ] Improve mobile responsiveness of the `BiodataForm` sticky header.
-- [ ] Standardize button icon-spacing (`gap-2`) across the project.
-- [ ] Implement skeleton loaders for `BiodataCard` in the browse page.
+- [x] Standardize button icon-spacing (`gap-2`) across the project.
+- [x] Implement skeleton loaders for `BiodataCard` in the browse page.
 
 ### Code & Architecture
 - [x] Extract `CustomFieldsFormBlock` to a global reusable component.

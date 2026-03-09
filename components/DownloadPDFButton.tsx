@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
 
 interface DownloadPDFButtonProps {
   /** ID of the DOM element to capture. Defaults to "biodata-content" */
@@ -13,6 +14,7 @@ interface DownloadPDFButtonProps {
   variant?: "primary" | "secondary" | "outline" | "ghost"
   className?: string
   children?: React.ReactNode
+  disabled?: boolean
 }
 
 export function DownloadPDFButton({
@@ -20,7 +22,8 @@ export function DownloadPDFButton({
   filename = "biodata",
   className,
   children,
-  variant = "primary"
+  variant = "primary",
+  disabled = false
 }: DownloadPDFButtonProps) {
   const [loading, setLoading] = useState(false)
 
@@ -39,6 +42,15 @@ export function DownloadPDFButton({
         return
       }
 
+      // Check if element is effectively hidden/empty
+      if (element.offsetWidth === 0 && element.offsetHeight === 0) {
+        // Many mobile components hide items with display:none.
+        // We can't capture display:none elements.
+        toast.error("Please switch to 'Preview' mode before downloading, or ensure there is content to export.")
+        setLoading(false)
+        return
+      }
+
       // A4 dimensions in px at 96 dpi: 794 x 1123
       const A4_WIDTH_PX = 794
 
@@ -53,25 +65,24 @@ export function DownloadPDFButton({
         logging: false,
         windowWidth: A4_WIDTH_PX,
         onclone: (clonedDoc, clonedEl) => {
+          // Ensure the element is visible in the clone regardless of mobile toggle state
+          clonedEl.style.display = "block";
+          clonedEl.style.visibility = "visible";
+          clonedEl.style.opacity = "1";
+
           // ── Step 2: Transfer all loaded FontFace objects into the cloned document ──
-          // html2canvas creates an isolated document — it has no access to the
-          // fonts loaded by the main window. We copy every loaded FontFace across.
           document.fonts.forEach((fontFace) => {
             try {
               clonedDoc.fonts.add(fontFace)
             } catch {
-              // Ignore fonts that can't be transferred (e.g. already added)
+              // Ignore fonts that already exist
             }
           })
 
           // ── Step 3: Resolve CSS var() font names → real family names ──
-          // html2canvas cannot follow `var(--font-geist-sans)` etc.
-          // We read the resolved names from the main document's computed styles
-          // and inject a scoped <style> that sets font-family to the real names.
           const mainStyles = getComputedStyle(document.documentElement)
           const resolveFont = (varName: string, fallback: string) => {
             const resolved = mainStyles.getPropertyValue(varName).trim()
-            // next/font injects names like "__GeistSans_abc123" — use as-is or fallback
             return resolved || fallback
           }
 
@@ -88,7 +99,6 @@ export function DownloadPDFButton({
           style.textContent = `
             #biodata-content,
             #biodata-content * {
-              /* Reset browser default font resolution */
             }
             #biodata-content .font-sans,
             #biodata-content {
@@ -147,6 +157,10 @@ export function DownloadPDFButton({
         },
       })
 
+      if (!canvas || canvas.width === 0 || canvas.height === 0) {
+        throw new Error("Canvas generation resulted in zero dimensions")
+      }
+
       const imgData = canvas.toDataURL("image/jpeg", 0.97)
 
       // We want a single continuous vertical PDF matching the aspect ratio of the canvas.
@@ -154,11 +168,19 @@ export function DownloadPDFButton({
       // and calculate the required height based on the canvas aspect ratio.
       const PAGE_W = 210  // mm
       const MARGIN = 10   // mm padding on left/right/top/bottom
-      const CONTENT_W = PAGE_W - MARGIN * 2
+      const CONTENT_W = PAGE_W - (MARGIN * 2)
 
-      const canvasAspect = canvas.height / canvas.width
+      const canvasWidth = canvas.width || 1 // Avoid division by zero
+      const canvasHeight = canvas.height || 1
+      const canvasAspect = canvasHeight / canvasWidth
+
       const CONTENT_H = CONTENT_W * canvasAspect  // mm
-      const PAGE_H = CONTENT_H + MARGIN * 2       // mm total height needed
+      const PAGE_H = CONTENT_H + (MARGIN * 2)       // mm total height needed
+
+      // Sanity check for PDF dimensions
+      if (isNaN(PAGE_H) || PAGE_H <= 0 || PAGE_H > 10000) {
+        throw new Error(`Invalid PDF height calculated: ${PAGE_H}`)
+      }
 
       const pdf = new jsPDF({
         orientation: "portrait",
@@ -192,9 +214,9 @@ export function DownloadPDFButton({
     <Button
       variant={variant}
       onClick={handleDownload}
-      disabled={loading}
+      disabled={loading || disabled}
       className={
-        cn("w-full sm:w-auto flex items-center justify-center gap-2", className)
+        cn("w-full sm:w-auto flex items-center justify-center transition-colors", className)
       }
     >
       {loading ? (

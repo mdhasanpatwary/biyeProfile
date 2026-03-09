@@ -112,7 +112,7 @@ export const DropdownMenuItem = React.forwardRef<
     role="menuitem"
     tabIndex={-1}
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-none px-2 py-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground",
+      "relative flex cursor-pointer select-none items-center gap-2 rounded-none px-2 py-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground",
       className
     )}
     {...props}

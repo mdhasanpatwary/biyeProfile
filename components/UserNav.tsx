@@ -9,7 +9,7 @@ export function UserNav({ username }: { username: string }) {
       align="right"
       trigger={
         <button
-          className="flex items-center gap-3 h-10 px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
+          className="flex items-center gap-2 h-10 px-3 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
           aria-label="User Menu"
         >
           <div className="flex items-center justify-center w-4 h-4 relative">
@@ -34,7 +34,7 @@ export function UserNav({ username }: { username: string }) {
       </div>
       <DropdownMenuItem
         onClick={() => signOut({ callbackUrl: "/" })}
-        className="text-foreground hover:bg-foreground hover:text-background font-mono text-[11px] font-bold uppercase tracking-[0.15em] mx-1 mb-1 justify-center border border-transparent transition-all flex items-center gap-2"
+        className="text-foreground hover:bg-foreground hover:text-background font-mono text-[11px] font-bold uppercase tracking-[0.15em] mx-1 mb-1 justify-center border border-transparent transition-all flex items-center"
       >
         <svg
           className="w-4 min-w-4 h-4"

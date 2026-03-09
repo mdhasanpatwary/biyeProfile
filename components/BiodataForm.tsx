@@ -19,6 +19,7 @@ import { FamilyInfoStep } from "./biodata-form/steps/FamilyInfoStep"
 import { ExpectationsStep } from "./biodata-form/steps/ExpectationsStep"
 import { ContactInfoStep } from "./biodata-form/steps/ContactInfoStep"
 import { CustomSectionsStep } from "./biodata-form/steps/CustomSectionsStep"
+import { ReviewSubmitStep } from "./biodata-form/steps/ReviewSubmitStep"
 
 export function BiodataForm({
   initialData,
@@ -26,6 +27,7 @@ export function BiodataForm({
   language: externalLanguage,
   mobileView,
   onViewChange,
+  onValidityChange,
   isGuest = false,
 }: {
   initialData: Partial<BiodataFormValues>,
@@ -33,6 +35,7 @@ export function BiodataForm({
   language?: "en" | "bn",
   mobileView?: "edit" | "preview",
   onViewChange?: (view: "edit" | "preview") => void,
+  onValidityChange?: (isValid: boolean) => void,
   isGuest?: boolean,
 }) {
   const router = useRouter()
@@ -48,7 +51,8 @@ export function BiodataForm({
     { title: "Family", icon: "👨‍👩‍👧‍👦" },
     { title: "Expectations", icon: "💍" },
     { title: "Contact", icon: "📞" },
-    { title: "Custom", icon: "➕" }
+    { title: "Custom", icon: "➕" },
+    { title: "Review", icon: "✅" }
   ]
 
   const stepKeys = [
@@ -59,7 +63,8 @@ export function BiodataForm({
     "familyInfo",
     "expectations",
     "contactInfo",
-    "customSections"
+    "customSections",
+    "basicInfo" // Use basicInfo (or any valid key) to satisfy trigger type for the review step
   ] as const;
 
   const form = useForm<BiodataFormValues>({
@@ -234,6 +239,12 @@ export function BiodataForm({
     }
   }, [externalLanguage, form]);
 
+  // Expose form validity state
+  const { isValid: formIsValid } = form.formState;
+  useEffect(() => {
+    onValidityChange?.(formIsValid);
+  }, [formIsValid, onValidityChange]);
+
 
   const lang = useWatch({ control: form.control, name: "language" });
 
@@ -289,6 +300,7 @@ export function BiodataForm({
         {currentStep === 6 && <ExpectationsStep form={form} lang={lang} />}
         {currentStep === 7 && <ContactInfoStep form={form} lang={lang} />}
         {currentStep === 8 && <CustomSectionsStep form={form} />}
+        {currentStep === 9 && <ReviewSubmitStep form={form} lang={lang} isGuest={isGuest} />}
 
         {/* Footer Navigation (Mobile) - Polished Floating bar */}
         <div className="fixed bottom-0 mb-0 left-0 right-0 bg-background/95 backdrop-blur-2xl border-t border-border-muted p-4 lg:hidden flex items-center justify-between gap-3 z-[100] shadow-xl">
@@ -322,26 +334,27 @@ export function BiodataForm({
           </div>
 
           <div className="flex-1 max-w-[140px]">
-            {currentStep < 8 ? (
+            {currentStep < 9 ? (
               <Button
                 type="button"
                 variant="primary"
                 onClick={handleNextStep}
-                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2"
+                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center justify-center"
               >
                 Next
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
               </Button>
             ) : isGuest ? (
               <DownloadPDFButton
+                disabled={!formIsValid}
                 filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
-                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all outline-none flex items-center justify-center gap-2"
+                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all outline-none flex items-center justify-center"
               />
             ) : (
               <Button
                 type="button"
                 onClick={handleFinish}
-                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest gap-2"
+                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest"
               >
                 Save & Finish
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
@@ -357,33 +370,34 @@ export function BiodataForm({
               type="button"
               onClick={handlePrevStep}
               variant="outline"
-              className="flex items-center gap-3 group"
+              className="flex items-center group"
             >
               <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               Back
             </Button>
           ) : <div />}
-          {currentStep < 8 ? (
+          {currentStep < 9 ? (
             <Button
               type="button"
               variant="primary"
               onClick={handleNextStep}
-              className="flex items-center gap-3 group"
+              className="flex items-center group"
             >
               Next Step
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </Button>
           ) : isGuest ? (
             <DownloadPDFButton
+              disabled={!formIsValid}
               filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
-              className="px-10 py-4 bg-foreground text-background font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-none hover:bg-foreground/90 transition-all active:scale-95 flex items-center gap-3"
+              className="px-10 py-4 bg-foreground text-background font-mono text-[11px] font-black uppercase tracking-[0.3em] rounded-none hover:bg-foreground/90 transition-all active:scale-95 flex items-center"
             />
           ) : (
             <Button
               type="button"
               variant="primary"
               onClick={handleFinish}
-              className="flex items-center gap-3 group"
+              className="flex items-center group"
             >
               Save & Finish
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>

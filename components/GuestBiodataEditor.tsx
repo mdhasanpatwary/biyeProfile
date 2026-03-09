@@ -21,6 +21,7 @@ export function GuestBiodataEditor() {
   const [language, setLanguage] = useState<"en" | "bn">("en")
   const [showSignInBanner, setShowSignInBanner] = useState(true)
   const [isReadyToRender, setIsReadyToRender] = useState(false)
+  const [isValid, setIsValid] = useState(false)
 
   // Use a separate state for initialData loaded from disk to avoid render-time ref access
   const [initialData, setInitialData] = useState<Partial<BiodataFormValues>>(defaultData)
@@ -133,8 +134,9 @@ export function GuestBiodataEditor() {
 
             {/* Download Button */}
             <DownloadPDFButton
+              disabled={!isValid}
               filename={`${formData.basicInfo?.fullName || 'biodata'}_biyeprofile`}
-              className="h-[42px] px-6 bg-primary text-primary-foreground rounded-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-primary/90 active:scale-95 transition-all outline-none"
+              className="h-[42px] px-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground rounded-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center active:scale-95 transition-all outline-none"
             />
           </div>
         </div>
@@ -145,13 +147,14 @@ export function GuestBiodataEditor() {
           {mobileView === "preview" && (
             <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex gap-3 print:hidden">
               <DownloadPDFButton
+                disabled={!isValid}
                 filename={`${formData.basicInfo?.fullName || 'biodata'}_biyeprofile`}
-                className="px-6 py-4 bg-primary text-primary-foreground rounded-none shadow-2xl shadow-primary/20 flex items-center gap-2 active:scale-95 transition-all"
+                className="px-6 py-4 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground rounded-none shadow-2xl shadow-primary/20 flex items-center active:scale-95 transition-all"
               />
               <Button
                 variant="outline"
                 onClick={() => setMobileView("edit")}
-                className="px-6 py-4 shadow-2xl flex items-center gap-2 active:scale-95 transition-all outline-none"
+                className="px-6 py-4 shadow-2xl flex items-center active:scale-95 transition-all outline-none"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -166,6 +169,7 @@ export function GuestBiodataEditor() {
             <BiodataForm
               initialData={initialData}
               onDataChange={(data) => setFormData(data)}
+              onValidityChange={setIsValid}
               language={language}
               mobileView={mobileView}
               onViewChange={(view) => setMobileView(view)}

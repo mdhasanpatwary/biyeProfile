@@ -86,7 +86,7 @@ export default async function DashboardPage() {
             <Button variant="outline" className="w-full px-8">View Biodata</Button>
           </Link>
           <Link href="/dashboard/edit" className="w-full sm:w-auto">
-            <Button variant="primary" className="w-full px-8 flex items-center justify-center gap-2">Edit Biodata</Button>
+            <Button variant="primary" className="w-full px-8 flex items-center justify-center">Edit Biodata</Button>
           </Link>
         </div>
       </div>
