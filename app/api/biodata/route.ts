@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { sanitizeDeep } from "@/lib/security/sanitize"
+import { RateLimiter } from "@/lib/rateLimiter"
+
+// 20 requests per minute
+const limiter = new RateLimiter(20, 60 * 1000)
+
+function getClientIp(req: NextRequest) {
+  const forwardedFor = req.headers.get("x-forwarded-for")
+  return forwardedFor ? forwardedFor.split(",")[0] : "unknown"
+}
 
 const defaultBiodata = {
   language: "bn",
@@ -70,7 +79,14 @@ const defaultBiodata = {
   customSections: []
 }
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const ip = getClientIp(req)
+  const limitCheck = limiter.check(ip)
+
+  if (!limitCheck.success) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
+  }
+
   const session = await auth()
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
@@ -95,6 +111,13 @@ export async function POST() {
 }
 
 export async function PUT(req: NextRequest) {
+  const ip = getClientIp(req)
+  const limitCheck = limiter.check(ip)
+
+  if (!limitCheck.success) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
+  }
+
   const session = await auth()
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 

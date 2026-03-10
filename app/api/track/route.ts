@@ -1,9 +1,21 @@
 import { prisma } from "@/lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 import { createHash } from "crypto"
+import { RateLimiter } from "@/lib/rateLimiter"
+
+// 20 requests per minute
+const limiter = new RateLimiter(20, 60 * 1000)
 
 export async function POST(req: NextRequest) {
   try {
+    const forwardedFor = req.headers.get("x-forwarded-for")
+    const ip = forwardedFor ? forwardedFor.split(",")[0] : ((req as unknown as { ip?: string }).ip || "unknown")
+
+    const limitCheck = limiter.check(ip)
+    if (!limitCheck.success) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 })
+    }
+
     const { sessionId, type, path, metadata } = await req.json()
 
     if (!sessionId) {
@@ -11,9 +23,7 @@ export async function POST(req: NextRequest) {
     }
 
     const userAgent = req.headers.get("user-agent") || undefined
-    // Get IP address for hashing (privacy-centric unique visitor tracking)
-    const forwardedFor = req.headers.get("x-forwarded-for")
-    const ip = forwardedFor ? forwardedFor.split(",")[0] : ((req as unknown as { ip?: string }).ip || "unknown")
+    // IP is already extracted above for rate limiting
     const ipHash = createHash("sha256").update(ip).digest("hex").substring(0, 16)
 
     // Update or create session
