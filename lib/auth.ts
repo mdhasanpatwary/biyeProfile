@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import { prisma } from "@/lib/prisma"
+import { cookies } from "next/headers"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -61,6 +62,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.role = token.role as string;
       }
       return session;
+    }
+  },
+  events: {
+    async signIn({ user }) {
+      try {
+        const cookieStore = await cookies()
+        const guestSessionId = cookieStore.get("biye_guest_sid")?.value
+        if (guestSessionId && user.id) {
+          // Verify the session actually exists before logging conversion
+          const session = await prisma.guestSession.findUnique({
+            where: { sessionId: guestSessionId }
+          })
+          if (session) {
+            await prisma.guestActivity.create({
+              data: {
+                sessionId: guestSessionId,
+                type: "GUEST_CONVERTED",
+                path: "/api/auth/callback/google",
+                metadata: { userId: user.id },
+              },
+            })
+          }
+        }
+      } catch {
+        // Non-critical: don't break sign-in if tracking fails
+      }
     }
   }
 })

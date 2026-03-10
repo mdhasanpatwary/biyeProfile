@@ -6,6 +6,20 @@ import { useEffect, useCallback } from "react"
 
 // Client-side session ID management
 const GUEST_SESSION_KEY = "biye_guest_session"
+const GUEST_SESSION_COOKIE = "biye_guest_sid"
+
+/** Returns (and creates if missing) the guest session ID from localStorage + cookie. */
+export function getGuestSessionId(): string | null {
+  if (typeof window === "undefined") return null
+  let sessionId = localStorage.getItem(GUEST_SESSION_KEY)
+  if (!sessionId) {
+    sessionId = crypto.randomUUID()
+    localStorage.setItem(GUEST_SESSION_KEY, sessionId)
+  }
+  // Also persist in a cookie so the server-side auth callback can read it
+  document.cookie = `${GUEST_SESSION_COOKIE}=${sessionId}; SameSite=Lax; Path=/; Max-Age=604800`
+  return sessionId
+}
 
 export function useGuestTracking() {
   const { status } = useSession()
@@ -14,11 +28,8 @@ export function useGuestTracking() {
     // Only track if we are SURE there's no session
     if (status !== "unauthenticated") return
 
-    let sessionId = localStorage.getItem(GUEST_SESSION_KEY)
-    if (!sessionId) {
-      sessionId = crypto.randomUUID()
-      localStorage.setItem(GUEST_SESSION_KEY, sessionId)
-    }
+    const sessionId = getGuestSessionId()
+    if (!sessionId) return
 
     try {
       await fetch("/api/track", {

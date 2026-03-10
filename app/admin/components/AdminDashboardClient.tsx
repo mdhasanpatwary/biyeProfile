@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Prisma } from "@prisma/client"
+
 
 interface AdminUser {
   id: string
@@ -45,17 +45,10 @@ interface AdminBiodata {
   reports?: AdminReport[]
 }
 
-interface AdminGuestActivity {
-  id: string
-  sessionId: string
-  type: string
-  path: string
-  metadata: Prisma.JsonValue
-  createdAt: Date
-  session: {
-    userAgent: string | null
-    lastActive: Date
-  }
+interface GuestAnalytics {
+  eventBreakdown: Record<string, number>
+  last7DaysSessions: { date: string; count: number }[]
+  conversionRate: string
 }
 
 interface AdminDashboardClientProps {
@@ -68,12 +61,12 @@ interface AdminDashboardClientProps {
   }
   users: AdminUser[]
   biodatas: AdminBiodata[]
-  guestActivities: AdminGuestActivity[]
+  guestAnalytics: GuestAnalytics
 }
 
 type TabType = "overview" | "users" | "biodatas" | "reports" | "guests"
 
-export function AdminDashboardClient({ initialStats, users, biodatas, guestActivities }: AdminDashboardClientProps) {
+export function AdminDashboardClient({ initialStats, users, biodatas, guestAnalytics }: AdminDashboardClientProps) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<TabType>("overview")
   const [isActionPending, setIsActionPending] = useState(false)
@@ -335,34 +328,75 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestActiv
         </TabsContent>
 
         <TabsContent active={activeTab === "guests"}>
-          <AdminTableux
-            title="Recent Guest Activity"
-            data={guestActivities}
-            columns={[
-              { header: "Path / URL", key: "path", render: (g) => (
-                <div className="flex flex-col">
-                  <span className="font-semibold text-xs">{g.path}</span>
-                  <span className="text-[10px] font-mono text-foreground-muted">{g.type}</span>
-                </div>
-              )},
-              { header: "Session ID", key: "sessionId", render: (g) => (
-                <span className="text-[10px] font-mono text-foreground-muted uppercase tracking-widest">{g.sessionId.substring(0, 8)}...</span>
-              )},
-              { header: "Device / Info", key: "session", render: (g) => (
-                <div className="flex flex-col max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
-                   <span className="text-[10px] font-mono text-foreground-muted leading-tight" title={g.session.userAgent || ""}>
-                     {g.session.userAgent || "Unknown Device"}
-                   </span>
-                </div>
-              )},
-              { header: "Timestamp", key: "createdAt", render: (g) => (
-                <div className="flex flex-col">
-                  <span className="text-xs">{new Date(g.createdAt).toLocaleDateString()}</span>
-                  <span className="text-[10px] font-mono text-foreground-muted">{new Date(g.createdAt).toLocaleTimeString()}</span>
-                </div>
-              )},
-            ]}
-          />
+          {/* Funnel Stat Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            {[
+              { label: "Total Sessions", value: initialStats.guestSessionsCount, color: "text-blue-500" },
+              { label: "Biodata Started", value: (guestAnalytics.eventBreakdown["GUEST_BIODATA_START"] ?? 0) + (guestAnalytics.eventBreakdown["GUEST_BIODATA_RESUME"] ?? 0), color: "text-violet-500" },
+              { label: "PDF Downloads", value: guestAnalytics.eventBreakdown["GUEST_PDF_DOWNLOAD"] ?? 0, color: "text-amber-500" },
+              { label: "Conversions", value: guestAnalytics.eventBreakdown["GUEST_CONVERTED"] ?? 0, color: "text-green-600" },
+            ].map((stat) => (
+              <div key={stat.label} className="border border-border-muted p-6">
+                <p className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted mb-2">{stat.label}</p>
+                <p className={`text-4xl font-serif ${stat.color}`}>{stat.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Conversion Rate Banner */}
+          <div className="border border-border-muted p-6 mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted mb-1">Guest → Registered Conversion Rate</p>
+              <p className="text-5xl font-serif text-foreground">{guestAnalytics.conversionRate}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted mb-1">New Sessions (Last 7 Days)</p>
+              <div className="flex items-end gap-1 justify-end">
+                {guestAnalytics.last7DaysSessions.map(({ date, count }) => {
+                  const max = Math.max(...guestAnalytics.last7DaysSessions.map(s => s.count), 1)
+                  const height = Math.max((count / max) * 60, 4)
+                  return (
+                    <div key={date} className="flex flex-col items-center gap-1" title={`${date}: ${count} sessions`}>
+                      <div
+                        className="w-5 bg-blue-500/70 rounded-none"
+                        style={{ height: `${height}px` }}
+                      />
+                      <span className="text-[8px] font-mono text-foreground-muted">{date.slice(5)}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Funnel Drop-off */}
+          <div className="border border-border-muted p-6 mb-10">
+            <p className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted mb-6">Guest Funnel Drop-off</p>
+            <div className="space-y-3">
+              {[
+                { label: "Visited Site", key: "PAGE_VIEW", color: "bg-blue-200" },
+                { label: "Started Biodata", key: "GUEST_BIODATA_START", color: "bg-violet-300" },
+                { label: "Edited Fields", key: "GUEST_FIELD_CHANGE", color: "bg-indigo-300" },
+                { label: "Downloaded PDF", key: "GUEST_PDF_DOWNLOAD", color: "bg-amber-300" },
+                { label: "Converted", key: "GUEST_CONVERTED", color: "bg-green-400" },
+              ].map(({ label, key, color }) => {
+                const val = guestAnalytics.eventBreakdown[key] ?? 0
+                const max = guestAnalytics.eventBreakdown["PAGE_VIEW"] ?? 1
+                const pct = max > 0 ? Math.round((val / max) * 100) : 0
+                return (
+                  <div key={key}>
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted">{label}</span>
+                      <span className="text-[10px] font-mono text-foreground-muted">{val.toLocaleString()} · {pct}%</span>
+                    </div>
+                    <div className="h-2 bg-border-muted w-full">
+                      <div className={`h-2 ${color} transition-all`} style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </TabsContent>
       </div>
     </div>

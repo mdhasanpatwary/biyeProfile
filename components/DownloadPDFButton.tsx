@@ -15,6 +15,8 @@ interface DownloadPDFButtonProps {
   className?: string
   children?: React.ReactNode
   disabled?: boolean
+  /** Optional callback fired just before the PDF is saved — use for analytics/tracking */
+  onTrack?: () => void
 }
 
 export function DownloadPDFButton({
@@ -23,7 +25,8 @@ export function DownloadPDFButton({
   className,
   children,
   variant = "primary",
-  disabled = false
+  disabled = false,
+  onTrack,
 }: DownloadPDFButtonProps) {
   const [loading, setLoading] = useState(false)
 
@@ -70,8 +73,8 @@ export function DownloadPDFButton({
           clonedEl.style.visibility = "visible";
           clonedEl.style.opacity = "1";
 
-          // Unhide all ancestors in the cloned document. 
-          // Since windowWidth is forced to A4_WIDTH_PX (794), responsive classes like 'lg:block hidden' 
+          // Unhide all ancestors in the cloned document.
+          // Since windowWidth is forced to A4_WIDTH_PX (794), responsive classes like 'lg:block hidden'
           // will default to 'hidden'. We must strip 'hidden' from ancestors to prevent 0x0 canvas errors.
           let parent = clonedEl.parentElement;
           while (parent && parent !== clonedDoc.body) {
@@ -224,6 +227,7 @@ export function DownloadPDFButton({
       )
 
       const safeFilename = filename.replace(/[^a-z0-9_-]/gi, "_").toLowerCase()
+      onTrack?.()
       pdf.save(`${safeFilename}.pdf`)
     } catch (err) {
       console.error("PDF generation failed:", err)

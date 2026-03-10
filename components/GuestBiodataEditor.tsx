@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import { BiodataForm } from "./BiodataForm"
 import { BiodataPreview } from "./BiodataPreview"
@@ -8,6 +8,7 @@ import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { Button } from "@/components/ui/button"
 import { DownloadPDFButton } from "@/components/DownloadPDFButton"
 import { LanguageSwitcher } from "./LanguageSwitcher"
+import { useGuestTracking } from "@/components/GuestTracker"
 
 const STORAGE_KEY = "guest_biodata_data"
 
@@ -22,6 +23,9 @@ export function GuestBiodataEditor() {
   const [showSignInBanner, setShowSignInBanner] = useState(true)
   const [isReadyToRender, setIsReadyToRender] = useState(false)
   const [isValid, setIsValid] = useState(false)
+  const { trackEvent } = useGuestTracking()
+  const fieldChangeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isFirstMount = useRef(true)
 
   // Use a separate state for initialData loaded from disk to avoid render-time ref access
   const [initialData, setInitialData] = useState<Partial<BiodataFormValues>>(defaultData)
@@ -30,10 +34,12 @@ export function GuestBiodataEditor() {
   useEffect(() => {
     let initialDataToSet = defaultData;
     let languageToSet: "en" | "bn" = "en";
+    let hasSavedData = false;
 
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY);
       if (saved) {
+        hasSavedData = true;
         const parsed = JSON.parse(saved) as Partial<BiodataFormValues>;
         initialDataToSet = parsed;
         if (parsed.language === "bn") {
@@ -45,11 +51,21 @@ export function GuestBiodataEditor() {
     }
 
     // Set all initial states at once - this is a standard pattern for hydration from localStorage
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInitialData(initialDataToSet);
     setFormData(initialDataToSet);
     setLanguage(languageToSet);
     setIsReadyToRender(true);
+
+    // Track start vs resume
+    const eventType = hasSavedData ? "GUEST_BIODATA_RESUME" : "GUEST_BIODATA_START"
+    // We schedule it after one tick so trackEvent has the correct auth status
+    setTimeout(() => {
+      trackEvent(eventType, {
+        language: languageToSet,
+        hasName: !!(initialDataToSet as Partial<BiodataFormValues>)?.basicInfo?.fullName,
+      })
+    }, 500)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Persist to localStorage whenever formData changes
@@ -62,12 +78,42 @@ export function GuestBiodataEditor() {
     }
   }, [formData, isReadyToRender])
 
+  // Debounced field-change tracking (5 s after last change)
+  useEffect(() => {
+    if (!isReadyToRender) return
+    if (isFirstMount.current) {
+      isFirstMount.current = false
+      return
+    }
+    if (fieldChangeTimer.current) clearTimeout(fieldChangeTimer.current)
+    fieldChangeTimer.current = setTimeout(() => {
+      // Count filled top-level sections
+      const filledSections = Object.entries(formData)
+        .filter(([k, v]) => k !== "language" && v && typeof v === "object" && Object.values(v as Record<string, unknown>).some(Boolean))
+        .map(([k]) => k)
+      trackEvent("GUEST_FIELD_CHANGE", { filledSections, count: filledSections.length })
+    }, 5000)
+    return () => { if (fieldChangeTimer.current) clearTimeout(fieldChangeTimer.current) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, isReadyToRender])
+
   const handleClearData = () => {
     if (confirm("Are you sure you want to clear all your data? This cannot be undone.")) {
+      trackEvent("GUEST_BIODATA_CLEAR", {})
       window.localStorage.removeItem(STORAGE_KEY)
       window.location.reload()
     }
   }
+
+  const handleSignInIntent = useCallback((source: "banner" | "cta") => {
+    trackEvent("GUEST_SIGNIN_INTENT", { source })
+  }, [trackEvent])
+
+  const handlePDFDownload = useCallback(() => {
+    trackEvent("GUEST_PDF_DOWNLOAD", {
+      filename: `${formData.basicInfo?.fullName || 'biodata'}_biyeprofile`,
+    })
+  }, [trackEvent, formData.basicInfo?.fullName])
 
   if (!isReadyToRender) {
     return (
@@ -92,6 +138,7 @@ export function GuestBiodataEditor() {
               <span className="font-black">Guest Mode</span> — Data is saved locally.{" "}
               <Link
                 href="/api/auth/signin"
+                onClick={() => handleSignInIntent("banner")}
                 className="underline underline-offset-4 font-bold text-foreground hover:text-foreground-muted transition-all"
               >
                 Sign in to save permanently →
@@ -136,6 +183,7 @@ export function GuestBiodataEditor() {
             <DownloadPDFButton
               disabled={!isValid}
               filename={`${formData.basicInfo?.fullName || 'biodata'}_biyeprofile`}
+              onTrack={handlePDFDownload}
               className="h-[42px] px-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground rounded-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center active:scale-95 transition-all outline-none"
             />
           </div>
@@ -149,6 +197,7 @@ export function GuestBiodataEditor() {
               <DownloadPDFButton
                 disabled={!isValid}
                 filename={`${formData.basicInfo?.fullName || 'biodata'}_biyeprofile`}
+                onTrack={handlePDFDownload}
                 className="px-6 py-4 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground rounded-none shadow-2xl shadow-primary/20 flex items-center active:scale-95 transition-all"
               />
               <Button

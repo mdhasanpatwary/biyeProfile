@@ -10,25 +10,49 @@ export default async function AdminPage() {
     redirect("/")
   }
 
-  const [totalUsers, totalBiodatas, publicBiodatas, privateBiodatas, guestSessionsCount, recentGuestActivities] = await Promise.all([
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6)
+  sevenDaysAgo.setHours(0, 0, 0, 0)
+
+  const [totalUsers, totalBiodatas, publicBiodatas, privateBiodatas, guestSessionsCount, rawEvents, recentSessions] = await Promise.all([
     prisma.user.count(),
     prisma.biodata.count(),
     prisma.biodata.count({ where: { isPublic: true } }),
     prisma.biodata.count({ where: { isPublic: false } }),
     prisma.guestSession.count(),
-    prisma.guestActivity.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 20,
-      include: {
-        session: {
-          select: {
-            userAgent: true,
-            lastActive: true,
-          }
-        }
-      }
-    })
+    prisma.guestActivity.groupBy({
+      by: ["type"],
+      _count: { type: true },
+    }),
+    prisma.guestSession.findMany({
+      where: { createdAt: { gte: sevenDaysAgo } },
+      select: { createdAt: true },
+    }),
   ])
+
+  // Build event breakdown map
+  const eventBreakdown: Record<string, number> = {}
+  for (const row of rawEvents) {
+    eventBreakdown[row.type] = row._count.type
+  }
+
+  // Build 7-day buckets
+  const dayCounts: Record<string, number> = {}
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sevenDaysAgo)
+    d.setDate(d.getDate() + i)
+    dayCounts[d.toISOString().slice(0, 10)] = 0
+  }
+  for (const s of recentSessions) {
+    const key = s.createdAt.toISOString().slice(0, 10)
+    if (key in dayCounts) dayCounts[key]++
+  }
+  const last7DaysSessions = Object.entries(dayCounts).map(([date, count]) => ({ date, count }))
+
+  const conversions = eventBreakdown["GUEST_CONVERTED"] ?? 0
+  const conversionRate = guestSessionsCount > 0
+    ? `${((conversions / guestSessionsCount) * 100).toFixed(1)}%`
+    : "0.0%"
 
   const [users, biodatas] = await Promise.all([
     prisma.user.findMany({
@@ -82,7 +106,12 @@ export default async function AdminPage() {
       }}
       users={users}
       biodatas={biodatas}
-      guestActivities={recentGuestActivities}
+      guestAnalytics={{
+        eventBreakdown,
+        last7DaysSessions,
+        conversionRate,
+      }}
     />
   )
 }
+
