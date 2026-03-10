@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { GuestTracker } from "@/components/GuestTracker";
+import { GuestTracker } from "../components/GuestTracker";
 
 import { Providers } from "@/components/Providers";
 

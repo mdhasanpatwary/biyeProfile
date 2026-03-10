@@ -11,6 +11,7 @@ export async function GET() {
   }
 
   const users = await prisma.user.findMany({
+    where: { isArchived: false },
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
@@ -18,6 +19,8 @@ export async function GET() {
       name: true,
       username: true,
       role: true,
+      isArchived: true,
+      archivedAt: true,
       createdAt: true,
       biodata: {
         select: {
@@ -40,10 +43,32 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const body = await req.json()
-    const { userId, role } = sanitizeDeep(body) as { userId: string, role: string }
+    const sanitized = sanitizeDeep(body) as { userId: string; role?: string; action?: string }
+    const { userId, role, action } = sanitized
 
-    if (!userId || !role) {
-      return NextResponse.json({ error: "Missing userId or role" }, { status: 400 })
+    if (!userId) {
+      return NextResponse.json({ error: "Missing userId" }, { status: 400 })
+    }
+
+    // ── Archive / Unarchive ──────────────────────────────────────────────────
+    if (action === "archive" || action === "unarchive") {
+      if (userId === session.user.id) {
+        return NextResponse.json({ error: "Cannot archive yourself" }, { status: 400 })
+      }
+      const isArchiving = action === "archive"
+      const updated = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          isArchived: isArchiving,
+          archivedAt: isArchiving ? new Date() : null,
+        },
+      })
+      return NextResponse.json(updated)
+    }
+
+    // ── Role update ──────────────────────────────────────────────────────────
+    if (!role) {
+      return NextResponse.json({ error: "Missing role" }, { status: 400 })
     }
 
     const parsedRole = adminRoleSchema.safeParse(role)

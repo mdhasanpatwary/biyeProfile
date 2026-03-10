@@ -63,6 +63,8 @@ export default async function AdminPage() {
         name: true,
         username: true,
         role: true,
+        isArchived: true,
+        archivedAt: true,
         createdAt: true,
         biodata: {
           select: {

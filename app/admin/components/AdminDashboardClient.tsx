@@ -9,13 +9,14 @@ import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
-
 interface AdminUser {
   id: string
   email: string
   name: string | null
   username: string | null
   role: string
+  isArchived: boolean
+  archivedAt: Date | null
   createdAt: Date
   biodata: {
     id: string
@@ -64,7 +65,7 @@ interface AdminDashboardClientProps {
   guestAnalytics: GuestAnalytics
 }
 
-type TabType = "overview" | "users" | "biodatas" | "reports" | "guests"
+type TabType = "overview" | "users" | "biodatas" | "reports" | "guests" | "archived"
 
 export function AdminDashboardClient({ initialStats, users, biodatas, guestAnalytics }: AdminDashboardClientProps) {
   const router = useRouter()
@@ -90,15 +91,52 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
   }
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm("Are you sure you want to delete this user? This cannot be undone.")) return
+    if (!confirm("Are you sure you want to permanently delete this user? This cannot be undone.")) return
     setIsActionPending(true)
     try {
       const res = await fetch(`/api/admin/users?id=${userId}`, { method: "DELETE" })
       if (res.ok) {
-        toast.success("User deleted")
+        toast.success("User permanently deleted")
         router.refresh()
       } else {
         toast.error("Failed to delete user")
+      }
+    } finally {
+      setIsActionPending(false)
+    }
+  }
+
+  const handleArchiveUser = async (userId: string) => {
+    if (!confirm("Archive this user? Their data will be preserved and they can be restored later.")) return
+    setIsActionPending(true)
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "PATCH",
+        body: JSON.stringify({ userId, action: "archive" }),
+      })
+      if (res.ok) {
+        toast.success("User archived")
+        router.refresh()
+      } else {
+        toast.error("Failed to archive user")
+      }
+    } finally {
+      setIsActionPending(false)
+    }
+  }
+
+  const handleUnarchiveUser = async (userId: string) => {
+    setIsActionPending(true)
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "PATCH",
+        body: JSON.stringify({ userId, action: "unarchive" }),
+      })
+      if (res.ok) {
+        toast.success("User restored")
+        router.refresh()
+      } else {
+        toast.error("Failed to restore user")
       }
     } finally {
       setIsActionPending(false)
@@ -122,6 +160,8 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
   }
 
   const reportedBiodatas = biodatas.filter(b => b.isReported)
+  const archivedUsers = users.filter(u => u.isArchived)
+  const activeUsers = users.filter(u => !u.isArchived)
 
   return (
     <div className="max-w-7xl mx-auto py-16 px-6 lg:px-10">
@@ -134,7 +174,7 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
 
       <Tabs className="bg-transparent border-none p-0 mb-12">
         <TabsList className="bg-transparent border-b border-border-muted w-full justify-start h-auto p-0 space-x-8">
-          {(["overview", "users", "biodatas", "reports", "guests"] as TabType[]).map((tab) => (
+          {(["overview", "users", "biodatas", "reports", "guests", "archived"] as TabType[]).map((tab) => (
             <TabsTrigger
               key={tab}
               active={activeTab === tab}
@@ -188,7 +228,7 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
         <TabsContent active={activeTab === "users"}>
           <AdminTableux
             title="All Users"
-            data={users}
+            data={activeUsers}
             columns={[
               { header: "User Info", key: "email", render: (u) => (
                 <div className="flex flex-col">
@@ -208,14 +248,24 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
                 </select>
               )},
               { header: "Actions", key: "id", render: (u) => (
-                <Button
-                  variant="ghost"
-                  disabled={isActionPending}
-                  onClick={() => handleDeleteUser(u.id)}
-                  className="text-red-500 hover:text-red-600 hover:bg-red-50 px-2 h-8 text-[10px] font-mono font-black uppercase tracking-widest"
-                >
-                  Delete
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    disabled={isActionPending}
+                    onClick={() => handleArchiveUser(u.id)}
+                    className="text-amber-600 hover:text-amber-700 hover:bg-amber-50 px-2 h-8 text-[10px] font-mono font-black uppercase tracking-widest"
+                  >
+                    Archive
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    disabled={isActionPending}
+                    onClick={() => handleDeleteUser(u.id)}
+                    className="text-red-500 hover:text-red-600 hover:bg-red-50 px-2 h-8 text-[10px] font-mono font-black uppercase tracking-widest"
+                  >
+                    Delete
+                  </Button>
+                </div>
               )},
             ]}
           />
@@ -358,10 +408,10 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
                   return (
                     <div key={date} className="flex flex-col items-center gap-1" title={`${date}: ${count} sessions`}>
                       <div
-                        className="w-5 bg-blue-500/70 rounded-none"
-                        style={{ height: `${height}px` }}
-                      />
-                      <span className="text-[8px] font-mono text-foreground-muted">{date.slice(5)}</span>
+                         className="w-5 bg-blue-500/70 rounded-none"
+                         style={{ height: `${height}px` }}
+                       />
+                       <span className="text-[8px] font-mono text-foreground-muted">{date.slice(5)}</span>
                     </div>
                   )
                 })}
@@ -397,6 +447,55 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
               })}
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent active={activeTab === "archived"}>
+          {archivedUsers.length === 0 ? (
+            <div className="border border-border-muted p-12 text-center">
+              <p className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted mb-2">No Archived Users</p>
+              <p className="text-sm text-foreground-muted">Archived users will appear here. Use Archive to soft-delete users while preserving their data.</p>
+            </div>
+          ) : (
+            <AdminTableux
+              title={`Archived Users (${archivedUsers.length})`}
+              data={archivedUsers}
+              columns={[
+                { header: "User Info", key: "email", render: (u) => (
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-foreground-muted line-through">{u.email}</span>
+                    <span className="text-[10px] font-mono text-foreground-muted">
+                      Archived {u.archivedAt ? new Date(u.archivedAt).toLocaleDateString() : "—"}
+                    </span>
+                  </div>
+                )},
+                { header: "Role", key: "role", render: (u) => (
+                  <span className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted/50">
+                    {u.role}
+                  </span>
+                )},
+                { header: "Actions", key: "id", render: (u) => (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      disabled={isActionPending}
+                      onClick={() => handleUnarchiveUser(u.id)}
+                      className="text-green-600 hover:text-green-700 hover:bg-green-50 px-2 h-8 text-[10px] font-mono font-black uppercase tracking-widest"
+                    >
+                      Restore
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      disabled={isActionPending}
+                      onClick={() => handleDeleteUser(u.id)}
+                      className="text-red-500 hover:text-red-600 hover:bg-red-50 px-2 h-8 text-[10px] font-mono font-black uppercase tracking-widest"
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )},
+              ]}
+            />
+          )}
         </TabsContent>
       </div>
     </div>
