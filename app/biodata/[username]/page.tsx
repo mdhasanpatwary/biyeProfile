@@ -84,8 +84,24 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
 
   const data = user.biodata.data as unknown as BiodataFormValues
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": data?.basicInfo?.fullName || username,
+      "jobTitle": data?.profession?.occupation || undefined,
+      "description": `Marriage biodata profile for ${data?.basicInfo?.fullName || username}`,
+      "url": `https://biye-profile.vercel.app/biodata/${username}`
+    }
+  }
+
   return (
     <div className="bg-background py-12 md:py-16 px-0 sm:px-6 lg:px-8 print:py-0 print:bg-background print:px-0">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-4xl mx-auto bg-background print:shadow-none p-6 print:p-0 sm:rounded-none border border-border-muted relative">
         {(isOwner || isAdmin) && (
           <div className="print:hidden flex flex-wrap items-center justify-between gap-4 mb-8">

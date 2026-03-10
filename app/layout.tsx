@@ -20,8 +20,25 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "BiyeProfile | Premium Marriage Biodata Builder",
-  description: "Create, manage, and share secure marriage biodata profiles with privacy controls.",
+  metadataBase: new URL("https://biye-profile.vercel.app"),
+  title: "BiyeProfile | Free Marriage Biodata Maker Online",
+  description: "The best free marriage biodata maker online. Create, manage, and securely share your marriage biodata with complete privacy controls and professional PDF export.",
+  keywords: ["marriage biodata", "free marriage biodata maker", "free marriage biodata maker online", "marriage biodata online", "biodata for marriage", "marriage biodata builder"],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    title: "BiyeProfile | Free Marriage Biodata Maker Online",
+    description: "The best free marriage biodata maker online. Create, manage, and securely share your marriage biodata with complete privacy controls and professional PDF export.",
+    url: "https://biye-profile.vercel.app",
+    siteName: "BiyeProfile",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BiyeProfile | Free Marriage Biodata Maker Online",
+    description: "The best free marriage biodata maker online. Create and download your marriage biodata as a professional PDF with complete privacy controls.",
+  },
 };
 
 import { Navbar } from "@/components/Navbar";
@@ -36,8 +53,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BiyeProfile",
+    "url": "https://biye-profile.vercel.app",
+    "logo": "https://biye-profile.vercel.app/icon.svg",
+    "description": "Premium Marriage Biodata Builder offering secure, professional digital profiles and PDF exports.",
+  };
+
   return (
     <html lang="en" className="max-w-full overflow-x-hidden scroll-smooth" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased max-w-full overflow-x-hidden flex flex-col min-h-screen bg-background text-foreground pb-16 lg:pb-0`}
       >

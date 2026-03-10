@@ -238,7 +238,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={getCloudinaryUrl(data.basicInfo.photoUrl, "full")}
-                alt="Profile photo"
+                alt={`${data.basicInfo?.fullName || 'Profile'}'s Marriage Biodata Profile Photo`}
                 crossOrigin="anonymous"
                 style={{
                   width: '145px',

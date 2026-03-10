@@ -7,8 +7,79 @@ import { Section } from "@/components/ui/section"
 export default async function Home() {
   const session = await auth()
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is BiyeProfile a free marriage biodata maker?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. BiyeProfile is a free marriage biodata maker online. You can create, customize, and download a complete marriage biodata at no cost. Simply sign up, fill in your details, and export your professional PDF biodata for free."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I create a marriage biodata online?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "BiyeProfile is the easiest free marriage biodata maker online. Create a marriage biodata by signing up, completing your personal, educational, and family information through our structured form, and publishing your profile. You can share it via a private link or download a professional PDF."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my marriage biodata private and secure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, your marriage biodata is private by default. Our infrastructure is built on principles of isolation and encryption. You can generate a secure, private shareable link for guardians or keep it completely unlisted from search engines."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I download my marriage biodata as a PDF?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, BiyeProfile offers a free one-click PDF export feature that formats your marriage biodata beautifully for printing and sharing offline with guardians and family members."
+        }
+      }
+    ]
+  };
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to create a marriage biodata online for free using BiyeProfile",
+    "description": "BiyeProfile is the best free marriage biodata maker online. Create, manage, and export professional marriage biodata in PDF format with complete privacy controls at no cost.",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Drafting",
+        "text": "Enter your personal, educational, and family details through our intuitive, structured multi-step interface."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Validation",
+        "text": "Review your profile in real-time with our live preview panel, ensuring every detail is represented accurately."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Distribution",
+        "text": "Generate a secure private link or download a professionally formatted PDF for sharing with guardians."
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300 overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
       {/* Texture Overlay */}
       <div className="fixed inset-0 bg-grain pointer-events-none opacity-[0.03] z-50"></div>
 
@@ -28,8 +99,11 @@ export default async function Home() {
             </h1>
 
             <div className="max-w-[540px]">
+              <p className="text-sm text-foreground-muted leading-[1.6] font-medium mb-5 tracking-tight">
+                BiyeProfile is a free marriage biodata maker online that allows users to securely create, manage, and export professional marriage biodata in PDF format with complete privacy controls.
+              </p>
               <p className="text-sm text-foreground-muted leading-[1.6] font-medium mb-10 tracking-tight">
-                Create, manage, and securely share your marriage biodata online with a professional digital profile and downloadable PDF.
+                Build a beautiful digital marriage biodata, share it privately with a secure link, or download a professionally formatted PDF for guardians — all for free.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -207,6 +281,31 @@ export default async function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </Section>
+
+        {/* FAQ & AEO SECTION */}
+        <Section className="border-t border-border py-24">
+          <div className="max-w-4xl mx-auto px-6 sm:px-0">
+            <div className="mb-16">
+               <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground/40 mb-6 block">Knowledge base / 02</span>
+               <h2 className="font-serif text-5xl md:text-7xl tracking-tight text-foreground leading-[0.9]">
+                 Common <br />
+                 <span className="italic">Questions.</span>
+               </h2>
+            </div>
+            <div className="space-y-8">
+               {faqSchema.mainEntity.map((faq, i) => (
+                 <div key={i} className="border-b border-border-muted pb-8 group">
+                    <h3 className="text-xl md:text-2xl font-serif text-foreground mb-4 opacity-90 group-hover:opacity-100 transition-opacity tracking-tight">
+                      {faq.name}
+                    </h3>
+                    <p className="text-foreground-muted text-lg font-medium tracking-tight leading-relaxed max-w-3xl">
+                      {faq.acceptedAnswer.text}
+                    </p>
+                 </div>
+               ))}
+            </div>
           </div>
         </Section>
 
