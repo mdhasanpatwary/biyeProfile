@@ -33,7 +33,7 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(({
         </p>
       )}
       {error && (
-        <p className="text-[12px] text-destructive font-medium mt-1 leading-relaxed">
+        <p className="text-[12px] text-destructive font-medium mt-1.5 leading-relaxed">
           {error}
         </p>
       )}

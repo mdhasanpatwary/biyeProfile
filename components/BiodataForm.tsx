@@ -323,62 +323,71 @@ export function BiodataForm({
 
         {/* Footer Navigation (Mobile) - Polished Floating bar */}
         <div className="fixed bottom-0 mb-0 left-0 right-0 bg-background/95 backdrop-blur-2xl border-t border-border-muted p-4 lg:hidden flex items-center justify-between gap-3 z-[100] shadow-xl">
-          <div className="flex items-center gap-3 flex-1">
-            <Button
-              type="button"
-              disabled={currentStep === 1}
-              onClick={handlePrevStep}
-              variant="outline"
-              className="w-12 h-12 bg-background text-foreground rounded-none border-border-muted flex items-center justify-center shrink-0 active:scale-90 transition-all gap-2"
-            >
-              <svg className="min-w-3.5 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
-            </Button>
+          {/* Previous button */}
+          <Button
+            type="button"
+            disabled={currentStep === 1}
+            onClick={handlePrevStep}
+            variant="outline"
+            className="w-12 h-12 bg-background text-foreground rounded-none border-border-muted flex items-center justify-center shrink-0 active:scale-90 transition-all"
+          >
+            <svg className="min-w-4 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+            </svg>
+          </Button>
 
-            <div className="flex-1 min-w-[140px] bg-accent p-1 rounded-none border border-border-muted flex items-center h-12 overflow-hidden">
-              <button
-                type="button"
-                onClick={() => onViewChange?.("edit")}
-                aria-pressed={mobileView === "edit"}
-                className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "edit" ? 'bg-foreground text-background shadow-sm' : 'text-foreground/60 hover:text-foreground'}`}
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                onClick={() => onViewChange?.("preview")}
-                aria-pressed={mobileView === "preview"}
-                className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "preview" ? 'bg-foreground text-background shadow-sm' : 'text-foreground/60 hover:text-foreground'}`}
-              >
-                Preview
-              </button>
-            </div>
+          {/* Edit/Preview Toggle */}
+          <div className="flex-1 bg-accent p-1 rounded-none border border-border-muted flex items-center h-12">
+            <button
+              type="button"
+              onClick={() => onViewChange?.("edit")}
+              aria-pressed={mobileView === "edit"}
+              className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "edit" ? "bg-foreground text-background shadow-sm" : "text-foreground-60 hover:text-foreground"
+                }`}
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              onClick={() => onViewChange?.("preview")}
+              aria-pressed={mobileView === "preview"}
+              className={`flex-1 h-full rounded-none text-[10px] font-mono font-black uppercase tracking-widest transition-all ${mobileView === "preview" ? "bg-foreground text-background shadow-sm" : "text-foreground-60 hover:text-foreground"
+                }`}
+            >
+              Preview
+            </button>
           </div>
 
-          <div className="flex-1 max-w-[140px]">
+          {/* Next/Finish Button */}
+          <div className="w-[100px] sm:w-[120px]">
             {currentStep < 9 ? (
               <Button
                 type="button"
                 variant="primary"
                 onClick={handleNextStep}
-                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] sm:text-[12px] font-black uppercase tracking-widest flex items-center justify-center"
+                className="w-full h-12 rounded-none active:scale-95 transition-all outline-none font-mono text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1"
               >
                 Next
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" /></svg>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                </svg>
               </Button>
             ) : isGuest ? (
               <DownloadPDFButton
                 disabled={!formIsValid}
-                filename={`${form.getValues().basicInfo?.fullName || 'biodata'}_biyeprofile`}
+                filename={`${form.getValues().basicInfo?.fullName || "biodata"}_biyeprofile`}
                 className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all outline-none flex items-center justify-center"
               />
             ) : (
               <Button
                 type="button"
                 onClick={handleFinish}
-                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] sm:text-[12px] font-black uppercase tracking-widest"
+                className="w-full h-12 bg-foreground text-background rounded-none active:scale-95 transition-all flex items-center justify-center text-center font-mono text-[10px] font-black uppercase tracking-widest gap-1"
               >
-                Save & Finish
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                Finish
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
               </Button>
             )}
           </div>

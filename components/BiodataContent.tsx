@@ -213,7 +213,7 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   return (
     <div
       id="biodata-content"
-      className="relative bg-background text-foreground font-sans overflow-hidden p-0 md:p-12"
+      className="relative bg-background text-foreground font-sans overflow-hidden p-6 md:p-12"
       style={{ wordBreak: 'break-word', overflowWrap: 'anywhere', lineHeight: 1.6 }}
     >
       {/* Subtle texture */}
