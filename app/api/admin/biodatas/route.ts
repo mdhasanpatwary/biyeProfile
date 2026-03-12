@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
 import { sanitizeDeep } from "@/lib/security/sanitize"
 
 export async function GET() {
@@ -46,7 +47,7 @@ export async function PATCH(req: NextRequest) {
       id: string, 
       isPublic?: boolean, 
       isReported?: boolean,
-      data?: any
+      data?: Prisma.InputJsonValue
     }
 
     if (!id) {

@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 import { BiodataEditor } from "@/components/BiodataEditor"
-import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { migrateBiodataData } from "@/lib/utils/biodata-migration"
 
 export const dynamic = "force-dynamic"
