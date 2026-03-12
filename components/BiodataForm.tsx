@@ -29,6 +29,8 @@ export function BiodataForm({
   onViewChange,
   onValidityChange,
   isGuest = false,
+  isAdminEdit = false,
+  biodataId,
 }: {
   initialData: Partial<BiodataFormValues>,
   onDataChange?: (data: BiodataFormValues) => void,
@@ -37,6 +39,8 @@ export function BiodataForm({
   onViewChange?: (view: "edit" | "preview") => void,
   onValidityChange?: (isValid: boolean) => void,
   isGuest?: boolean,
+  isAdminEdit?: boolean,
+  biodataId?: string,
 }) {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
@@ -146,10 +150,14 @@ export function BiodataForm({
 
     setSaveStatus("saving")
     try {
-      const res = await fetch("/api/biodata", {
-        method: "PUT",
+      const url = isAdminEdit ? "/api/admin/biodatas" : "/api/biodata"
+      const method = isAdminEdit ? "PATCH" : "PUT"
+      const body = isAdminEdit ? { id: biodataId, data } : { data }
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data })
+        body: JSON.stringify(body)
       })
       if (res.ok) {
         setSaveStatus("saved")
@@ -162,7 +170,7 @@ export function BiodataForm({
       console.error("Autosave failed:", error)
       setSaveStatus("error")
     }
-  }, [isGuest])
+  }, [isGuest, isAdminEdit, biodataId])
 
   // Enhanced Autosave logic with debounce
   const watchedValues = useWatch({ control: form.control })
@@ -225,7 +233,7 @@ export function BiodataForm({
         // One final force save to be absolutely sure
         await performSave(form.getValues())
       }
-      router.push("/dashboard");
+      router.push(isAdminEdit ? "/admin" : "/dashboard");
       router.refresh();
     } else {
       toast.error("Please fill in all required fields correctly.");

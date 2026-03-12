@@ -42,7 +42,12 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const body = await req.json()
-    const { id, isPublic, isReported } = sanitizeDeep(body) as { id: string, isPublic?: boolean, isReported?: boolean }
+    const { id, isPublic, isReported, data } = sanitizeDeep(body) as { 
+      id: string, 
+      isPublic?: boolean, 
+      isReported?: boolean,
+      data?: any
+    }
 
     if (!id) {
       return NextResponse.json({ error: "Missing biodata id" }, { status: 400 })
@@ -67,6 +72,7 @@ export async function PATCH(req: NextRequest) {
       data: {
         ...(typeof isPublic === "boolean" ? { isPublic } : {}),
         ...(typeof isReported === "boolean" ? { isReported } : {}),
+        ...(data ? { data } : {}),
       },
     })
 

@@ -298,6 +298,20 @@ export function AdminDashboardClient({ initialStats, users, biodatas, guestAnaly
                  </span>
                )},
                { header: "Created", key: "createdAt", render: (b) => b.createdAt.toLocaleDateString() },
+              { header: "Actions", key: "id", render: (b) => (
+                <div className="flex gap-2">
+                  <Link href={`/biodata/${b.user.username}`}>
+                    <Button variant="ghost" className="h-8 px-2 text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted hover:text-foreground">
+                      View
+                    </Button>
+                  </Link>
+                  <Link href={`/admin/biodatas/${b.id}/edit`}>
+                    <Button variant="ghost" className="h-8 px-2 text-[10px] font-mono font-black uppercase tracking-widest text-amber-600 hover:text-amber-700 hover:bg-amber-50">
+                      Edit
+                    </Button>
+                  </Link>
+                </div>
+              )},
              ]}
           />
         </TabsContent>

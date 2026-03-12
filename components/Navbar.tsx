@@ -8,7 +8,7 @@ export async function Navbar() {
   const session = await auth()
 
   return (
-    <nav className="border-b border-border-muted/50 bg-background sticky top-0 z-50 print:hidden">
+    <nav className="border-b border-border-muted/50 bg-background sticky top-0 z-500 print:hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-3 sm:gap-4">
         {/* Logo Section */}
         <div className="flex items-center shrink-0">

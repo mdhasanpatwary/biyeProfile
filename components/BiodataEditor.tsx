@@ -11,10 +11,14 @@ import Link from "next/link"
 export function BiodataEditor({
   initialData,
   username,
+  isAdminEdit = false,
+  biodataId,
 }: {
   initialData: Partial<BiodataFormValues>
   username: string
   initialIsPublic: boolean
+  isAdminEdit?: boolean
+  biodataId?: string
 }) {
   const [formData, setFormData] = useState(initialData)
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit")
@@ -46,9 +50,9 @@ export function BiodataEditor({
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pb-10 border-b border-border-muted">
           <div>
             <h1 className="text-4xl font-serif text-foreground tracking-tight">
-              Edit Your Biodata
+              {isAdminEdit ? "Edit Biodata (Admin)" : "Edit Your Biodata"}
             </h1>
-            <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] mt-3">Document Management</p>
+            <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] mt-3">{isAdminEdit ? "Moderation Suite" : "Document Management"}</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -75,6 +79,8 @@ export function BiodataEditor({
           language={language}
           mobileView={mobileView}
           onViewChange={setMobileView}
+          isAdminEdit={isAdminEdit}
+          biodataId={biodataId}
         />
       </div>
 
