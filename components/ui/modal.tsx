@@ -47,7 +47,7 @@ export function Modal({
       />
       <div
         className={cn(
-          "relative z-50 w-full max-w-lg bg-background border border-border-muted p-6 shadow-xl flex flex-col gap-4 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300",
+          "relative z-50 w-full max-w-lg max-h-full bg-background border border-border-muted p-6 shadow-xl flex flex-col gap-4 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300",
           className
         )}
         role="dialog"

@@ -19,7 +19,22 @@ export async function POST(
 
   try {
     const body = await req.json().catch(() => ({}))
-    const { reason } = body
+    const { reason, details } = body
+
+    // Check if the user has already reported this biodata
+    const existingReport = await prisma.report.findFirst({
+      where: {
+        reporterId: session.user.id,
+        biodataId: id,
+      },
+    })
+
+    if (existingReport) {
+      return NextResponse.json({ 
+        error: "Conflict", 
+        message: "You have already reported this profile." 
+      }, { status: 409 })
+    }
 
     // We transactionally create the report and mark the biodata as reported
     await prisma.$transaction([
@@ -28,6 +43,7 @@ export async function POST(
           reporterId: session.user.id,
           biodataId: id,
           reason: reason || "No reason provided",
+          details: details,
         },
       }),
       prisma.biodata.update({
@@ -37,7 +53,8 @@ export async function POST(
     ])
 
     return NextResponse.json({ success: true, message: "Biodata reported successfully" })
-  } catch {
+  } catch (error) {
+    console.error("REPORT_POST_ERROR:", error)
     return NextResponse.json({ error: "Report failed" }, { status: 500 })
   }
 }

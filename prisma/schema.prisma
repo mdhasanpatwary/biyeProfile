@@ -38,11 +38,13 @@ model Report {
   reporterId String
   biodataId  String
   reason     String?
+  details    String?
   createdAt  DateTime @default(now())
 
   reporter User    @relation(fields: [reporterId], references: [id], onDelete: Cascade)
   biodata  Biodata @relation(fields: [biodataId], references: [id], onDelete: Cascade)
 
+  @@unique([reporterId, biodataId])
   @@index([reporterId])
   @@index([biodataId])
 }
