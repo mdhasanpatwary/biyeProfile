@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { FileUpload } from "@/components/ui/file-upload"
 import { CustomFieldsFormBlock } from "../CustomFieldsFormBlock"
-import { HEIGHT_OPTIONS, BLOOD_GROUPS, MARITAL_STATUS_OPTIONS } from "@/lib/constants/biodata-options"
+import { HEIGHT_OPTIONS, BLOOD_GROUPS, MARITAL_STATUS_OPTIONS, RELIGION_OPTIONS } from "@/lib/constants/biodata-options"
 
 interface BasicInfoStepProps {
   form: UseFormReturn<BiodataFormValues>
@@ -64,7 +64,10 @@ export function BasicInfoStep({ form, lang }: BasicInfoStepProps) {
           </FormField>
 
           <FormField label="Religion" error={form.formState.errors.basicInfo?.religion?.message}>
-            <Input type="text" {...form.register("basicInfo.religion")} placeholder="e.g. Islam / Hinduism" className="block w-full" />
+            <Select {...form.register("basicInfo.religion")} className="cursor-pointer">
+              <option value="">Select Religion</option>
+              {RELIGION_OPTIONS.map(religion => <option key={religion} value={religion}>{religion}</option>)}
+            </Select>
           </FormField>
 
           <FormField label="Marital Status" error={form.formState.errors.basicInfo?.maritalStatus?.message}>

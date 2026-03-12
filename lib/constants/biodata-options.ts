@@ -10,3 +10,4 @@ export const COMPLEXION_OPTIONS = ["Fair", "Medium", "Dark"];
 export const EMPLOYMENT_TYPES = ["Private", "Govt", "Business", "Freelancer", "Other"];
 export const FAMILY_STATUS_OPTIONS = ["Nuclear Family", "Joint Family", "Middle Class", "Upper Middle Class", "Affluent"];
 export const MARITAL_STATUS_OPTIONS = ["Unmarried", "Divorced", "Widow/Widower"];
+export const RELIGION_OPTIONS = ["Islam", "Hinduism", "Christianity", "Buddhism", "Other"];

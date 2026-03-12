@@ -5,6 +5,7 @@ import { type BiodataFormValues } from "@/lib/validations/biodata"
 import { SearchInput } from "@/components/SearchInput"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { RELIGION_OPTIONS } from "@/lib/constants/biodata-options"
 
 export const dynamic = "force-dynamic"
 
@@ -58,7 +59,7 @@ export default async function BrowseBiodataPage(props: {
         });
     }
 
-    const religions = ["Muslim", "Hindu", "Christian", "Buddhist"]
+    const religions = RELIGION_OPTIONS
 
     return (
         <div className="min-h-screen bg-background">
