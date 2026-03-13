@@ -17,27 +17,58 @@ export function ThemeToggle() {
     )
   }
 
+  const isDark = theme === "dark"
+
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="flex items-center gap-3 h-10 px-3 border border-border-muted hover:border-foreground transition-all duration-300 group"
-      aria-label="Toggle theme"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="flex items-center gap-2.5 h-11 px-3.5 border border-border-muted hover:border-foreground transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-4"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
-      <div className="flex items-center justify-center w-4 h-4 relative" aria-hidden="true">
-        {/* Sun Icon (Visible in Light Mode) */}
-        <div className={`absolute inset-0 transition-all duration-500 transform ${theme === 'dark' ? 'scale-0 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'}`}>
-          <div className="w-full h-full border-2 border-foreground rounded-full" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-4 bg-foreground" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-[1px] bg-foreground" />
-        </div>
-        {/* Moon Icon (Visible in Dark Mode) */}
-        <div className={`absolute inset-0 transition-all duration-500 transform ${theme === 'dark' ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-90 opacity-0'}`}>
-          <div className="w-full h-full border-2 border-foreground rounded-full bg-foreground" />
-          <div className="absolute top-[-2px] right-[-2px] w-3 h-3 bg-background rounded-full" />
-        </div>
+      <div className="relative w-4 h-4 flex items-center justify-center pointer-events-none">
+        {/* Sun Icon */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`absolute inset-0 transition-all duration-500 transform ${
+            isDark ? "scale-0 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100"
+          }`}
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
+        </svg>
+
+        {/* Moon Icon */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`absolute inset-0 transition-all duration-500 transform ${
+            isDark ? "scale-100 rotate-0 opacity-100" : "scale-0 -rotate-90 opacity-0"
+          }`}
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
       </div>
-      <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-foreground hidden sm:block">
-        {theme === 'dark' ? 'Dark' : 'Light'}
+      <span className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-foreground hidden sm:block">
+        {isDark ? "Dark" : "Light"}
       </span>
     </button>
   )

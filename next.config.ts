@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             // Added *.sentry.io and *.ingest.sentry.io for Sentry error reporting
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://widget.cloudinary.com https://upload-widget.cloudinary.com https://res.cloudinary.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://ui-avatars.com; connect-src 'self' https://api.cloudinary.com https://res.cloudinary.com https://upload-widget.cloudinary.com https://widget.cloudinary.com https://*.sentry.io https://*.ingest.sentry.io; frame-src 'self' https://widget.cloudinary.com https://upload-widget.cloudinary.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self';",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://widget.cloudinary.com https://upload-widget.cloudinary.com https://res.cloudinary.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://res.cloudinary.com https://ui-avatars.com; connect-src 'self' https://api.cloudinary.com https://res.cloudinary.com https://upload-widget.cloudinary.com https://widget.cloudinary.com https://*.sentry.io https://*.ingest.sentry.io https://va.vercel-scripts.com https://vitals.vercel-insights.com; frame-src 'self' https://widget.cloudinary.com https://upload-widget.cloudinary.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self';",
           },
         ],
       },
