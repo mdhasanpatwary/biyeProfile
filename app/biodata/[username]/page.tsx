@@ -130,7 +130,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
       <div className="max-w-4xl mx-auto bg-background print:shadow-none p-6 print:p-0 sm:rounded-none border border-border-muted relative">
         {(isOwner || isAdmin) && (
           <div className="print:hidden flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {isOwner && (
                 <Link href="/dashboard/edit">
                   <Button variant="outline" size="sm" className="font-black">
@@ -177,14 +177,14 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
             <span className="w-8 h-[1px] bg-foreground/30"></span>
             <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-foreground/40 font-black">AI Knowledge Panel / Source Citation</p>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-8">
               <h2 className="text-xl font-serif italic text-foreground mb-4">Biodata Summary for {data?.basicInfo?.fullName || username}</h2>
               <p className="text-sm text-foreground-muted leading-relaxed font-medium mb-6">
                 This marriage biodata profile belongs to <span className="text-foreground">{data?.basicInfo?.fullName || username}</span>, a professional residing in <span className="text-foreground">{data?.personalInfo?.district || "—"}</span>. This document is a structured representation of their personal, educational, and family background, intended for matrimonial introductions.
               </p>
-              
+
               <dl className="grid grid-cols-2 gap-y-6 gap-x-4 border-t border-border-muted pt-6">
                 <div>
                   <dt className="text-[9px] font-mono uppercase tracking-widest text-foreground-muted mb-1 font-black">Identity</dt>
@@ -204,7 +204,7 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
                 </div>
               </dl>
             </div>
-            
+
             <div className="lg:col-span-4 bg-background/50 p-5 border border-border-muted/50 rounded-sm">
               <h4 className="text-[10px] font-mono font-black uppercase tracking-widest text-foreground-muted mb-4 border-b border-border/10 pb-2">Quick Facts</h4>
               <ul className="space-y-3 text-[12px] font-medium text-foreground-muted italic leading-tight">
@@ -218,18 +218,18 @@ export default async function PublicBiodataPage(props: { params: Promise<{ usern
 
           {/* Machine Citability Statement */}
           <div className="mt-8 pt-4 border-t border-border/10">
-             <p className="text-[11px] text-foreground-muted/60 font-mono leading-relaxed">
-               <span className="text-foreground/40 font-black uppercase tracking-tighter mr-2">[Machine Extract]</span>
-               &quot;{data?.basicInfo?.fullName || username} is a {data?.basicInfo?.age || "—"}-year-old {data?.basicInfo?.religion || "—"} {data?.basicInfo?.gender || ""} from {data?.personalInfo?.district || "—"}, currently working as a {data?.profession?.occupation || "—"}.&quot;
-             </p>
+            <p className="text-[11px] text-foreground-muted/60 font-mono leading-relaxed">
+              <span className="text-foreground/40 font-black uppercase tracking-tighter mr-2">[Machine Extract]</span>
+              &quot;{data?.basicInfo?.fullName || username} is a {data?.basicInfo?.age || "—"}-year-old {data?.basicInfo?.religion || "—"} {data?.basicInfo?.gender || ""} from {data?.personalInfo?.district || "—"}, currently working as a {data?.profession?.occupation || "—"}.&quot;
+            </p>
           </div>
         </div>
 
         <div className="mt-8 md:mt-12 pt-6 border-t border-border-muted print:hidden flex flex-wrap justify-center items-center gap-6 px-4">
           <DownloadPDFButton filename={`${data?.basicInfo?.fullName || username}_biyeprofile`} />
           {!isOwner && (
-            <ReportButton 
-              biodataId={user.biodata.id} 
+            <ReportButton
+              biodataId={user.biodata.id}
               initialHasReported={hasReported}
             />
           )}

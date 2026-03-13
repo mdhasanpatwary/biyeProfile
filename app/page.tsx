@@ -244,19 +244,19 @@ export default async function Home() {
         </Section>
 
         {/* SECURITY SECTION */}
-        <Section className="border-t border-x border-border bg-foreground text-background py-24 md:py-32 -mx-6 sm:-mx-8 lg:-mx-10 px-6 sm:px-8 lg:px-10">
+        <Section className="border-t border-x border-border bg-[#111111] text-[#eaeaea] py-24 md:py-32 -mx-6 sm:-mx-8 lg:-mx-10 px-6 sm:px-8 lg:px-10">
           <div className="max-w-[1400px] mx-auto">
             <div className="grid grid-cols-12 gap-8 md:gap-12 items-center">
               <div className="col-span-12 lg:col-span-5 mb-12 lg:mb-0">
                 <div className="flex items-center gap-4 mb-10">
-                  <span className="w-12 h-[1px] bg-background/30"></span>
-                  <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-background/50 text-success">Verified Security Protocol</span>
+                  <span className="w-12 h-[1px] bg-white/30"></span>
+                  <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-success">Verified Security Protocol</span>
                 </div>
-                <h2 className="font-serif text-6xl md:text-8xl tracking-tight text-background leading-[0.9] mb-10">
+                <h2 className="font-serif text-6xl md:text-8xl tracking-tight text-[#eaeaea] leading-[0.9] mb-10">
                   Secure by <br />
                   <span className="italic">Design.</span>
                 </h2>
-                <p className="text-background/75 text-lg font-medium leading-relaxed max-w-md">
+                <p className="text-[#eaeaea]/75 text-lg font-medium leading-relaxed max-w-md">
                   We treat your personal data with the gravity it deserves. Our infrastructure is built on principles of isolation and encryption.
                 </p>
               </div>
@@ -282,8 +282,8 @@ export default async function Home() {
                 ].map((item, i) => (
                   <div key={i} className="space-y-4">
                     <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-success/80">0{i + 1} / Verified</h4>
-                    <h3 className="text-2xl font-serif italic text-background">{item.title}</h3>
-                    <p className="text-background/75 text-sm leading-relaxed font-medium">
+                    <h3 className="text-2xl font-serif italic text-[#eaeaea]">{item.title}</h3>
+                    <p className="text-[#eaeaea]/75 text-sm leading-relaxed font-medium">
                       {item.desc}
                     </p>
                   </div>
