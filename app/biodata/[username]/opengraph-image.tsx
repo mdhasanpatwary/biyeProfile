@@ -55,7 +55,8 @@ export default async function OGImage({
   // Derive display attributes
   const religion = data?.basicInfo?.religion
   const occupation = data?.profession?.occupation
-  const district = data?.personalInfo?.presentAddress
+  const district = data?.personalInfo?.district
+  const gender = data?.basicInfo?.gender
 
   // Build age string
   const age: string | null = (() => {
@@ -73,7 +74,7 @@ export default async function OGImage({
     ? getCloudinaryUrl(data.basicInfo.photoUrl, "thumb")
     : null
 
-  const tags = [religion, age, occupation, district].filter(Boolean) as string[]
+  const tags = [gender, religion, age, occupation, district].filter(Boolean) as string[]
 
   return new ImageResponse(
     (

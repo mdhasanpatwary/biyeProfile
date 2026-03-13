@@ -3,6 +3,13 @@ import { auth } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { Container } from "@/components/ui/container"
 import { Section } from "@/components/ui/section"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+}
 
 export default async function Home() {
   const session = await auth()
@@ -37,10 +44,18 @@ export default async function Home() {
       },
       {
         "@type": "Question",
-        "name": "Can I download my marriage biodata as a PDF?",
+        "name": "What is a marriage biodata?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, BiyeProfile offers a free one-click PDF export feature that formats your marriage biodata beautifully for printing and sharing offline with guardians and family members."
+          "text": "A marriage biodata is a comprehensive document used in many cultures to introduce an individual's personal, educational, family, and professional background to potential life partners and their families. It serves as a formal profile for arranged marriage introductions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is BiyeProfile free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, BiyeProfile is 100% free to use. You can create a complete marriage biodata, share it via a secure link, and download it as a professionally formatted PDF without any hidden costs."
         }
       }
     ]
@@ -54,20 +69,51 @@ export default async function Home() {
     "step": [
       {
         "@type": "HowToStep",
-        "name": "Drafting",
-        "text": "Enter your personal, educational, and family details through our intuitive, structured multi-step interface."
+        "name": "Register Account",
+        "text": "Sign up for a free BiyeProfile account using your email."
       },
       {
         "@type": "HowToStep",
-        "name": "Validation",
-        "text": "Review your profile in real-time with our live preview panel, ensuring every detail is represented accurately."
+        "name": "Input Biodata Details",
+        "text": "Fill in your personal, educational, family, and professional information in our structured form."
       },
       {
         "@type": "HowToStep",
-        "name": "Distribution",
-        "text": "Generate a secure private link or download a professionally formatted PDF for sharing with guardians."
+        "name": "Set Privacy Settings",
+        "text": "Choose to keep your profile private or list it in our public directory."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Download PDF",
+        "text": "Export your completed marriage biodata as a professionally formatted PDF document."
       }
     ]
+  };
+
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BiyeProfile",
+    "url": "https://biye-profile.vercel.app",
+    "logo": "https://biye-profile.vercel.app/icon.svg",
+    "description": "BiyeProfile is a premium, secure digital platform dedicated to helping individuals create and manage professional marriage biodata with privacy and elegance.",
+    "foundingDate": "2026-03-01",
+    "sameAs": [
+      "https://facebook.com/biyeprofile",
+      "https://twitter.com/biyeprofile"
+    ]
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "BiyeProfile",
+    "url": "https://biye-profile.vercel.app",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://biye-profile.vercel.app/biodata?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
   };
 
   return (
@@ -80,67 +126,63 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
       {/* Texture Overlay */}
       <div className="fixed inset-0 bg-grain pointer-events-none opacity-[0.03] z-50"></div>
 
       <Container className="max-w-[1400px] px-6 sm:px-8 lg:px-10">
-        {/* HERO SECTION: Strict 12-column grid */}
-        <Section className="pt-16 pb-16 md:pt-20 md:pb-24 grid grid-cols-12 gap-8 md:gap-12 items-start">
-          {/* Hero Left: Span 8 */}
-          <div className="col-span-12 lg:col-span-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-            <div className="flex items-center gap-4 mb-8">
-              <span className="w-12 h-[1px] bg-foreground"></span>
-              <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground-muted">Official Registry / 2026</span>
+        {/* HERO SECTION: Refactored for conversion and balance */}
+        <Section className="pt-24 pb-20 md:pt-32 md:pb-40">
+          <div className="max-w-[1000px] mx-auto flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <div className="flex items-center gap-4 mb-12">
+              <span className="w-12 h-[1px] bg-foreground/20"></span>
+              <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground-muted">Digital Marriage Registry / 2026</span>
+              <span className="w-12 h-[1px] bg-foreground/20"></span>
             </div>
 
-            <h1 className="font-serif text-[clamp(2.5rem,8vw,7.5rem)] leading-[0.8] tracking-tighter text-foreground mb-8">
-              The Digital Standard <br />
-              for Marriage.
+            <h1 className="font-serif text-[clamp(2.5rem,8vw,7rem)] leading-[0.85] tracking-tighter text-foreground mb-12">
+              Create, Share & Discover <br />
+              <span className="italic">Professional</span> Marriage Biodata.
             </h1>
 
-            <div className="max-w-[540px]">
-              <p className="text-sm text-foreground-muted leading-[1.6] font-medium mb-5 tracking-tight">
-                BiyeProfile is a free marriage biodata maker online that allows users to securely create, manage, and export professional marriage biodata in PDF format with complete privacy controls.
-              </p>
-              <p className="text-sm text-foreground-muted leading-[1.6] font-medium mb-10 tracking-tight">
-                Build a beautiful digital marriage biodata, share it privately with a secure link, or download a professionally formatted PDF for guardians — all for free.
+            <div className="max-w-[720px]">
+              <p className="text-lg md:text-2xl text-foreground-muted leading-relaxed font-medium mb-16 tracking-tight">
+                BiyeProfile is the digital home for intentional marriage. Create a stunning marriage biodata in minutes or browse verified profiles for your next introduction.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20">
                 <Link href={session?.user ? "/dashboard" : "/create"}>
-                  <Button variant="primary" size="lg" className="w-full sm:w-auto px-10 transition-all">
-                    {session?.user ? "Dashboard" : "Create Biodata"}
+                  <Button variant="primary" size="lg" className="w-full sm:w-auto px-14 py-8 text-base transition-all">
+                    {session?.user ? "Go to Dashboard" : "Create Biodata"}
                   </Button>
                 </Link>
                 <Link href="/biodata">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto px-10 transition-all">
-                    Biodata
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto px-14 py-8 text-base transition-all">
+                    Browse Biodata
                   </Button>
                 </Link>
               </div>
-            </div>
-          </div>
 
-          {/* Hero Right: Span 4 */}
-          <div className="hidden lg:col-span-4 lg:block pt-16 animate-in fade-in slide-in-from-right-8 duration-1000 delay-300">
-            <div className="border-l-[1.5px] border-border-muted pl-12 space-y-10">
-              <div>
-                <span className="block font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.2em] mb-4">01 / Privacy</span>
-                <p className="text-lg font-serif italic leading-tight text-foreground">
-                  Private shareable biodata links
-                </p>
-              </div>
-              <div>
-                <span className="block font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.2em] mb-4">02 / Security</span>
-                <p className="text-lg font-serif italic leading-tight text-foreground">
-                  Secure encrypted data storage
-                </p>
-              </div>
-              <div>
-                <span className="block font-mono text-[10px] font-black text-foreground-muted uppercase tracking-[0.2em] mb-4">03 / Export</span>
-                <p className="text-lg font-serif italic leading-tight text-foreground">
-                  Professional PDF biodata export
-                </p>
+              {/* Trust Signal Row */}
+              <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 pt-12 border-t border-border-muted/30">
+                {[
+                  "Free biodata generator",
+                  "Privacy-focused profiles",
+                  "Professional PDF export",
+                  "Trusted by families in Bangladesh"
+                ].map((signal, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-success/60"></div>
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-foreground/40">{signal}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -284,27 +326,34 @@ export default async function Home() {
           </div>
         </Section>
 
-        {/* FAQ & AEO SECTION */}
+
+        {/* BROWSE BY DISTRICT SECTION */}
         <Section className="border-t border-border py-24">
-          <div className="max-w-4xl mx-auto px-6 sm:px-0">
-            <div className="mb-16">
-               <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground/40 mb-6 block">Knowledge base / 02</span>
-               <h2 className="font-serif text-5xl md:text-7xl tracking-tight text-foreground leading-[0.9]">
-                 Common <br />
-                 <span className="italic">Questions.</span>
-               </h2>
-            </div>
-            <div className="space-y-8">
-               {faqSchema.mainEntity.map((faq, i) => (
-                 <div key={i} className="border-b border-border-muted pb-8 group">
-                    <h3 className="text-xl md:text-2xl font-serif text-foreground mb-4 opacity-90 group-hover:opacity-100 transition-opacity tracking-tight">
-                      {faq.name}
-                    </h3>
-                    <p className="text-foreground-muted text-lg font-medium tracking-tight leading-relaxed max-w-3xl">
-                      {faq.acceptedAnswer.text}
-                    </p>
-                 </div>
-               ))}
+          <div className="max-w-4xl mx-auto px-6 sm:px-0 text-center">
+            <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground/40 mb-6 block">Quick Directory / 02</span>
+            <h2 className="font-serif text-5xl md:text-7xl tracking-tight text-foreground leading-[0.9] mb-12">
+              Browse by <br />
+              <span className="italic">Location.</span>
+            </h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {[
+                "Dhaka", "Chattogram", "Sylhet", "Rajshahi", "Khulna", "Barishal", "Rangpur", "Mymensingh",
+                "Comilla", "Gazipur", "Narayanganj", "Bogura"
+              ].map((district) => (
+                <Link
+                  key={district}
+                  href={`/biodata?q=${district}`}
+                  className="px-6 py-3 border border-border-muted text-foreground-muted hover:border-foreground hover:text-foreground transition-all font-mono text-[11px] uppercase tracking-widest"
+                >
+                  {district}
+                </Link>
+              ))}
+              <Link
+                href="/biodata"
+                className="px-6 py-3 border border-foreground bg-foreground text-background transition-all font-mono text-[11px] uppercase tracking-widest"
+              >
+                All Districts
+              </Link>
             </div>
           </div>
         </Section>
@@ -321,6 +370,65 @@ export default async function Home() {
                 Join The Registry
               </Button>
             </Link>
+          </div>
+        </Section>
+
+        {/* SEO & KNOWLEDGE SECTION at bottom */}
+        <Section id="knowledge" className="border-t border-border py-24 bg-surface/5">
+          <div className="max-w-3xl mx-auto px-6 sm:px-0">
+            {/* Identity & Definition */}
+            <div className="mb-16 border-l-2 border-foreground/10 pl-8">
+              <h2 className="font-serif text-3xl text-foreground mb-6">What is BiyeProfile?</h2>
+              <p className="text-foreground-muted text-base font-medium leading-relaxed">
+                BiyeProfile is a professional digital environment designed for creating, managing, and sharing marriage biodata. We provide structured tools to help individuals and families present their stories with dignity, clarity, and complete privacy control. Our platform is built for intentional connections in the modern age.
+              </p>
+            </div>
+
+            <div className="mb-24">
+              <span className="font-mono text-[10px] font-black uppercase tracking-[0.4em] text-foreground/40 mb-10 block text-center uppercase tracking-widest">Knowledge Center</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div className="space-y-8">
+                  <h3 className="text-xl font-serif italic text-foreground border-b border-border pb-4">Essential Writing Tips</h3>
+                  <ul className="space-y-4 text-[13px] text-foreground-muted leading-relaxed font-medium list-none">
+                    <li className="flex gap-3"><span className="text-success">○</span> Be honest about your educational background and current professional status.</li>
+                    <li className="flex gap-3"><span className="text-success">○</span> Describe your personality and hobbies to provide a glimpse into your daily life.</li>
+                    <li className="flex gap-3"><span className="text-success">○</span> Clearly state your expectations regarding a partner&apos;s values, education, and location.</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-8">
+                  <h3 className="text-xl font-serif italic text-foreground border-b border-border pb-4">Common Mistakes</h3>
+                  <ul className="space-y-4 text-[13px] text-foreground-muted leading-relaxed font-medium list-none">
+                    <li className="flex gap-3"><span className="text-error">×</span> Using informal or low-quality profile photos for a formal document.</li>
+                    <li className="flex gap-3"><span className="text-error">×</span> Providing overly vague descriptions of family background or siblings.</li>
+                    <li className="flex gap-3"><span className="text-error">×</span> Overlooking spelling and grammatical errors that impact professionalism.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-16 p-8 border border-border-muted bg-background rounded-sm">
+                <h3 className="text-base font-serif italic text-foreground mb-3 font-bold">Biodata vs. Resume</h3>
+                <p className="text-[13px] text-foreground-muted leading-relaxed italic">
+                  &quot;While a resume focuses on professional skills for employment, a marriage biodata is a cultural document focused on personal identity, family values, and lifestyle compatibility for matrimony.&quot;
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-16 border-t border-border">
+               <h2 className="font-serif text-3xl text-foreground mb-12 text-center italic">Common Questions</h2>
+               <div className="space-y-12">
+                  {faqSchema.mainEntity.map((faq, i) => (
+                    <div key={i} className="group">
+                       <h3 className="text-lg md:text-xl font-serif text-foreground mb-3 opacity-90 group-hover:opacity-100 transition-opacity tracking-tight font-bold">
+                         {faq.name}
+                       </h3>
+                       <p className="text-foreground-muted text-base font-medium tracking-tight leading-relaxed">
+                         {faq.acceptedAnswer.text}
+                       </p>
+                    </div>
+                  ))}
+               </div>
+            </div>
           </div>
         </Section>
       </Container>

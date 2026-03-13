@@ -10,25 +10,31 @@ export function Footer() {
           <div className="md:col-span-4 flex flex-col items-start gap-8">
             <Logo />
             <p className="text-[13px] font-medium text-foreground-muted leading-relaxed max-w-[300px]">
-              Create, manage, and securely share your marriage biodata online with a professional digital profile and downloadable PDF.
+              <span className="text-foreground font-bold">BiyeProfile</span> is a secure, professional platform for creating and managing digital marriage biodata. We help individuals present their personal, educational, and family backgrounds with clarity and privacy for matrimonial introductions.
             </p>
           </div>
 
           {/* Navigation Grid */}
-          <div className="md:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-12">
+          <div className="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
             <div className="flex flex-col gap-6">
-              <span className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Platform</span>
-              <Link href="/create" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Create Biodata</Link>
-              <Link href="/biodata" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Search Biodatas</Link>
+              <h3 className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Platform</h3>
+              <Link href="/create" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Create</Link>
+              <Link href="/biodata" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Directory</Link>
             </div>
 
             <div className="flex flex-col gap-6">
-              <span className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Institutional</span>
+              <h3 className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Resources</h3>
+              <Link href="/#knowledge" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Biodata Guide</Link>
+              <Link href="/biodata" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Public Examples</Link>
+            </div>
+
+            <div className="flex flex-col gap-6">
+              <h3 className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Account</h3>
               <Link href="/dashboard" className="text-[12px] font-bold text-foreground-muted hover:text-foreground transition-colors uppercase tracking-tight focus-visible:outline-none focus-visible:underline">Dashboard</Link>
             </div>
 
             <div className="flex flex-col gap-6">
-              <span className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Legal</span>
+              <h3 className="font-mono text-[11px] md:text-[12px] font-black text-foreground uppercase tracking-[0.2em] mb-4">Legal</h3>
               <span className="text-[12px] font-bold text-foreground/30 uppercase tracking-tight cursor-not-allowed select-none" title="Coming soon">Privacy Policy</span>
               <span className="text-[12px] font-bold text-foreground/30 uppercase tracking-tight cursor-not-allowed select-none" title="Coming soon">Terms of Use</span>
             </div>

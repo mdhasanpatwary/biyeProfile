@@ -22,6 +22,7 @@ export const biodataSchema = z.object({
   language: z.enum(["en", "bn"]),
   basicInfo: z.object({
     fullName: z.string().min(2, "Full name is required").max(100),
+    gender: z.enum(["Male", "Female"]).optional(),
     photoUrl: z.string(),
     dateOfBirth: z.string().min(1, "Date of birth is required"),
     age: z.union([z.number(), z.literal("")]),

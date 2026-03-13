@@ -6,6 +6,15 @@ import { SearchInput } from "@/components/SearchInput"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { RELIGION_OPTIONS } from "@/lib/constants/biodata-options"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Explore Marriage Biodata | BiyeProfile",
+  description: "Browse all public marriage biodata profiles. Find your life partner from our curated directory of professional biodatas.",
+  alternates: {
+    canonical: "/biodata",
+  },
+}
 
 export const dynamic = "force-dynamic"
 
@@ -61,8 +70,35 @@ export default async function BrowseBiodataPage(props: {
 
     const religions = RELIGION_OPTIONS
 
+    const browseFaqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How can I find marriage biodata for a specific district?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can find marriage biodata for specific districts by using the search bar on our directory page. Simply type the name of the district (e.g., Dhaka, Sylhet, Chittagong) to filter profiles by location."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is it possible to filter biodata by religion?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, BiyeProfile allows you to filter the marriage biodata directory by religion. You can select your preferred religion from the filter options to find matching profiles."
+                }
+            }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-background">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(browseFaqSchema) }}
+            />
 
             <main className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-12 md:py-16">
 
@@ -73,7 +109,8 @@ export default async function BrowseBiodataPage(props: {
                         <h1 className="text-5xl font-serif text-foreground tracking-tight leading-none mb-8">
                             Explore Profiles
                         </h1>
-                        <p className="text-foreground-muted font-medium text-lg leading-relaxed md:max-w-md">
+
+                        <p className="text-foreground-muted font-medium text-lg leading-relaxed md:max-w-md mb-6">
                             A curated list of public marriage biodata entries. Refined, secure, and ready for your connection.
                         </p>
                     </div>
@@ -189,6 +226,37 @@ export default async function BrowseBiodataPage(props: {
 
                     </div>
                 )}
+
+                {/* SEO Content Section at bottom */}
+                <div className="mt-32 pt-24 border-t border-border-muted max-w-3xl mx-auto px-6 sm:px-0">
+                    <div className="mb-20">
+                        <h2 className="text-3xl font-serif text-foreground mb-8 italic">Understanding Marriage Biodata</h2>
+                        <div className="prose prose-sm prose-neutral">
+                            <p className="text-foreground-muted text-base leading-relaxed font-medium mb-6">
+                                <span className="text-foreground font-bold">What is a marriage biodata?</span> A marriage biodata is a structured document that provides a comprehensive overview of an individual&apos;s personal background, including their identity, religion, education, profession, family history, and partner expectations. It is a critical tool for introductions in the arranged marriage process, facilitating transparency and informed decision-making.
+                            </p>
+                            <p className="text-foreground-muted text-base leading-relaxed font-medium">
+                                BiyeProfile provides a secure and professional environment for these introductions. Our directory features verified marriage biodata from across Bangladesh and beyond, allowing you to filter by religion, profession, and location while maintaining the highest standards of privacy.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="pt-20 border-t border-border-muted">
+                        <h2 className="text-2xl font-serif text-foreground mb-12 italic">Frequently Asked Questions</h2>
+                        <div className="space-y-12 pb-24">
+                            {browseFaqSchema.mainEntity.map((faq, i) => (
+                                <div key={i} className="group">
+                                    <h3 className="text-lg font-serif text-foreground mb-3 opacity-90 group-hover:opacity-100 transition-opacity tracking-tight font-bold">
+                                        {faq.name}
+                                    </h3>
+                                    <p className="text-foreground-muted text-base font-medium tracking-tight leading-relaxed">
+                                        {faq.acceptedAnswer.text}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
 
             </main>
 

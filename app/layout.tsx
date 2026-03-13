@@ -27,9 +27,6 @@ export const metadata: Metadata = {
   title: "BiyeProfile | Free Marriage Biodata Maker Online",
   description: "The best free marriage biodata maker online. Create, manage, and securely share your marriage biodata with complete privacy controls and professional PDF export.",
   keywords: ["marriage biodata", "free marriage biodata maker", "free marriage biodata maker online", "marriage biodata online", "biodata for marriage", "marriage biodata builder"],
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     title: "BiyeProfile | Free Marriage Biodata Maker Online",
