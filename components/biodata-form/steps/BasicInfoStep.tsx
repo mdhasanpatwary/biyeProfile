@@ -25,7 +25,7 @@ export function BasicInfoStep({ form, lang }: BasicInfoStepProps) {
       <CardContent>
         <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
           <div className="sm:col-span-2 mb-4">
-            <FormField label="Profile Photo (Optional)">
+            <FormField label="Profile Photo">
               <FileUpload
                 value={form.watch("basicInfo.photoUrl") || ""}
                 onChange={(url: string) => form.setValue("basicInfo.photoUrl", url)}
@@ -52,7 +52,7 @@ export function BasicInfoStep({ form, lang }: BasicInfoStepProps) {
             </Select>
           </FormField>
 
-          <FormField label="Weight (Optional)">
+          <FormField label="Weight">
             <Input type="text" {...form.register("basicInfo.weight")} placeholder="e.g. 70kg / 154 lbs" className="block w-full" />
           </FormField>
 

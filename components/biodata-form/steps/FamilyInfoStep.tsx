@@ -28,7 +28,7 @@ export function FamilyInfoStep({ form, lang }: FamilyInfoStepProps) {
             <Input type="text" {...form.register("familyInfo.fatherName")} placeholder="e.g. Md. Rahman" className="block w-full" />
           </FormField>
 
-          <FormField label="Father's Profession (Optional)">
+          <FormField label="Father's Profession">
             <Input type="text" {...form.register("familyInfo.fatherProfession")} placeholder="e.g. Businessman / Retired Govt. Officer" className="block w-full" />
           </FormField>
 
@@ -36,20 +36,20 @@ export function FamilyInfoStep({ form, lang }: FamilyInfoStepProps) {
             <Input type="text" {...form.register("familyInfo.motherName")} placeholder="e.g. Mrs. Begum" className="block w-full" />
           </FormField>
 
-          <FormField label="Mother's Profession (Optional)">
+          <FormField label="Mother's Profession">
             <Input type="text" {...form.register("familyInfo.motherProfession")} placeholder="e.g. Homemaker / Teacher" className="block w-full" />
           </FormField>
 
-          <FormField label="Number of Brothers (Optional)">
+          <FormField label="Number of Brothers">
             <Input type="number" {...form.register("familyInfo.numberOfBrothers", { valueAsNumber: true })} placeholder="e.g. 1" className="block w-full" />
           </FormField>
 
-          <FormField label="Number of Sisters (Optional)">
+          <FormField label="Number of Sisters">
             <Input type="number" {...form.register("familyInfo.numberOfSisters", { valueAsNumber: true })} placeholder="e.g. 2" className="block w-full" />
           </FormField>
 
           <div className="sm:col-span-2">
-            <FormField label="Family Status (Optional)">
+            <FormField label="Family Status">
               <Select {...form.register("familyInfo.familyStatus")} className="cursor-pointer">
                 <option value="">Select Family Status</option>
                 {FAMILY_STATUS_OPTIONS.map(status => <option key={status} value={status}>{status}</option>)}

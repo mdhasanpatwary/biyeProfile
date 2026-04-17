@@ -41,27 +41,27 @@ export function PersonalInfoStep({ form, lang }: PersonalInfoStepProps) {
             <Input type="text" {...form.register("personalInfo.district")} placeholder="e.g. Dhaka / Sylhet" className="block w-full" />
           </FormField>
 
-          <FormField label="Division (Optional)">
+          <FormField label="Division">
             <Input type="text" {...form.register("personalInfo.division")} placeholder="e.g. Dhaka Division" className="block w-full" />
           </FormField>
 
-          <FormField label="Native Village (Optional)">
+          <FormField label="Native Village">
             <Input type="text" {...form.register("personalInfo.nativeVillage")} placeholder="e.g. Your Ancestral Village" className="block w-full" />
           </FormField>
 
-          <FormField label="Complexion (Optional)">
+          <FormField label="Complexion">
             <Select {...form.register("personalInfo.complexion")} className="cursor-pointer">
               <option value="">Select Complexion</option>
               {COMPLEXION_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
             </Select>
           </FormField>
 
-          <FormField label="Physical Status (Optional)">
+          <FormField label="Physical Status">
             <Input type="text" {...form.register("personalInfo.physicalStatus")} placeholder="e.g. Completely Healthy" className="block w-full" />
           </FormField>
 
           <div className="sm:col-span-2">
-            <FormField label="Hobby / Interests (Optional)">
+            <FormField label="Hobby / Interests">
               <Textarea {...form.register("personalInfo.hobby")} placeholder="e.g. Reading, Traveling, Photography" rows={2} className="block w-full" />
             </FormField>
           </div>

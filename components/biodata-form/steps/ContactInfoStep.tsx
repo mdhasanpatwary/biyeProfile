@@ -26,15 +26,15 @@ export function ContactInfoStep({ form, lang }: ContactInfoStepProps) {
             <Input type="text" {...form.register("contactInfo.contactNumber")} placeholder="e.g. 01712345678" className="block w-full" />
           </FormField>
 
-          <FormField label="WhatsApp Number (Optional)">
+          <FormField label="WhatsApp Number">
             <Input type="text" {...form.register("contactInfo.whatsAppNumber")} placeholder="e.g. 01712345678" className="block w-full" />
           </FormField>
 
-          <FormField label="Email Address (Optional)" error={form.formState.errors.contactInfo?.emailAddress?.message}>
+          <FormField label="Email Address" error={form.formState.errors.contactInfo?.emailAddress?.message}>
             <Input type="email" {...form.register("contactInfo.emailAddress")} placeholder="e.g. hello@example.com" className="block w-full" />
           </FormField>
 
-          <FormField label="Guardian Contact Info (Optional)">
+          <FormField label="Guardian Contact Info">
             <Input type="text" {...form.register("contactInfo.guardianContact")} placeholder="e.g. Father: 017..." className="block w-full" />
           </FormField>
 

@@ -1,18 +1,18 @@
 import { z } from "zod"
 
 const customFieldSchema = z.object({
-  label: z.string().min(1, "Field label is required").max(100),
-  value: z.string().min(1, "Field value is required").max(500),
+  label: z.string(),
+  value: z.string(),
 })
 
 const customSectionSchema = z.object({
-  title: z.string().min(1, "Section title is required").max(100),
-  fields: z.array(customFieldSchema).min(1, "At least one field is required"),
+  title: z.string(),
+  fields: z.array(customFieldSchema),
 })
 
 const educationQualificationSchema = z.object({
-  degree: z.string().min(1, "Degree/Level is required").max(100),
-  institution: z.string().min(1, "Institution is required").max(200),
+  degree: z.string(),
+  institution: z.string(),
   passingYear: z.union([z.number(), z.literal(""), z.string()]),
   result: z.string().optional(),
   extraFields: z.array(customFieldSchema).optional(),
@@ -21,23 +21,23 @@ const educationQualificationSchema = z.object({
 export const biodataSchema = z.object({
   language: z.enum(["en", "bn"]),
   basicInfo: z.object({
-    fullName: z.string().min(2, "Full name is required").max(100),
+    fullName: z.string(),
     gender: z.enum(["Male", "Female"]).optional(),
     photoUrl: z.string(),
-    dateOfBirth: z.string().min(1, "Date of birth is required"),
+    dateOfBirth: z.string(),
     age: z.union([z.number(), z.literal("")]),
-    height: z.string().min(1, "Height is required").max(50),
+    height: z.string(),
     weight: z.string(),
-    bloodGroup: z.string().min(1, "Blood group is required").max(10),
-    religion: z.string().min(1, "Religion is required").max(50),
-    maritalStatus: z.string().min(1, "Marital status is required").max(50),
-    nationality: z.string().min(2, "Nationality is required"),
+    bloodGroup: z.string(),
+    religion: z.string(),
+    maritalStatus: z.string(),
+    nationality: z.string(),
     extraFields: z.array(customFieldSchema),
   }),
   personalInfo: z.object({
-    presentAddress: z.string().min(5, "Present address is required").max(500),
-    permanentAddress: z.string().min(5, "Permanent address is required").max(500),
-    district: z.string().min(2, "District is required").max(50),
+    presentAddress: z.string(),
+    permanentAddress: z.string(),
+    district: z.string(),
     division: z.string(),
     nativeVillage: z.string(),
     complexion: z.string(),
@@ -46,11 +46,11 @@ export const biodataSchema = z.object({
     extraFields: z.array(customFieldSchema),
   }),
   education: z.object({
-    qualifications: z.array(educationQualificationSchema).min(1, "At least one qualification is required"),
+    qualifications: z.array(educationQualificationSchema),
     additionalQualifications: z.string(),
   }),
   profession: z.object({
-    occupation: z.string().min(2, "Occupation is required").max(200),
+    occupation: z.string(),
     organizationName: z.string(),
     employmentType: z.string(),
     monthlyIncome: z.string(),
@@ -58,9 +58,9 @@ export const biodataSchema = z.object({
     extraFields: z.array(customFieldSchema),
   }),
   familyInfo: z.object({
-    fatherName: z.string().min(2, "Father's name is required").max(100),
+    fatherName: z.string(),
     fatherProfession: z.string(),
-    motherName: z.string().min(2, "Mother's name is required").max(100),
+    motherName: z.string(),
     motherProfession: z.string(),
     numberOfBrothers: z.union([z.number(), z.literal("")]),
     numberOfSisters: z.union([z.number(), z.literal("")]),
@@ -77,7 +77,7 @@ export const biodataSchema = z.object({
     extraFields: z.array(customFieldSchema),
   }),
   contactInfo: z.object({
-    contactNumber: z.string().min(10, "Valid contact number is required").max(20),
+    contactNumber: z.string(),
     whatsAppNumber: z.string(),
     emailAddress: z.union([z.string().email("Invalid email address"), z.literal("")]),
     guardianContact: z.string(),

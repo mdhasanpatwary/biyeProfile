@@ -76,7 +76,7 @@ export function EducationStep({ form, lang }: EducationStepProps) {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <FormField label="Result (Optional)" error={form.formState.errors.education?.qualifications?.[index]?.result?.message}>
+                  <FormField label="Result" error={form.formState.errors.education?.qualifications?.[index]?.result?.message}>
                     <Input
                       type="text"
                       {...form.register(`education.qualifications.${index}.result` as const)}
@@ -105,7 +105,7 @@ export function EducationStep({ form, lang }: EducationStepProps) {
           </Button>
 
           <div className="sm:col-span-2 mt-12 py-8 border-t border-border-muted">
-            <FormField label="Additional Educational Details (Optional)">
+            <FormField label="Additional Educational Details">
               <Textarea {...form.register("education.additionalQualifications")} placeholder="e.g. Won national debate championship" rows={3} className="block w-full" />
             </FormField>
           </div>

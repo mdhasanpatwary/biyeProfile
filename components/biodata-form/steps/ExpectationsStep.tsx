@@ -23,30 +23,30 @@ export function ExpectationsStep({ form, lang }: ExpectationsStepProps) {
 
       <CardContent>
         <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2">
-          <FormField label="Expected Age Range (Optional)">
+          <FormField label="Expected Age Range">
             <Input type="text" {...form.register("expectations.expectedAgeRange")} placeholder="e.g. 22-26" className="block w-full" />
           </FormField>
 
-          <FormField label="Expected Height (Optional)">
+          <FormField label="Expected Height">
             <Input type="text" {...form.register("expectations.expectedHeight")} placeholder={`e.g. 5'2" - 5'6"`} className="block w-full" />
           </FormField>
 
-          <FormField label="Expected Education (Optional)">
+          <FormField label="Expected Education">
             <Input type="text" {...form.register("expectations.expectedEducation")} placeholder="e.g. Graduate or Minimum Post Graduate" className="block w-full" />
           </FormField>
 
-          <FormField label="Expected Profession (Optional)">
+          <FormField label="Expected Profession">
             <Input type="text" {...form.register("expectations.expectedProfession")} placeholder="e.g. Doctor, Engineer, or Business" className="block w-full" />
           </FormField>
 
           <div className="sm:col-span-2">
-            <FormField label="Expected Location (Optional)">
+            <FormField label="Expected Location">
               <Input type="text" {...form.register("expectations.expectedLocation")} placeholder="e.g. Dhaka or Abroad" className="block w-full" />
             </FormField>
           </div>
 
           <div className="sm:col-span-2 mt-6">
-            <FormField label="Additional Expectations (Optional)">
+            <FormField label="Additional Expectations">
               <Textarea {...form.register("expectations.additionalExpectations")} placeholder="e.g. Looking for someone with a good family background..." rows={4} className="block w-full" />
             </FormField>
           </div>

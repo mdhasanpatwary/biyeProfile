@@ -28,23 +28,23 @@ export function ProfessionStep({ form, lang }: ProfessionStepProps) {
             <Input type="text" {...form.register("profession.occupation")} placeholder="e.g. Software Engineer" className="block w-full" />
           </FormField>
 
-          <FormField label="Organization Name (Optional)">
+          <FormField label="Organization Name">
             <Input type="text" {...form.register("profession.organizationName")} placeholder="e.g. Tech Company Ltd." className="block w-full" />
           </FormField>
 
-          <FormField label="Employment Type (Optional)">
+          <FormField label="Employment Type">
             <Select {...form.register("profession.employmentType")} className="cursor-pointer">
               <option value="">Select Type</option>
               {EMPLOYMENT_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
             </Select>
           </FormField>
 
-          <FormField label="Monthly Income (Optional)">
+          <FormField label="Monthly Income">
             <Input type="text" {...form.register("profession.monthlyIncome")} placeholder="e.g. 50,000 BDT" className="block w-full" />
           </FormField>
 
           <div className="sm:col-span-2">
-            <FormField label="Workplace Location (Optional)">
+            <FormField label="Workplace Location">
               <Input type="text" {...form.register("profession.workplaceLocation")} placeholder="e.g. Banani, Dhaka" className="block w-full" />
             </FormField>
           </div>
