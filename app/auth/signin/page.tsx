@@ -2,8 +2,11 @@
 
 import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/components/LanguageContext"
 
 export default function SignInPage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 bg-background relative overflow-hidden">
       <div className="absolute inset-0 bg-accent opacity-50 pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
@@ -12,7 +15,7 @@ export default function SignInPage() {
         <div className="text-center mb-10 md:mb-12">
           <h1 className="text-5xl font-serif text-foreground mb-4 tracking-tight">The Registry.</h1>
           <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] max-w-[240px] mx-auto">
-            Secure access to your professional marriage documentation
+            {t.auth.signInSubtitle}
           </p>
         </div>
 
@@ -40,13 +43,13 @@ export default function SignInPage() {
                 fill="currentColor"
               />
             </svg>
-            Continue with Google
+            {t.auth.continueGoogle}
           </Button>
         </div>
 
         <div className="mt-10 md:mt-12 pt-8 md:pt-10 border-t border-border-muted w-full text-center">
           <p className="text-[10px] text-foreground-muted font-mono uppercase tracking-widest leading-relaxed">
-            By accessing the Registry, you agree to our <br /> Terms and Privacy Policy.
+            {t.auth.privacyNotice}
           </p>
         </div>
       </div>

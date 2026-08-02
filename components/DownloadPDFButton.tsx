@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
+import { useLanguage } from "@/components/LanguageContext"
 
 interface DownloadPDFButtonProps {
   /** ID of the DOM element to capture. Defaults to "biodata-content" */
@@ -28,6 +29,7 @@ export function DownloadPDFButton({
   disabled = false,
   onTrack,
 }: DownloadPDFButtonProps) {
+  const { language } = useLanguage()
   const [loading, setLoading] = useState(false)
 
   const handleDownload = async () => {
@@ -261,7 +263,7 @@ export function DownloadPDFButton({
               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
             />
           </svg>
-          <span className="tracking-tight">Generating PDF…</span>
+          <span className="tracking-tight">{language === "bn" ? "পিডিএফ তৈরি হচ্ছে…" : "Generating PDF…"}</span>
         </>
       ) : (
         <>
@@ -278,7 +280,7 @@ export function DownloadPDFButton({
             <polyline points="7 10 12 15 17 10" />
             <line x1="12" x2="12" y1="15" y2="3" />
           </svg>
-          {children ?? <span className="tracking-tight">Download PDF</span>}
+          {children ?? <span className="tracking-tight">{language === "bn" ? "পিডিএফ ডাউনলোড" : "Download PDF"}</span>}
         </>
       )}
     </Button>

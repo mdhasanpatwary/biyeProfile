@@ -2,8 +2,11 @@
 
 import { signOut } from "next-auth/react"
 import { DropdownMenu, DropdownMenuItem } from "./ui/dropdown-menu"
+import { useLanguage } from "@/components/LanguageContext"
 
 export function UserNav({ username }: { username: string }) {
+  const { t } = useLanguage()
+
   return (
     <DropdownMenu
       align="right"
@@ -29,7 +32,9 @@ export function UserNav({ username }: { username: string }) {
       }
     >
       <div className="px-4 py-3 border-b border-border-muted mb-1 min-w-[12rem]">
-        <p className="font-mono text-[10px] text-foreground-muted uppercase tracking-[0.2em] mb-1">Signed in as</p>
+        <p className="font-mono text-[10px] text-foreground-muted uppercase tracking-[0.2em] mb-1">
+          {t.nav.myBiodata}
+        </p>
         <p className="font-medium text-sm truncate">@{username}</p>
       </div>
       <DropdownMenuItem
@@ -49,7 +54,7 @@ export function UserNav({ username }: { username: string }) {
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
           />
         </svg>
-        Sign Out
+        {t.nav.signOut}
       </DropdownMenuItem>
     </DropdownMenu>
   )

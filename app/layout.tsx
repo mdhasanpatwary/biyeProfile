@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Noto_Sans_Bengali } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
@@ -20,6 +20,12 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
   subsets: ["latin"],
   weight: "400",
+});
+
+const notoSansBengali = Noto_Sans_Bengali({
+  variable: "--font-noto-bengali",
+  subsets: ["bengali"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -63,7 +69,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="max-w-full overflow-x-hidden scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="max-w-full overflow-x-clip scroll-smooth" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -71,7 +77,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased max-w-full overflow-x-hidden flex flex-col min-h-screen bg-background text-foreground pb-16 lg:pb-0`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${notoSansBengali.variable} antialiased max-w-full overflow-x-clip flex flex-col min-h-screen bg-background text-foreground pb-16 lg:pb-0`}
       >
         <Providers>
           <ThemeProvider

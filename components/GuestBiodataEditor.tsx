@@ -164,10 +164,10 @@ export function GuestBiodataEditor() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-6 pb-8 border-b border-border-muted print:hidden">
           <div>
             <h1 className="text-4xl font-serif text-foreground tracking-tight">
-              Create Your Biodata
+              {language === "bn" ? "আপনার বায়োডাটা তৈরি করুন" : "Create Your Biodata"}
             </h1>
             <p className="text-foreground-muted font-mono text-[10px] uppercase tracking-[0.2em] mt-2">
-              Guest Mode / Temporary Session
+              {language === "bn" ? "গেস্ট মোড / সাময়িক সেশন" : "Guest Mode / Temporary Session"}
             </p>
           </div>
 

@@ -67,10 +67,69 @@
   --color-destructive: var(--destructive);
   --color-success: var(--success);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
+  --font-sans: var(--font-geist-sans), var(--font-noto-bengali), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia;
+  --font-serif: var(--font-instrument-serif), var(--font-noto-bengali), ui-serif, Georgia;
+  --font-bengali: var(--font-noto-bengali), var(--font-geist-sans), sans-serif;
 }
+
+html[lang="bn"],
+html[data-lang="bn"],
+html[lang="bn"] body,
+html[data-lang="bn"] body,
+[lang="bn"] .font-sans,
+[data-lang="bn"] .font-sans,
+[lang="bn"] .font-serif,
+[data-lang="bn"] .font-serif {
+  font-family: var(--font-noto-bengali), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Completely disable letter-spacing / tracking for Bangla text across the entire project */
+html[lang="bn"] *,
+html[data-lang="bn"] *,
+[lang="bn"],
+[lang="bn"] *,
+[data-lang="bn"],
+[data-lang="bn"] * {
+  letter-spacing: normal !important;
+}
+
+/* Fix line-height for Bangla titles & headings */
+html[lang="bn"] h1,
+html[data-lang="bn"] h1,
+html[lang="bn"] h2,
+html[data-lang="bn"] h2,
+html[lang="bn"] h3,
+html[data-lang="bn"] h3,
+[lang="bn"] h1,
+[data-lang="bn"] h1,
+[lang="bn"] h2,
+[data-lang="bn"] h2,
+[lang="bn"] h3,
+[data-lang="bn"] h3,
+html[lang="bn"] .font-serif,
+html[data-lang="bn"] .font-serif,
+[lang="bn"] .font-serif,
+[data-lang="bn"] .font-serif {
+  line-height: 1.35 !important;
+}
+
+html[lang="bn"] .leading-\[0\.85\],
+html[data-lang="bn"] .leading-\[0\.85\],
+[lang="bn"] .leading-\[0\.85\],
+[data-lang="bn"] .leading-\[0\.85\],
+html[lang="bn"] .leading-\[0\.9\],
+html[data-lang="bn"] .leading-\[0\.9\],
+[lang="bn"] .leading-\[0\.9\],
+[data-lang="bn"] .leading-\[0\.9\],
+html[lang="bn"] .leading-none,
+html[data-lang="bn"] .leading-none,
+[lang="bn"] .leading-none,
+[data-lang="bn"] .leading-none {
+  line-height: 1.35 !important;
+}
+
+
 
 .bg-grain {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");

@@ -213,6 +213,8 @@ export function BiodataContent({ data }: { data: Partial<BiodataFormValues> }) {
   return (
     <div
       id="biodata-content"
+      lang={lang}
+      data-lang={lang}
       className="relative bg-background text-foreground font-sans overflow-hidden p-6 md:p-12"
       style={{ wordBreak: 'break-word', overflowWrap: 'anywhere', lineHeight: 1.6 }}
     >
